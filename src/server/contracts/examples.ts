@@ -15,6 +15,7 @@ import {
   type MatchResponse,
   type PathwayRequest,
   type PathwayResponse,
+  type RolesResponse,
   type SdgResponse,
 } from "./index.ts";
 
@@ -207,6 +208,36 @@ export const examplePathwayResponse = {
     },
   ],
 } satisfies PathwayResponse;
+
+// GET /api/roles (no request body). Shortened: the real response lists 12 skills
+// per role. Everything here is placeholder data, so isPlaceholder is true.
+export const exampleRolesResponse = {
+  isPlaceholder: true,
+  roles: [
+    {
+      roleId: "backend-development",
+      name: "Backend Development",
+      description: "PLACEHOLDER: builds the server side of applications (APIs, data, business logic).",
+      skills: [
+        { skillId: "nodejs", name: "Node.js", weight: 3, isRequired: true },
+        { skillId: "sql", name: "SQL", weight: 3, isRequired: true },
+        { skillId: "docker", name: "Docker", weight: 2, isRequired: false },
+      ],
+      isPlaceholder: true,
+    },
+    {
+      roleId: "qa-automation",
+      name: "QA Automation",
+      description: "PLACEHOLDER: checks software quality by designing and automating tests.",
+      skills: [
+        { skillId: "testing-basics", name: "Testing basics", weight: 3, isRequired: true },
+        { skillId: "test-automation", name: "Test automation", weight: 3, isRequired: true },
+        { skillId: "sql", name: "SQL", weight: 1, isRequired: false },
+      ],
+      isPlaceholder: true,
+    },
+  ],
+} satisfies RolesResponse;
 
 // GET /api/sdg (no request body). Goal names are the official UN SDG names;
 // the role and skill links and their rationales are placeholders.
