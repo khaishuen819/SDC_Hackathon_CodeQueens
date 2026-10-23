@@ -32,7 +32,10 @@ a temp folder, rewrite `http://package-firewall.replit.internal/npm/` → `https
 the copy, run `npm ci` there, and move `node_modules` into the repo. The integrity hashes matched.
 Decision (2026-10-23): the lockfile should use public registry URLs. New packages are installed with
 `npm install` on M2's laptop. Note: `npm install` keeps the old Replit URLs for packages already
-in the lockfile; only new packages get public URLs.
+in the lockfile; only new packages get public URLs. On 2026-10-23 all 97 old URLs were rewritten to
+`https://registry.npmjs.org/` (URL lines only; versions and integrity hashes unchanged). Checked with a
+clean `npm ci` (empty cache) in a temp copy: install, `npm test` and `npm run typecheck` all passed.
+After every install, check: `grep -c package-firewall.replit.internal package-lock.json` should print 0.
 
 Planned (not installed yet, versions to be filled in when added): Prisma, PostgreSQL on Neon (free tier),
 Google Gemini SDK, a PDF text library, a multipart upload library.
@@ -86,8 +89,10 @@ Errors (all endpoints): body is `ApiError`, `{ "error": { "code", "message", "de
 | LLM_FAILED | 502 | model returned bad JSON, or the provider failed |
 | LLM_TIMEOUT | 504 | model did not answer in time |
 
-Match buckets (provisional, to confirm with M1): for each role skill, it is a **strength** if it is in
-`confirmedSkills`, **unconfirmed** if it is in `unconfirmedSkillIds`, otherwise a **gap**.
+Match buckets (decided 2026-10-23): each role skill is in exactly one list. **Strength** if it is in
+`confirmedSkills`; **unconfirmed** if the graduate marked it "not sure" (`unconfirmedSkillIds`); otherwise a
+**gap**, worded to the graduate as "not on your confirmed profile". The score counts confirmed skills only.
+Roles are ranked by score; the preferred route is marked with `preferredRouteKept: true`, not moved.
 
 ## Progress checklist
 

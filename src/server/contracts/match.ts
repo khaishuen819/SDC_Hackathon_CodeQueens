@@ -26,9 +26,12 @@ export const RoleMatch = z.object({
   score: z.int().min(0).max(100), // whole numbers, easier to read
   // Plain text: how this score was calculated for this graduate.
   scoreExplanation: z.string().min(1),
+  // Every role skill is in exactly one of these three lists.
+  // Only strengths count towards the score.
   // Role skills that are in confirmedSkills.
   strengths: z.array(RoleSkillResult),
-  // Role skills the graduate has not confirmed (and not marked "not sure").
+  // Role skills not on the confirmed profile (and not marked "not sure").
+  // Shown to the graduate as "not on your confirmed profile", not as "missing".
   gaps: z.array(RoleSkillResult),
   // Role skills the graduate marked "not sure" (unconfirmedSkillIds).
   unconfirmedSkills: z.array(RoleSkillResult),

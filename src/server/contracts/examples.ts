@@ -118,7 +118,7 @@ export const exampleMatchResponse = {
       scoreExplanation:
         "Example only, with illustrative weights. Your confirmed skills cover 14 of this role's 18 " +
         "skill-weight points: 14 / 18 x 100 = 78 (rounded). Not counted: Docker (weight 2), which you " +
-        "marked as not sure, and database design (weight 2), which you have not confirmed.",
+        "marked as not sure, and database design (weight 2), which is not on your confirmed profile.",
       strengths: [
         { skillId: "nodejs", weight: 3, isRequired: true },
         { skillId: "sql", weight: 3, isRequired: true },
@@ -138,7 +138,8 @@ export const exampleMatchResponse = {
       scoreExplanation:
         "Example only, with illustrative weights. Your confirmed skills cover 10 of this role's 15 " +
         "skill-weight points: 10 / 15 x 100 = 67 (rounded). Not counted: test automation (weight 3, " +
-        "required) and CI/CD basics (weight 2). This is your preferred route, so it stays your route " +
+        "required) and CI/CD basics (weight 2), which are not on your confirmed profile. " +
+        "This is your preferred route, so it stays your route " +
         "even though backend development scores higher.",
       strengths: [
         { skillId: "testing-basics", weight: 3, isRequired: true },
@@ -169,7 +170,7 @@ export const examplePathwayResponse = {
     {
       order: 1,
       skillId: "test-automation",
-      why: "Required for QA automation and not in your confirmed profile. It has the highest weight of your gaps.",
+      why: "Required for QA automation and not on your confirmed profile. It has the highest weight of these skills.",
       estimatedHours: 20,
       resources: [
         {
