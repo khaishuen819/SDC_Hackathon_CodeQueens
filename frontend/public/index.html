@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Code Queens: map your next skill</title>
+<meta name="description" content="Upload a fictional CV, check the skills we found, and get a roadmap of what to learn next for Backend Development or QA Automation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script type="module" src="js/app.js"></script>
+</head>
+<body>
+<a class="skip" href="#app">Skip to content</a>
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <div class="topbar-row">
+      <div class="brand">
+        <span class="brand-lines" aria-hidden="true"><span class="lb b sm">B</span><span class="lb q sm">Q</span></span>
+        <span class="brand-name">Code Queens</span>
+        <span class="pill ph">pilot · fictional CVs only</span>
+      </div>
+      <button class="restart" type="button" data-action="restart" data-key="restart"><span class="ic" aria-hidden="true">↺</span>Start over</button>
+    </div>
+    <nav aria-label="Progress"><ol class="mstep" id="stepper"></ol></nav>
+  </div>
+</header>
+<main id="app" class="wrap main" tabindex="-1">
+  <noscript><p>This app needs JavaScript turned on.</p></noscript>
+</main>
+<div id="live" class="sr-only" aria-live="polite"></div>
+</body>
+</html>
