@@ -6,3 +6,4 @@ export * from "./pathway.ts";
 export * from "./sdg.ts";
 export * from "./evidence.ts";
 export * from "./errors.ts";
+export * from "./roles.ts";

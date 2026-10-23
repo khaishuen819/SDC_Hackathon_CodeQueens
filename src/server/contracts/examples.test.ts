@@ -14,6 +14,7 @@ import {
   MatchResponse,
   PathwayRequest,
   PathwayResponse,
+  RolesResponse,
   SdgResponse,
 } from "./index.ts";
 import * as ex from "./examples.ts";
@@ -31,6 +32,7 @@ const cases: Array<[string, z.ZodType, unknown]> = [
   ["match response", MatchResponse, ex.exampleMatchResponse],
   ["pathway request", PathwayRequest, ex.examplePathwayRequest],
   ["pathway response", PathwayResponse, ex.examplePathwayResponse],
+  ["roles response", RolesResponse, ex.exampleRolesResponse],
   ["sdg response", SdgResponse, ex.exampleSdgResponse],
   ["evidence response", EvidenceListResponse, ex.exampleEvidenceResponse],
   ["error response", ApiError, ex.exampleErrorResponse],

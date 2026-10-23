@@ -1,0 +1,146 @@
+// Database schema (Prisma 7, PostgreSQL on Neon).
+// Stores reference content only: roles, skills, resources, SDGs, evidence.
+// It does NOT store user profiles or CVs.
+// Every content table has `isPlaceholder`, default true: nothing counts as
+// reviewed until someone sets it to false on purpose.
+// Table descriptions in plain words: docs/m2-technical-notes.md
+
+generator client {
+  provider            = "prisma-client"
+  // Generated TypeScript goes into our source tree (git-ignored), because
+  // Node cannot strip types from .ts files inside node_modules.
+  output              = "../src/server/db/generated/prisma"
+  moduleFormat        = "esm"
+  // Imports end in ".ts", so plain `node` can run the generated files.
+  importFileExtension = "ts"
+}
+
+datasource db {
+  provider = "postgresql"
+  // The connection URL is in prisma.config.ts (Prisma 7).
+}
+
+// A career route, e.g. "backend-development".
+model Role {
+  id            String      @id // slug = roleId in the API contract
+  name          String
+  description   String
+  isPlaceholder Boolean     @default(true)
+  skills        RoleSkill[]
+  sdgTags       RoleSdg[]
+}
+
+// A skill in the catalogue, e.g. "sql".
+model Skill {
+  id            String          @id // slug = skillId in the API contract
+  name          String
+  description   String
+  isPlaceholder Boolean         @default(true)
+  roles         RoleSkill[]
+  resources     Resource[]
+  sdgTags       SkillSdg[]
+  evidence      TrendEvidence[]
+}
+
+// Which skills a role needs, and how much each one counts.
+model RoleSkill {
+  roleId        String
+  skillId       String
+  weight        Int // 1 = nice to have, 2 = important, 3 = core
+  isRequired    Boolean
+  isPlaceholder Boolean @default(true)
+  role          Role    @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  skill         Skill   @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, skillId])
+}
+
+enum ResourceCost {
+  free
+  paid
+  unknown
+}
+
+// A learning resource for one skill.
+model Resource {
+  id             String       @id // slug = resourceId in the API contract
+  skillId        String
+  title          String
+  url            String
+  provider       String
+  cost           ResourceCost
+  estimatedHours Int
+  sourceNote     String
+  isPlaceholder  Boolean      @default(true)
+  skill          Skill        @relation(fields: [skillId], references: [id], onDelete: Cascade)
+}
+
+// One of the 17 UN Sustainable Development Goals.
+model SdgGoal {
+  id         String     @id // "sdg-1" to "sdg-17"
+  number     Int        @unique
+  name       String
+  roleTags   RoleSdg[]
+  skillTags  SkillSdg[]
+}
+
+// Links a role to an SDG, with the reason.
+model RoleSdg {
+  roleId        String
+  sdgId         String
+  rationale     String
+  isPlaceholder Boolean @default(true)
+  role          Role    @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  sdg           SdgGoal @relation(fields: [sdgId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, sdgId])
+}
+
+// Links a skill to an SDG, with the reason.
+model SkillSdg {
+  skillId       String
+  sdgId         String
+  rationale     String
+  isPlaceholder Boolean @default(true)
+  skill         Skill   @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  sdg           SdgGoal @relation(fields: [sdgId], references: [id], onDelete: Cascade)
+
+  @@id([skillId, sdgId])
+}
+
+// A dated publication that trend evidence comes from (filled by M3/M4).
+model Source {
+  id            String          @id // slug = sourceId in the API contract
+  title         String
+  publisher     String
+  url           String
+  publishedDate DateTime        @db.Date
+  retrievedAt   DateTime        @db.Date
+  isPlaceholder Boolean         @default(true)
+  evidence      TrendEvidence[]
+}
+
+enum TrendDirection {
+  rising
+  declining
+}
+
+// One claim from one source about one skill (feature 2, filled by M3/M4).
+// Starts empty. Matching will read `priorityAdjustment` later, so the output
+// changes visibly when the evidence changes.
+model TrendEvidence {
+  id                    String         @id // slug = evidenceId in the API contract
+  sourceId              String
+  skillId               String
+  direction             TrendDirection
+  summary               String // short plain-text summary
+  supportedClaim        String // the one claim this source supports
+  limitation            String // what this source does NOT show
+  // Optional: how much this evidence changes the skill's priority
+  // (scale to be agreed with M3/M4), and why, in plain words.
+  priorityAdjustment    Float?
+  adjustmentExplanation String?
+  isPlaceholder         Boolean        @default(true)
+  source                Source         @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  skill                 Skill          @relation(fields: [skillId], references: [id], onDelete: Cascade)
+}
