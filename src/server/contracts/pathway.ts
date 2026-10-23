@@ -31,9 +31,12 @@ export const PathwayStep = z.object({
   skillId: SkillId,
   // Plain text: why this skill is next for this graduate.
   why: z.string().min(1),
-  estimatedHours: z.number().positive(),
+  // Hours of the skill's learning resource (the first by resource id).
+  // null when no resource is listed yet: we never invent an hour count.
+  estimatedHours: z.number().positive().nullable(),
   resources: z.array(LearningResource),
-  // Skills to have before this step.
+  // Skills to have before this step. Always empty for now: there is no
+  // prerequisite data yet (open item for M3).
   prerequisites: z.array(SkillId),
   // Trend evidence for this step. Filled later by feature 2 (M3/M4).
   evidence: z.array(EvidenceRef).optional(),
@@ -42,6 +45,8 @@ export type PathwayStep = z.infer<typeof PathwayStep>;
 
 export const PathwayResponse = z.object({
   roleId: RoleId,
+  // true if any resource, the role, or any of its skills is placeholder data. Never show it as real.
+  isPlaceholder: z.boolean(),
   steps: z.array(PathwayStep), // ordered by `order`
 });
 export type PathwayResponse = z.infer<typeof PathwayResponse>;

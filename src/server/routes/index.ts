@@ -1,11 +1,14 @@
 import "../env.ts";
 import { Router } from "express";
 import { prisma } from "../db/client.ts";
-import { loadKnownSkillIds, loadRoles, loadWeightEvidence } from "../db/matchData.ts";
+import { loadKnownSkillIds, loadReviewedEvidence, loadRoles, loadWeightEvidence } from "../db/matchData.ts";
+import { loadEvidenceList, loadResources, loadSdg } from "../db/referenceData.ts";
 import { createLlmAdapter } from "../extraction/llmAdapter.ts";
 import { errorHandler, notFoundHandler } from "./errors.ts";
 import { createMatchRouter } from "./match.ts";
+import { createPathwayRouter } from "./pathway.ts";
 import { createProfileRouter } from "./profile.ts";
+import { createReferenceRouter } from "./reference.ts";
 import { rolesRouter } from "./roles.ts";
 
 // All /api routes. server.ts mounts this once; new routes are added here,
@@ -30,6 +33,22 @@ apiRouter.use(
     loadRoles: () => loadRoles(prisma),
     loadKnownSkillIds: () => loadKnownSkillIds(prisma),
     loadEvidence: () => loadWeightEvidence(prisma),
+  }),
+);
+
+apiRouter.use(
+  createPathwayRouter({
+    loadRoles: () => loadRoles(prisma),
+    loadKnownSkillIds: () => loadKnownSkillIds(prisma),
+    loadResources: (skillIds) => loadResources(prisma, skillIds),
+    loadEvidence: () => loadReviewedEvidence(prisma),
+  }),
+);
+
+apiRouter.use(
+  createReferenceRouter({
+    loadSdg: () => loadSdg(prisma),
+    loadEvidenceList: () => loadEvidenceList(prisma),
   }),
 );
 

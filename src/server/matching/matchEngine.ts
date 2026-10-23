@@ -19,12 +19,13 @@ export type RoleInput = {
   skills: Array<{ skillId: string; name: string; weight: number; isRequired: boolean; isPlaceholder: boolean }>;
 };
 
-// One TrendEvidence row with a priorityAdjustment (feature 2, M3/M4).
+// One reviewed TrendEvidence row (feature 2, M3/M4). Only rows with a
+// priorityAdjustment change weights; the pathway also cites rows without one.
 export type EvidenceInput = {
   evidenceId: string;
   skillId: string;
   direction: TrendDirection;
-  priorityAdjustment: number;
+  priorityAdjustment: number | null;
   explanation: string | null;
 };
 
@@ -76,7 +77,7 @@ export function matchRoles(
 }
 
 // A role skill after trend evidence has been applied.
-type WeightedSkill = {
+export type WeightedSkill = {
   skillId: string;
   name: string;
   isRequired: boolean;
@@ -88,8 +89,11 @@ type WeightedSkill = {
   hitMinimum: boolean; // weight was raised to MIN_EFFECTIVE_WEIGHT
 };
 
-function applyEvidence(skill: RoleInput["skills"][number], evidence: EvidenceInput[]): WeightedSkill {
-  const rows = evidence.filter((e) => e.skillId === skill.skillId);
+// Used by matching and by pathways, so both follow the same evidence rules.
+export function applyEvidence(skill: RoleInput["skills"][number], evidence: EvidenceInput[]): WeightedSkill {
+  const rows = evidence.flatMap((e) =>
+    e.skillId === skill.skillId && e.priorityAdjustment !== null ? [{ ...e, priorityAdjustment: e.priorityAdjustment }] : [],
+  );
   const adjustments = rows.map((e) => ({
     evidenceId: e.evidenceId,
     direction: e.direction,
@@ -156,13 +160,10 @@ function scoreRole(
 
   // Say exactly what trend evidence changed, and cite it.
   for (const s of skills.filter((x) => x.adjustments.length > 0)) {
-    let detail = `${signed(s.rawTotal)} from evidence ${s.adjustments.map((a) => a.evidenceId).join(", ")}`;
-    if (s.rawTotal !== s.limitedTotal) detail += `, limited to ${signed(s.limitedTotal)}`;
-    if (s.hitMinimum) detail += `; the lowest allowed weight is ${MIN_EFFECTIVE_WEIGHT}`;
-    sentences.push(`Trend evidence changed the weight of ${s.name} from ${fmt(s.baseWeight)} to ${fmt(s.weight)} (${detail}).`);
+    sentences.push(evidenceSentence(s));
   }
   if (evidence === null) {
-    sentences.push("Trend evidence was not available, so base weights were used.");
+    sentences.push(EVIDENCE_UNAVAILABLE);
   }
 
   return {
@@ -174,6 +175,16 @@ function scoreRole(
     gaps: gaps.map(toResult),
     unconfirmedSkills: unconfirmed.map(toResult),
   };
+}
+
+export const EVIDENCE_UNAVAILABLE = "Trend evidence was not available, so base weights were used.";
+
+// "Trend evidence changed the weight of Docker from 2 to 3 (+1 from evidence ev-1)."
+export function evidenceSentence(s: WeightedSkill): string {
+  let detail = `${signed(s.rawTotal)} from evidence ${s.adjustments.map((a) => a.evidenceId).join(", ")}`;
+  if (s.rawTotal !== s.limitedTotal) detail += `, limited to ${signed(s.limitedTotal)}`;
+  if (s.hitMinimum) detail += `; the lowest allowed weight is ${MIN_EFFECTIVE_WEIGHT}`;
+  return `Trend evidence changed the weight of ${s.name} from ${fmt(s.baseWeight)} to ${fmt(s.weight)} (${detail}).`;
 }
 
 // baseWeight and evidenceAdjustments are only sent when evidence exists for the skill.
@@ -200,7 +211,7 @@ function round2(n: number): number {
   return Math.round(n * 100) / 100;
 }
 
-function fmt(n: number): string {
+export function fmt(n: number): string {
   return String(round2(n));
 }
 
@@ -210,13 +221,13 @@ function signed(n: number): string {
 
 // Skill or role IDs in the profile that we do not know. The route answers
 // INVALID_INPUT with these, instead of guessing.
+// knownRoleIds = null skips the preferredRouteId check (the pathway does not use it).
 export function findUnknownIds(
   profile: ConfirmedProfile,
   knownSkillIds: Iterable<string>,
-  knownRoleIds: Iterable<string>,
+  knownRoleIds: Iterable<string> | null,
 ): Array<{ path: string; message: string }> {
   const skills = new Set(knownSkillIds);
-  const roles = new Set(knownRoleIds);
   const problems: Array<{ path: string; message: string }> = [];
 
   profile.confirmedSkills.forEach((s, i) => {
@@ -227,7 +238,8 @@ export function findUnknownIds(
       if (!skills.has(id)) problems.push({ path: `${key}.${i}`, message: `Unknown skillId "${id}".` });
     });
   }
-  if (profile.preferredRouteId !== undefined && !roles.has(profile.preferredRouteId)) {
+  const roles = knownRoleIds === null ? null : new Set(knownRoleIds);
+  if (roles !== null && profile.preferredRouteId !== undefined && !roles.has(profile.preferredRouteId)) {
     problems.push({ path: "preferredRouteId", message: `Unknown roleId "${profile.preferredRouteId}".` });
   }
   return problems;

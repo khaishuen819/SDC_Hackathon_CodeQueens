@@ -109,6 +109,14 @@ After every install, check: `grep -c package-firewall.replit.internal package-lo
 | 2026-10-23 | `MatchResponse.isPlaceholder`: true if any role, role skill or skill used is placeholder data. | Scores from placeholder weights must never look real. |
 | 2026-10-23 | Only REVIEWED evidence (`isPlaceholder = false`) with a `priorityAdjustment` changes weights. | Unreviewed evidence must not change what graduates see. |
 | 2026-10-23 | Database read functions take the Prisma client as an argument (`loadRoles(prisma)`). | Tests pass a small fake client, so they need no database. |
+| 2026-10-23 | Pathway logic is a pure function (`src/server/pathway/pathwayEngine.ts`) and uses the same evidence rules as matching (`applyEvidence`). | One rule for both features; tests need no database. |
+| 2026-10-23 | `PathwayStep.estimatedHours` may be `null` (no resource listed). Hours come from the skill's first resource by resource id. | We never invent an hour count. |
+| 2026-10-23 | `prerequisites` is always `[]` for now. | There is no prerequisite data; inventing a map would mislead. Open item for M3. |
+| 2026-10-23 | `PathwayResponse.isPlaceholder`: true if the role, any of its skills, or any resource in the steps is placeholder. | Placeholder pathways must never look real. |
+| 2026-10-23 | Pathways cite every REVIEWED evidence row for a skill; only rows with a `priorityAdjustment` change its weight. | Graduates can see the evidence; weights change only through an explicit, explained number. |
+| 2026-10-23 | The pathway does not check `preferredRouteId`; an unknown `roleId` is `NOT_FOUND`. | The pathway is for the requested role only. |
+| 2026-10-23 | `GET /api/evidence` returns REVIEWED rows only; one `TrendEvidence` row = one `EvidenceItem` with one `linkedSkillIds` entry. | Matches the proposed mapping; unreviewed evidence is never shown. |
+| 2026-10-23 | Illustrative engine inputs live in `src/server/matching/exampleInputs.ts`; `examplePathwayResponse` is real engine output, checked by a test. | The examples M1 uses cannot drift from the API. |
 | 2026-10-23 | `DATABASE_URL` placeholder uses `sslmode=verify-full`. | node-postgres already treats `require` as `verify-full` and warns about it; writing `verify-full` keeps the same security and removes the warning. |
 | 2026-10-23 | Added error code `INTERNAL_ERROR` (500). | Unexpected problems (e.g. database down) also return our JSON error shape. |
 | 2026-10-23 | Uploads with multer `memoryStorage`, 2 MB limit, one file in field `cv`. | Most used Express upload library; memory storage means the CV never touches disk. |
@@ -129,10 +137,10 @@ response: `src/server/contracts/examples.ts`. Status "planned" means the contrac
 | GET /health | none | `{ status: "ok" }` | setup | done (Replit Agent) |
 | POST /api/profile/extract | multipart upload, field `cv` (PDF or .txt, max 2 MB) | `DraftProfile` | 1 | done, Phase 3 |
 | POST /api/match | `MatchRequest` (= `ConfirmedProfile`) | `MatchResponse` | 3 | done, Phase 4 |
-| POST /api/pathway | `PathwayRequest` (`{ profile, roleId }`) | `PathwayResponse` | 4 | planned |
+| POST /api/pathway | `PathwayRequest` (`{ profile, roleId }`) | `PathwayResponse` | 4 | done, Phase 5 |
 | GET /api/roles | none | `RolesResponse` (roles, skills, weights, `isPlaceholder`) | 3 | done, Phase 2 |
-| GET /api/sdg | none | `SdgResponse` | 5 | planned |
-| GET /api/evidence | none | `EvidenceListResponse` (contract PROPOSED, to agree with M3/M4) | 2 (M3/M4) | planned |
+| GET /api/sdg | none | `SdgResponse` | 5 | done, Phase 5 |
+| GET /api/evidence | none | `EvidenceListResponse` (contract PROPOSED, to agree with M3/M4) | 2 (M3/M4) | done, Phase 5 (reviewed rows only) |
 
 Errors (all endpoints): body is `ApiError`, `{ "error": { "code", "message", "details"? } }`.
 
@@ -257,6 +265,63 @@ Match buckets (decided 2026-10-23): each role skill is in exactly one list. **St
 **gap**, worded to the graduate as "not on your confirmed profile". The score counts confirmed skills only.
 Roles are ranked by score; the preferred route is marked with `preferredRouteKept: true`, not moved.
 
+### POST /api/pathway
+
+An ordered learning pathway for ONE role (the `roleId` in the request; the preferred route is not used).
+Code: `src/server/routes/pathway.ts`, `src/server/pathway/pathwayEngine.ts` (pure),
+`src/server/db/referenceData.ts` (`loadResources`), `src/server/db/matchData.ts` (`loadReviewedEvidence`).
+
+Request: JSON `{ "profile": ConfirmedProfile, "roleId": "qa-automation" }` (see `examplePathwayRequest`).
+
+Response 200: `PathwayResponse` (see `examplePathwayResponse`, which is real engine output):
+- **Steps** = the role's skills that are NOT in `confirmedSkills`. "Not sure" skills are included (their
+  `why` says to check them first). Removed skills are included. If the graduate has every skill:
+  `steps: []`.
+- **Ordering rule:** required skills first; then by effective weight, highest first (same evidence rules
+  as matching: reviewed rows only, total limited to -1..+1, minimum 0.5); then by skill id. `order`
+  starts at 1.
+- **why**: plain text. It says whether the skill is required and its weight, and whether the graduate
+  removed it, marked it not sure, or has not listed it ("not on your confirmed profile"). If reviewed
+  evidence changed the weight, it cites the evidence ID. If no resource exists, it says so.
+- **resources**: the skill's `Resource` rows exactly as stored, each with its own `isPlaceholder`.
+  **estimatedHours**: the hours of the first resource by resource id, or `null` if there is none.
+  Nothing is invented.
+- **prerequisites**: always `[]` (no data yet; open item for M3).
+- **evidence**: one `{ evidenceId }` for every reviewed evidence row linked to the skill.
+- **isPlaceholder** (top level): true if the role, any of its skills, or any resource in the steps is
+  placeholder.
+- If evidence cannot be read: base weights are used and every `why` says
+  `Trend evidence was not available, so base weights were used.`
+
+Errors: `INVALID_INPUT` 400 (body fails the schema, draft profile, unknown skill ID, with `details`);
+`NOT_FOUND` 404 (unknown `roleId`); `INTERNAL_ERROR` 500 (database down).
+
+### GET /api/sdg
+
+All SDG goals (the 17 seeded UN goals, ordered by number), role tags and skill tags, each tag with its
+own `isPlaceholder`. Checked against `SdgResponse` before sending. Code: `src/server/routes/reference.ts`,
+`loadSdg` in `src/server/db/referenceData.ts`.
+
+### GET /api/evidence
+
+REVIEWED trend evidence only (`TrendEvidence.isPlaceholder = false`), with its `Source`. One row = one
+`EvidenceItem`: `id`, `title` / `publisher` / `url` from the source, `publishedDate` and `retrievedAt` as
+`YYYY-MM-DD`, `supportedClaim`, `limitation`, and `linkedSkillIds` with the row's single skill.
+`{ "items": [] }` when there is none (today). Checked against `EvidenceListResponse` before sending.
+The contract is still PROPOSED, to agree with M3/M4.
+
+## Open items
+
+- **Prerequisites (for M3):** there is no prerequisite data, so every pathway step has
+  `prerequisites: []`. M3 (or the content owner) to supply reviewed "skill A before skill B" pairs; we
+  will need a small table for them. Nothing is invented meanwhile.
+- **Evidence scale (for M3/M4):** confirm the -1..+1 total adjustment per skill and the 0.5 minimum weight
+  (both proposed).
+- **Evidence and placeholder sources (for M3/M4):** a reviewed `TrendEvidence` row is shown even if its
+  `Source` row is still `isPlaceholder = true`. Should the source also have to be reviewed?
+- **Several resources per skill:** the seed has one per skill. With more, `estimatedHours` uses the first
+  by resource id. Confirm with the content owner.
+
 ## Database tables (Prisma schema: `prisma/schema.prisma`)
 
 The database holds reference content only. **No user profiles and no CVs are stored.**
@@ -307,6 +372,9 @@ Commands (run by M2, from the project root):
   - [ ] M2: try `LLM_PROVIDER=gemini` with a real key and the two fictional sample CVs, after checking provider terms
 - [x] Phase 4: `POST /api/match` with explained scores and the trend-evidence hook (pure engine + route tests)
   - [ ] M3/M4: confirm the -1..+1 adjustment scale and the 0.5 minimum weight
+  - [x] Follow-up: `MatchResponse.isPlaceholder`; only reviewed evidence changes weights
+- [x] Phase 5: `POST /api/pathway`, `GET /api/sdg`, `GET /api/evidence` (pure pathway engine + route tests)
+  - [ ] M3: supply prerequisite data (see Open items)
 
 ## Data, licences and privacy notes
 

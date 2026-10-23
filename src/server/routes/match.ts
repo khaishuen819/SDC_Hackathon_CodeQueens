@@ -1,8 +1,7 @@
 import express, { Router } from "express";
-import type * as z from "zod";
 import { MatchRequest, MatchResponse } from "../contracts/index.ts";
 import { findUnknownIds, matchRoles, type EvidenceInput, type RoleInput } from "../matching/matchEngine.ts";
-import { ApiFailure, type ErrorDetail } from "./errors.ts";
+import { ApiFailure, zodDetails } from "./errors.ts";
 
 // What this route needs. Passed in (not imported) so tests run with no database.
 export type MatchRouteDeps = {
@@ -46,8 +45,4 @@ export function createMatchRouter(deps: MatchRouteDeps) {
   });
 
   return router;
-}
-
-function zodDetails(error: z.ZodError): ErrorDetail[] {
-  return error.issues.map((issue) => ({ path: issue.path.map(String).join("."), message: issue.message }));
 }

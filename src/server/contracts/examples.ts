@@ -181,18 +181,24 @@ export const examplePathwayRequest = {
   roleId: "qa-automation",
 } satisfies PathwayRequest;
 
+// Real output of the pathway engine for examplePathwayRequest, with the illustrative inputs
+// in src/server/matching/exampleInputs.ts. pathwayEngine.test.ts checks the engine still gives exactly this.
+// prerequisites are empty on purpose: there is no prerequisite data yet (open item for M3).
 export const examplePathwayResponse = {
   roleId: "qa-automation",
+  isPlaceholder: true, // placeholder role weights and resources
   steps: [
     {
       order: 1,
       skillId: "test-automation",
-      why: "Required for QA automation and not on your confirmed profile. It has the highest weight of these skills.",
-      estimatedHours: 20,
+      why:
+        "Test automation is required for QA Automation (weight 3). " +
+        "You have not listed it, so it is not on your confirmed profile.",
+      estimatedHours: 10, // from the resource row, not invented
       resources: [
         {
           resourceId: "placeholder-test-automation-1",
-          title: "PLACEHOLDER: test automation basics",
+          title: "PLACEHOLDER: Test automation resource",
           url: "https://example.com/placeholder/test-automation",
           provider: "Placeholder provider",
           cost: "unknown",
@@ -200,18 +206,21 @@ export const examplePathwayResponse = {
           isPlaceholder: true,
         },
       ],
-      prerequisites: ["testing-basics", "javascript"],
+      prerequisites: [],
       evidence: [],
     },
     {
       order: 2,
       skillId: "ci-cd-basics",
-      why: "Automated tests usually run in a CI/CD pipeline. You already have Git, which this builds on.",
-      estimatedHours: 8,
+      why:
+        "CI/CD basics is not required for QA Automation, but it counts with weight 3. " +
+        "You have not listed it, so it is not on your confirmed profile. " +
+        "Trend evidence changed the weight of CI/CD basics from 2 to 3 (+1 from evidence fictional-evidence-1).",
+      estimatedHours: 10,
       resources: [
         {
           resourceId: "placeholder-ci-cd-basics-1",
-          title: "PLACEHOLDER: CI/CD basics",
+          title: "PLACEHOLDER: CI/CD basics resource",
           url: "https://example.com/placeholder/ci-cd-basics",
           provider: "Placeholder provider",
           cost: "unknown",
@@ -219,7 +228,7 @@ export const examplePathwayResponse = {
           isPlaceholder: true,
         },
       ],
-      prerequisites: ["git"],
+      prerequisites: [],
       evidence: [{ evidenceId: "fictional-evidence-1" }],
     },
   ],

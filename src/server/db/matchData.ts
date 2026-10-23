@@ -33,13 +33,31 @@ export const WEIGHT_EVIDENCE_WHERE = { isPlaceholder: false, priorityAdjustment:
 
 export async function loadWeightEvidence(db: MatchDb): Promise<EvidenceInput[]> {
   const rows = await db.trendEvidence.findMany({ where: WEIGHT_EVIDENCE_WHERE, orderBy: { id: "asc" } });
-  return rows
-    .filter((e) => !e.isPlaceholder && e.priorityAdjustment !== null) // same rule again, to be safe
-    .map((e) => ({
-      evidenceId: e.id,
-      skillId: e.skillId,
-      direction: e.direction,
-      priorityAdjustment: e.priorityAdjustment ?? 0, // never null after the filter
-      explanation: e.adjustmentExplanation,
-    }));
+  // Same rule again, to be safe.
+  return rows.filter((e) => !e.isPlaceholder && e.priorityAdjustment !== null).map(toEvidenceInput);
+}
+
+// All REVIEWED evidence, with or without an adjustment. Pathways cite every reviewed
+// row for a skill; only rows with an adjustment change its weight.
+export const REVIEWED_EVIDENCE_WHERE = { isPlaceholder: false };
+
+export async function loadReviewedEvidence(db: MatchDb): Promise<EvidenceInput[]> {
+  const rows = await db.trendEvidence.findMany({ where: REVIEWED_EVIDENCE_WHERE, orderBy: { id: "asc" } });
+  return rows.filter((e) => !e.isPlaceholder).map(toEvidenceInput);
+}
+
+function toEvidenceInput(e: {
+  id: string;
+  skillId: string;
+  direction: EvidenceInput["direction"];
+  priorityAdjustment: number | null;
+  adjustmentExplanation: string | null;
+}): EvidenceInput {
+  return {
+    evidenceId: e.id,
+    skillId: e.skillId,
+    direction: e.direction,
+    priorityAdjustment: e.priorityAdjustment,
+    explanation: e.adjustmentExplanation,
+  };
 }

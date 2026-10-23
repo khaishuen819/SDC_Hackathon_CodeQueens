@@ -5,69 +5,11 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { MatchResponse, type ConfirmedProfile } from "../contracts/index.ts";
 import { exampleConfirmedProfile, exampleMatchResponse } from "../contracts/examples.ts";
+import { exampleEvidence, exampleRoles, skill } from "./exampleInputs.ts";
 import { matchRoles, type EvidenceInput, type RoleInput } from "./matchEngine.ts";
 
-// The ILLUSTRATIVE weights behind exampleMatchResponse (not the database seed).
-const names: Record<string, string> = {
-  nodejs: "Node.js",
-  sql: "SQL",
-  "api-basics": "API basics",
-  git: "Git",
-  javascript: "JavaScript",
-  "testing-basics": "Testing basics",
-  "database-design": "Database design",
-  docker: "Docker",
-  "test-automation": "Test automation",
-  "ci-cd-basics": "CI/CD basics",
-};
-// All illustrative data counts as placeholder, like the seed.
-const skill = (skillId: string, weight: number, isRequired: boolean, isPlaceholder = true) => ({
-  skillId,
-  name: names[skillId] ?? skillId,
-  weight,
-  isRequired,
-  isPlaceholder,
-});
-const roles: RoleInput[] = [
-  {
-    roleId: "backend-development",
-    name: "Backend Development",
-    isPlaceholder: true,
-    skills: [
-      skill("nodejs", 3, true),
-      skill("sql", 3, true),
-      skill("api-basics", 3, true),
-      skill("git", 2, true),
-      skill("javascript", 2, false),
-      skill("testing-basics", 1, false),
-      skill("database-design", 2, false),
-      skill("docker", 2, false),
-    ],
-  },
-  {
-    roleId: "qa-automation",
-    name: "QA Automation",
-    isPlaceholder: true,
-    skills: [
-      skill("testing-basics", 3, true),
-      skill("test-automation", 3, true),
-      skill("api-basics", 2, true),
-      skill("git", 2, true),
-      skill("javascript", 2, false),
-      skill("ci-cd-basics", 2, false),
-      skill("sql", 1, false),
-    ],
-  },
-];
-const exampleEvidence: EvidenceInput[] = [
-  {
-    evidenceId: "fictional-evidence-1",
-    skillId: "ci-cd-basics",
-    direction: "rising",
-    priorityAdjustment: 1,
-    explanation: "FICTIONAL example adjustment, for format testing only.",
-  },
-];
+// The ILLUSTRATIVE inputs behind exampleMatchResponse (not the database seed).
+const roles = exampleRoles;
 
 const profile: ConfirmedProfile = exampleConfirmedProfile;
 const byId = (response: MatchResponse, roleId: string) => {

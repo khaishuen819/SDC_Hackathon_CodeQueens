@@ -1,4 +1,5 @@
 import type { ErrorRequestHandler, RequestHandler, Response } from "express";
+import type * as z from "zod";
 import { ERROR_HTTP_STATUS, type ApiError, type ErrorCode } from "../contracts/index.ts";
 
 // Field-level problems, e.g. from Zod validation.
@@ -15,6 +16,11 @@ export class ApiFailure extends Error {
     this.code = code;
     this.details = details;
   }
+}
+
+// Zod problems as error details, e.g. { path: "profile.status", message: "..." }.
+export function zodDetails(error: z.ZodError): ErrorDetail[] {
+  return error.issues.map((issue) => ({ path: issue.path.map(String).join("."), message: issue.message }));
 }
 
 export function sendError(res: Response, code: ErrorCode, message: string, details?: ErrorDetail[]) {

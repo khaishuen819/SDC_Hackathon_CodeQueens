@@ -69,6 +69,21 @@ test("an evidence adjustment with an unknown direction is rejected", () => {
   assert.equal(MatchResponse.safeParse(response).success, false);
 });
 
+test("a pathway step with no resource has estimatedHours null (never an invented number)", () => {
+  const [first, ...rest] = ex.examplePathwayResponse.steps;
+  assertValid(PathwayResponse, {
+    ...ex.examplePathwayResponse,
+    steps: [{ ...first, resources: [], estimatedHours: null }, ...rest],
+  });
+});
+
+test("responses without isPlaceholder are rejected (match and pathway)", () => {
+  const { isPlaceholder: _m, ...match } = ex.exampleMatchResponse;
+  const { isPlaceholder: _p, ...pathway } = ex.examplePathwayResponse;
+  assert.equal(MatchResponse.safeParse(match).success, false);
+  assert.equal(PathwayResponse.safeParse(pathway).success, false);
+});
+
 test("a score above 100 is rejected", () => {
   const [first, ...rest] = ex.exampleMatchResponse.roles;
   const response = { ...ex.exampleMatchResponse, roles: [{ ...first, score: 101 }, ...rest] };
