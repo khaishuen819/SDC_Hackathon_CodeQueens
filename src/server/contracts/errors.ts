@@ -8,6 +8,7 @@ export const ErrorCode = z.enum([
   "LLM_FAILED", // the model returned bad JSON, or the provider failed
   "LLM_TIMEOUT", // the model did not answer in time
   "NOT_FOUND", // unknown route, role, skill, etc.
+  "INTERNAL_ERROR", // unexpected server problem (e.g. database down)
 ]);
 export type ErrorCode = z.infer<typeof ErrorCode>;
 
@@ -20,6 +21,7 @@ export const ERROR_HTTP_STATUS = {
   UNREADABLE_CV: 422,
   LLM_FAILED: 502,
   LLM_TIMEOUT: 504,
+  INTERNAL_ERROR: 500,
 } as const satisfies Record<ErrorCode, number>;
 
 // The one error shape every endpoint returns.

@@ -1,0 +1,31 @@
+FICTIONAL CV - NOT A REAL PERSON. Made up for testing the Code Queens prototype.
+All names, places, organisations and contact details below are invented.
+
+Jordan Lee (fictional)
+jordan.lee@example.com
+
+EDUCATION
+BSc Computer Science, Example University (fictional), graduating 2026
+Final-year project grade: First (fictional)
+
+SKILLS
+JavaScript, Node.js, Express, PostgreSQL, Git, REST APIs, Linux command line
+
+PROJECTS
+Course-booking web app (final-year project)
+- Built a course-booking web app in JavaScript with a Node.js and Express backend.
+- Designed tables and queries in PostgreSQL for courses, students and bookings.
+- Wrote a REST API with endpoints for listing, booking and cancelling courses.
+- Wrote unit tests with Jest for the booking API.
+- Used Git and GitHub for version control with a team of four.
+
+Personal finance tracker (personal project)
+- Small command-line tool in Python that reads bank CSV exports and sums spending by category.
+
+EXPERIENCE
+Teaching assistant, Example University (fictional), 2025
+- Helped first-year students debug their code in weekly programming labs.
+
+Intern, Fictional Software Company Ltd, summer 2025
+- Fixed bugs in an internal Node.js service and added logging.
+- Deployed changes on a Linux server using the command line.

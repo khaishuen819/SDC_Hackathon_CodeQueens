@@ -20,6 +20,15 @@ Installed today (from `package.json` / `package-lock.json`):
 | pg (node-postgres) | ^8.23.1 | 8.23.1 (MIT; Phase 2) |
 | prisma (CLI, dev) | 7.10.1 (exact) | 7.10.1 (Apache-2.0; Phase 2) |
 | @types/pg (dev) | ^8.23.1 | 8.23.1 (MIT; Phase 2) |
+| multer | 2.4.0 (exact) | 2.4.0 (MIT; Phase 3) |
+| unpdf | 1.9.0 (exact) | 1.9.0 (MIT; bundles Mozilla PDF.js 6.4.299, Apache-2.0; Phase 3) |
+| @google/genai | 2.30.0 (exact) | 2.30.0 (Apache-2.0; official Google Gen AI SDK; Phase 3) |
+| @types/multer (dev) | ^2.3.0 | 2.3.0 (MIT; Phase 3) |
+
+Version rule (from Phase 3): use releases at least about one week old, pinned exactly. On 2026-10-23 the
+newest multer (2.5.0) was 1 day old, @google/genai (2.31.0) a few hours old and unpdf (1.9.1) 4 days old,
+so the previous release of each was used. Brand-new releases are where a compromised package is most
+likely to show up.
 
 Why Prisma 7.10.1 and not "latest": on 2026-10-23 npm's `latest` tag for `prisma` points to
 `8.0.0-rc.26`, a release candidate published the day before. 7.10.1 (2026-10-15) is the newest stable
@@ -33,6 +42,8 @@ Prisma 7 with plain Node (no tsx), checked 2026-10-23:
 - The generated code goes to `src/server/db/generated/prisma`, not `node_modules`, because Node does not
   strip types from `.ts` files inside `node_modules`. Run `npx prisma generate` after every schema change.
 - Prisma enums are generated as plain `const` objects, which is allowed (erasable syntax only).
+- The generated client is committed to git (decision 2026-10-23), so Replit needs no generate step.
+  It must be regenerated with `npx prisma generate` after any schema change, and committed again.
 - The seed is `node prisma/seed.ts` (set in `prisma.config.ts`). Prisma 7 never seeds automatically:
   run `npx prisma db seed` yourself.
 - `.env` is loaded with Node's built-in `process.loadEnvFile` (no `dotenv` package), only if the file
@@ -57,9 +68,6 @@ in the lockfile; only new packages get public URLs. On 2026-10-23 all 97 old URL
 `https://registry.npmjs.org/` (URL lines only; versions and integrity hashes unchanged). Checked with a
 clean `npm ci` (empty cache) in a temp copy: install, `npm test` and `npm run typecheck` all passed.
 After every install, check: `grep -c package-firewall.replit.internal package-lock.json` should print 0.
-
-Planned (not installed yet, versions to be filled in when added): Google Gemini SDK, a PDF text library,
-a multipart upload library.
 
 ## Decisions
 
@@ -90,6 +98,16 @@ a multipart upload library.
 | 2026-10-23 | `TrendEvidence` has optional `priorityAdjustment` (number) and `adjustmentExplanation` (text), empty for now. | Feature 2 can change skill priority later, visibly and with a reason. The scale is to be agreed with M3/M4. |
 | 2026-10-23 | The DB client fails at start-up if `DATABASE_URL` is missing. | A clear error now instead of a confusing one on the first request. |
 | 2026-10-23 | All `/api` routes are mounted through one `apiRouter` (`src/server/routes/index.ts`). | `server.ts` changes once; later phases add routes without touching it. |
+| 2026-10-23 | Commit the generated Prisma client; no `postinstall`. | Replit runs it as is; regenerate after schema changes. |
+| 2026-10-23 | Proposal (asked M3/M4): `priorityAdjustment` is -1 to +1, added to the role-skill weight. | Small, explainable effect; to be confirmed. |
+| 2026-10-23 | Added error code `INTERNAL_ERROR` (500). | Unexpected problems (e.g. database down) also return our JSON error shape. |
+| 2026-10-23 | Uploads with multer `memoryStorage`, 2 MB limit, one file in field `cv`. | Most used Express upload library; memory storage means the CV never touches disk. |
+| 2026-10-23 | PDF text with unpdf (MIT), not raw pdfjs-dist or pdf-parse. | Maintained (unjs), no dependencies, one-call `extractText`, works in Node without worker set-up; uses Mozilla's PDF.js inside. |
+| 2026-10-23 | File type is checked from the file's bytes (`%PDF-`, or valid UTF-8 text with a .txt name / text/plain type). | The browser's name and type can be wrong. |
+| 2026-10-23 | Fewer than 30 letters/digits of text = `UNREADABLE_CV`. Text over 20,000 characters is cut, with a warning. | Never return a misleading empty profile; bound model time and cost. |
+| 2026-10-23 | Gemini: JSON mode (`responseMimeType: application/json`), `temperature: 0`, 30 s timeout, reply checked with Zod. Not using Gemini's own response schema yet. | JSON mode plus Zod is simple and testable without the real API; the response-schema option can be tried later against the real API. |
+| 2026-10-23 | After extraction, any skillId not in the catalogue becomes `null` (raw name kept) with a warning. | The model can never put an invented ID into a profile, whatever it replies. |
+| 2026-10-23 | Mock adapter is the default (`LLM_PROVIDER` unset = mock). Its output says "MOCK EXTRACTION ... NOT read from your CV". | App and tests run without a key; mock output cannot be mistaken for real extraction. |
 
 ## Endpoints
 
@@ -99,10 +117,10 @@ response: `src/server/contracts/examples.ts`. Status "planned" means the contrac
 | Method + path | Request | Response | Feature | Status |
 |---|---|---|---|---|
 | GET /health | none | `{ status: "ok" }` | setup | done (Replit Agent) |
-| POST /api/profile/extract | multipart upload, field `cv` (PDF or .txt, max 2 MB) | `DraftProfile` | 1 | planned, Phase 3 |
+| POST /api/profile/extract | multipart upload, field `cv` (PDF or .txt, max 2 MB) | `DraftProfile` | 1 | done, Phase 3 |
 | POST /api/match | `MatchRequest` (= `ConfirmedProfile`) | `MatchResponse` | 3 | planned |
 | POST /api/pathway | `PathwayRequest` (`{ profile, roleId }`) | `PathwayResponse` | 4 | planned |
-| GET /api/roles | none | `RolesResponse` (roles, skills, weights, `isPlaceholder`) | 3 | done, Phase 2 (needs migrate + seed) |
+| GET /api/roles | none | `RolesResponse` (roles, skills, weights, `isPlaceholder`) | 3 | done, Phase 2 |
 | GET /api/sdg | none | `SdgResponse` | 5 | planned |
 | GET /api/evidence | none | `EvidenceListResponse` (contract PROPOSED, to agree with M3/M4) | 2 (M3/M4) | planned |
 
@@ -117,6 +135,60 @@ Errors (all endpoints): body is `ApiError`, `{ "error": { "code", "message", "de
 | UNREADABLE_CV | 422 | no text could be read (never an empty profile) |
 | LLM_FAILED | 502 | model returned bad JSON, or the provider failed |
 | LLM_TIMEOUT | 504 | model did not answer in time |
+| INTERNAL_ERROR | 500 | unexpected server problem, e.g. database down |
+
+Unknown paths under `/api` return `NOT_FOUND` as JSON.
+
+### POST /api/profile/extract
+
+Upload one CV, get a DRAFT profile for the graduate to check. Code: `src/server/routes/profile.ts`,
+`src/server/extraction/`.
+
+Request: `multipart/form-data` with one file in field `cv`. PDF (with real text, not a scan) or plain
+text (.txt, UTF-8). Max 2 MB.
+
+```
+curl -s -F "cv=@docs/sample-cvs/backend-graduate.txt;type=text/plain" http://localhost:3000/api/profile/extract
+```
+
+Response 200: `DraftProfile`. Example from the mock adapter (shortened):
+
+```json
+{
+  "status": "draft",
+  "extractedSkills": [
+    { "skillId": "javascript", "rawName": "JavaScript", "evidence": "(mock) Built a web app in JavaScript", "confidence": 0.9 }
+  ],
+  "projects": [{ "title": "(mock) Fictional coursework project", "summary": "...", "skillIds": ["javascript", "sql"] }],
+  "experience": [],
+  "warnings": ["MOCK EXTRACTION (LLM_PROVIDER=mock): this is a fixed FICTIONAL profile. It was NOT read from your CV."]
+}
+```
+
+Errors: `UNSUPPORTED_FILE` 415, `FILE_TOO_LARGE` 413, `UNREADABLE_CV` 422 (no text, scanned, damaged or
+password-protected PDF), `INVALID_INPUT` 400 (no file, wrong field name, more than one file),
+`LLM_FAILED` 502, `LLM_TIMEOUT` 504. Example:
+`{ "error": { "code": "UNREADABLE_CV", "message": "We could not read any text from this file. ..." } }`
+
+Steps: check file type from its bytes, then read text in memory (unpdf for PDF). If fewer than 30
+letters/digits, return `UNREADABLE_CV`. Otherwise load the skill catalogue from the database and call the
+adapter (Gemini or mock). Turn any non-catalogue skillId into `null` with a warning, then check the reply
+against the `DraftProfile` schema.
+
+Prompt-injection protection: the system prompt (`src/server/extraction/prompt.ts`) says the CV is data,
+not instructions. The CV text goes between `<<<CV_TEXT_START>>>` and `<<<CV_TEXT_END>>>`, and those markers
+are removed from the CV text itself, so a CV cannot close its own block. Even if the model is fooled, its
+reply is still checked with Zod and against the catalogue. `docs/sample-cvs/qa-graduate.txt` has a
+deliberate injection line for manual testing.
+
+Model and provider: Google Gemini API through `@google/genai`, model set by `GEMINI_MODEL`. On 2026-10-23
+Google's model list recommended `gemini-3.5-flash-lite` (stable) for fast, low-cost text tasks.
+**Provider terms and free-tier limits to be checked by M2 before the demo.** In particular: whether
+free-tier prompts may be used by Google to improve its products, and the request limits per minute/day.
+Until that is checked, send only fictional CVs to Gemini.
+
+Settings (env vars, see `.env.example`): `LLM_PROVIDER` = `mock` (default) or `gemini`; `GEMINI_API_KEY`;
+`GEMINI_MODEL`. With `gemini`, the server will not start unless both are set.
 
 Match buckets (decided 2026-10-23): each role skill is in exactly one list. **Strength** if it is in
 `confirmedSkills`; **unconfirmed** if the graduate marked it "not sure" (`unconfirmedSkillIds`); otherwise a
@@ -166,14 +238,20 @@ Commands (run by M2, from the project root):
 
 - [x] Phase 0: inspect repo, set up working notes
 - [x] Phase 1: API contract (Zod schemas, examples, validation test)
-- [ ] Phase 2: database schema and placeholder seed (Prisma + PostgreSQL), `GET /api/roles`
-  - [x] schema, config, client, seed script, `GET /api/roles`, `.env.example`; `prisma validate` + `generate` pass
-  - [ ] M2 runs `migrate dev` and `db seed` on Neon, then checks `GET /api/roles`
-- [ ] Phase 3: CV upload and extraction (`POST /api/profile/extract`)
+- [x] Phase 2: database schema and placeholder seed (Prisma + PostgreSQL), `GET /api/roles`
+  (migration `20261023030501_init` applied and seeded on Neon; `GET /api/roles` checked 2026-10-23)
+- [x] Phase 3: CV upload and extraction (`POST /api/profile/extract`), mock + Gemini adapters, 14 route tests
+  - [ ] M2: try `LLM_PROVIDER=gemini` with a real key and the two fictional sample CVs, after checking provider terms
 
 ## Data, licences and privacy notes
 
-- CVs are processed in memory only. They are not written to disk, stored in the database, or logged.
+- **Privacy statement: CVs are processed in memory and not stored.** The upload is held in memory
+  (multer `memoryStorage`) only while the request runs. It is never written to disk, never stored in the
+  database, and neither the file nor its text is ever logged (error logs hold only an error name and message).
+- With `LLM_PROVIDER=gemini`, the CV text is sent to Google's Gemini API to be read. The prompt asks the
+  model not to copy names or contact details into its reply. Google's handling of that data depends on
+  the API terms and tier: M2 checks this before the demo (see the endpoint notes).
+- Sample CVs in `docs/sample-cvs/` are FICTIONAL (marked at the top). Contact details use example.com.
 - All CVs and profiles used in development, tests and demos are fictional.
 - Seeded content (roles, skills, weights, resources, SDG rationales) is placeholder until replaced by
   reviewed data. Every such row has `isPlaceholder = true`, and `GET /api/roles` reports it. Never show
