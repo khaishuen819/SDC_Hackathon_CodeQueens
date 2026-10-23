@@ -114,6 +114,7 @@ export const exampleMatchRequest = exampleConfirmedProfile satisfies MatchReques
 // matchEngine.test.ts checks that the engine still gives exactly this.
 export const exampleMatchResponse = {
   scoreMeaning: SCORE_MEANING,
+  isPlaceholder: true, // the weights are illustrative placeholders
   roles: [
     {
       roleId: "backend-development",

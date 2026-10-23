@@ -20,16 +20,19 @@ const names: Record<string, string> = {
   "test-automation": "Test automation",
   "ci-cd-basics": "CI/CD basics",
 };
-const skill = (skillId: string, weight: number, isRequired: boolean) => ({
+// All illustrative data counts as placeholder, like the seed.
+const skill = (skillId: string, weight: number, isRequired: boolean, isPlaceholder = true) => ({
   skillId,
   name: names[skillId] ?? skillId,
   weight,
   isRequired,
+  isPlaceholder,
 });
 const roles: RoleInput[] = [
   {
     roleId: "backend-development",
     name: "Backend Development",
+    isPlaceholder: true,
     skills: [
       skill("nodejs", 3, true),
       skill("sql", 3, true),
@@ -44,6 +47,7 @@ const roles: RoleInput[] = [
   {
     roleId: "qa-automation",
     name: "QA Automation",
+    isPlaceholder: true,
     skills: [
       skill("testing-basics", 3, true),
       skill("test-automation", 3, true),
@@ -113,8 +117,8 @@ test("the preferred route ranks lower by score but keeps preferredRouteKept", ()
 test("ties are broken by role id, and exploring graduates have no preferred route", () => {
   const exploring = { ...profile, entryPath: "exploring" as const, preferredRouteId: undefined };
   const twins: RoleInput[] = [
-    { roleId: "zz-role", name: "Z", skills: [skill("git", 1, false)] },
-    { roleId: "aa-role", name: "A", skills: [skill("git", 1, false)] },
+    { roleId: "zz-role", name: "Z", isPlaceholder: false, skills: [skill("git", 1, false, false)] },
+    { roleId: "aa-role", name: "A", isPlaceholder: false, skills: [skill("git", 1, false, false)] },
   ];
   const response = matchRoles(exploring, twins, []);
   assert.deepEqual(response.roles.map((r) => r.roleId), ["aa-role", "zz-role"]);
@@ -182,7 +186,7 @@ test("evidence is limited to -1..+1 in total, and a weight never goes below 0.5"
   assert.equal(testing?.weight, 0.5); // 1 - 1 = 0, raised to 0.5
   assert.match(backend.scoreExplanation, /\+1\.5 from evidence up-a, up-b, limited to \+1/);
   assert.match(backend.scoreExplanation, /from 1 to 0\.5 .*lowest allowed weight is 0\.5/);
-  MatchResponse.parse({ scoreMeaning: matchRoles(profile, roles, rows).scoreMeaning, roles: [backend] });
+  MatchResponse.parse({ ...matchRoles(profile, roles, rows), roles: [backend] });
 });
 
 test("when evidence could not be read, base weights are used and the explanation says so", () => {
@@ -191,4 +195,18 @@ test("when evidence could not be read, base weights are used and the explanation
   for (const role of response.roles) {
     assert.match(role.scoreExplanation, /Trend evidence was not available, so base weights were used\./);
   }
+});
+
+// Part A: isPlaceholder on the match response
+test("isPlaceholder is false only when no role, role skill or skill used is placeholder", () => {
+  const reviewed: RoleInput[] = [
+    { roleId: "aa-role", name: "A", isPlaceholder: false, skills: [skill("git", 2, true, false), skill("sql", 1, false, false)] },
+  ];
+  assert.equal(matchRoles(profile, reviewed, []).isPlaceholder, false);
+
+  const oneSkillPlaceholder = [{ ...reviewed[0]!, skills: [skill("git", 2, true, false), skill("sql", 1, false, true)] }];
+  assert.equal(matchRoles(profile, oneSkillPlaceholder, []).isPlaceholder, true);
+
+  const rolePlaceholder = [{ ...reviewed[0]!, isPlaceholder: true }];
+  assert.equal(matchRoles(profile, rolePlaceholder, []).isPlaceholder, true);
 });

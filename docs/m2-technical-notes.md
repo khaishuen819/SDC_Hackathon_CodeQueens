@@ -106,6 +106,9 @@ After every install, check: `grep -c package-firewall.replit.internal package-lo
 | 2026-10-23 | `baseWeight` and `evidenceAdjustments` appear on a role skill only when evidence exists for it. | Old responses keep working; "present" means "evidence changed this". |
 | 2026-10-23 | If the evidence read fails, match with base weights and say so in every explanation. | Evidence is optional; a feature 2 problem must not break matching. |
 | 2026-10-23 | `exampleMatchResponse` is real engine output, checked by a test. | The example M1 builds against cannot drift from what the API returns. |
+| 2026-10-23 | `MatchResponse.isPlaceholder`: true if any role, role skill or skill used is placeholder data. | Scores from placeholder weights must never look real. |
+| 2026-10-23 | Only REVIEWED evidence (`isPlaceholder = false`) with a `priorityAdjustment` changes weights. | Unreviewed evidence must not change what graduates see. |
+| 2026-10-23 | Database read functions take the Prisma client as an argument (`loadRoles(prisma)`). | Tests pass a small fake client, so they need no database. |
 | 2026-10-23 | `DATABASE_URL` placeholder uses `sslmode=verify-full`. | node-postgres already treats `require` as `verify-full` and warns about it; writing `verify-full` keeps the same security and removes the warning. |
 | 2026-10-23 | Added error code `INTERNAL_ERROR` (500). | Unexpected problems (e.g. database down) also return our JSON error shape. |
 | 2026-10-23 | Uploads with multer `memoryStorage`, 2 MB limit, one file in field `cv`. | Most used Express upload library; memory storage means the CV never touches disk. |
@@ -209,7 +212,8 @@ curl -s -X POST -H "content-type: application/json" --data @profile.json http://
 ```
 
 Response 200: `MatchResponse` (see `exampleMatchResponse`, which is real engine output). Always includes
-`scoreMeaning` (not a hiring probability). Roles are ranked by score, highest first; ties by role id.
+`scoreMeaning` (not a hiring probability) and `isPlaceholder` (true if any role, role skill or skill used
+is placeholder data: then the scores are only illustrative and must not be shown as real). Roles are ranked by score, highest first; ties by role id.
 
 Errors: `INVALID_INPUT` 400 for a body that fails the schema (each Zod problem in `details`), a body that
 is not JSON, a draft profile (`status: "draft"`), or unknown skill IDs / `preferredRouteId` (one `details`
@@ -234,8 +238,9 @@ score = round( sum of effective weights of role skills in confirmedSkills
 - The preferred route (only when `entryPath` is `preferred-route`) gets `preferredRouteKept: true` and
   is never moved: its rank is still by score, and its explanation says it stays the graduate's route.
 
-**Evidence hook (feature 2 plugs in here).** The route reads `TrendEvidence` rows where
-`priorityAdjustment` is not null. For each skill, the adjustments are added up, the total is limited to
+**Evidence hook (feature 2 plugs in here).** The route reads `TrendEvidence` rows that are REVIEWED
+(`isPlaceholder = false`) and have a `priorityAdjustment` (`loadWeightEvidence` in `src/server/db/matchData.ts`).
+Placeholder evidence never changes a weight. For each skill, the adjustments are added up, the total is limited to
 **-1 to +1 (proposed, to confirm with M3/M4)**, and added to the base weight. The effective weight is
 never below **0.5** (also proposed). When evidence exists for a skill:
 - the skill's result carries `baseWeight` (before) and `evidenceAdjustments` (`evidenceId`, `direction`,
@@ -245,8 +250,7 @@ never below **0.5** (also proposed). When evidence exists for a skill:
   It also says when the -1..+1 limit or the 0.5 minimum was applied.
 If reading evidence fails, the match still returns with base weights, and every explanation ends with
 `Trend evidence was not available, so base weights were used.` The evidence tables are empty today,
-so live scores currently use base weights only. All evidence rows are used, including ones with
-`isPlaceholder = true` (see open question below).
+so live scores currently use base weights only.
 
 Match buckets (decided 2026-10-23): each role skill is in exactly one list. **Strength** if it is in
 `confirmedSkills`; **unconfirmed** if the graduate marked it "not sure" (`unconfirmedSkillIds`); otherwise a

@@ -1,7 +1,7 @@
 import "../env.ts";
 import { Router } from "express";
 import { prisma } from "../db/client.ts";
-import { loadEvidence, loadKnownSkillIds, loadRoles } from "../db/matchData.ts";
+import { loadKnownSkillIds, loadRoles, loadWeightEvidence } from "../db/matchData.ts";
 import { createLlmAdapter } from "../extraction/llmAdapter.ts";
 import { errorHandler, notFoundHandler } from "./errors.ts";
 import { createMatchRouter } from "./match.ts";
@@ -25,7 +25,13 @@ apiRouter.use(
   }),
 );
 
-apiRouter.use(createMatchRouter({ loadRoles, loadKnownSkillIds, loadEvidence }));
+apiRouter.use(
+  createMatchRouter({
+    loadRoles: () => loadRoles(prisma),
+    loadKnownSkillIds: () => loadKnownSkillIds(prisma),
+    loadEvidence: () => loadWeightEvidence(prisma),
+  }),
+);
 
 // Unknown /api paths get a JSON 404. Any error becomes our standard error shape.
 apiRouter.use("/api", notFoundHandler);

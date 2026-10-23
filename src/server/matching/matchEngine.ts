@@ -11,10 +11,12 @@ import {
 } from "../contracts/index.ts";
 
 // A role with its skills and base weights (from the database).
+// isPlaceholder on a skill = its weight row or the skill itself is placeholder data.
 export type RoleInput = {
   roleId: string;
   name: string;
-  skills: Array<{ skillId: string; name: string; weight: number; isRequired: boolean }>;
+  isPlaceholder: boolean;
+  skills: Array<{ skillId: string; name: string; weight: number; isRequired: boolean; isPlaceholder: boolean }>;
 };
 
 // One TrendEvidence row with a priorityAdjustment (feature 2, M3/M4).
@@ -69,7 +71,8 @@ export function matchRoles(
     };
   });
 
-  return { scoreMeaning: SCORE_MEANING, roles: ranked };
+  const isPlaceholder = roles.some((role) => role.isPlaceholder || role.skills.some((s) => s.isPlaceholder));
+  return { scoreMeaning: SCORE_MEANING, isPlaceholder, roles: ranked };
 }
 
 // A role skill after trend evidence has been applied.

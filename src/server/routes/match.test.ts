@@ -16,18 +16,20 @@ const roles: RoleInput[] = [
   {
     roleId: "backend-development",
     name: "Backend Development",
+    isPlaceholder: false,
     skills: [
-      { skillId: "nodejs", name: "Node.js", weight: 3, isRequired: true },
-      { skillId: "sql", name: "SQL", weight: 3, isRequired: true },
-      { skillId: "docker", name: "Docker", weight: 2, isRequired: false },
+      { skillId: "nodejs", name: "Node.js", weight: 3, isRequired: true, isPlaceholder: false },
+      { skillId: "sql", name: "SQL", weight: 3, isRequired: true, isPlaceholder: false },
+      { skillId: "docker", name: "Docker", weight: 2, isRequired: false, isPlaceholder: false },
     ],
   },
   {
     roleId: "qa-automation",
     name: "QA Automation",
+    isPlaceholder: true, // one placeholder role makes the whole match placeholder
     skills: [
-      { skillId: "testing-basics", name: "Testing basics", weight: 3, isRequired: true },
-      { skillId: "git", name: "Git", weight: 2, isRequired: true },
+      { skillId: "testing-basics", name: "Testing basics", weight: 3, isRequired: true, isPlaceholder: false },
+      { skillId: "git", name: "Git", weight: 2, isRequired: true, isPlaceholder: false },
     ],
   },
 ];
@@ -76,6 +78,7 @@ test("a confirmed profile returns a valid MatchResponse", async () => {
   const response = MatchResponse.parse(result.body);
   // With these test roles: QA 5 of 5 = 100, backend 6 of 8 = 75.
   assert.deepEqual(response.roles.map((r) => [r.roleId, r.score]), [["qa-automation", 100], ["backend-development", 75]]);
+  assert.equal(response.isPlaceholder, true);
 });
 
 // (g)

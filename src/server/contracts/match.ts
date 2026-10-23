@@ -59,6 +59,9 @@ export type RoleMatch = z.infer<typeof RoleMatch>;
 
 export const MatchResponse = z.object({
   scoreMeaning: z.literal(SCORE_MEANING),
+  // true if any role, role skill or skill used in this match is placeholder data.
+  // Then the scores are only illustrative: never show them as real.
+  isPlaceholder: z.boolean(),
   roles: z.array(RoleMatch), // ordered by rank
 });
 export type MatchResponse = z.infer<typeof MatchResponse>;
