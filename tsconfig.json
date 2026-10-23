@@ -1,0 +1,16 @@
+{
+  // Type-check only. Node 24 runs the .ts files directly by stripping types,
+  // so TypeScript never emits JavaScript here.
+  "compilerOptions": {
+    "noEmit": true,
+    "target": "esnext",
+    "module": "nodenext",
+    "allowImportingTsExtensions": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "types": ["node"]
+  },
+  "include": ["server.ts", "src/**/*.ts", "prisma/**/*.ts"]
+}

@@ -1,1 +1,7 @@
 node_modules/
+# Local secrets: never commit. .env.example (placeholders only) stays tracked.
+.env
+.env.*
+!.env.example
+dist/
+.DS_Store
