@@ -1,0 +1,45 @@
+import * as z from "zod";
+import { RoleId, SkillId } from "./ids.ts";
+import { ConfirmedProfile } from "./profile.ts";
+
+// Sent with every match response, so the frontend always shows what a score means.
+export const SCORE_MEANING =
+  "The score (0 to 100) shows how much of this role's weighted skill list is covered by your confirmed skills. " +
+  "It is not a hiring probability and does not predict whether you will get a job.";
+
+// POST /api/match: the body is the confirmed profile itself.
+export const MatchRequest = ConfirmedProfile;
+export type MatchRequest = z.infer<typeof MatchRequest>;
+
+// One of the role's skills, as it appears in a match result.
+export const RoleSkillResult = z.object({
+  skillId: SkillId,
+  // How much this skill counts for the role (scale set in the database seed).
+  weight: z.number().positive(),
+  isRequired: z.boolean(),
+});
+export type RoleSkillResult = z.infer<typeof RoleSkillResult>;
+
+export const RoleMatch = z.object({
+  roleId: RoleId,
+  rank: z.int().min(1), // 1 = highest score
+  score: z.int().min(0).max(100), // whole numbers, easier to read
+  // Plain text: how this score was calculated for this graduate.
+  scoreExplanation: z.string().min(1),
+  // Role skills that are in confirmedSkills.
+  strengths: z.array(RoleSkillResult),
+  // Role skills the graduate has not confirmed (and not marked "not sure").
+  gaps: z.array(RoleSkillResult),
+  // Role skills the graduate marked "not sure" (unconfirmedSkillIds).
+  unconfirmedSkills: z.array(RoleSkillResult),
+  // true on the graduate's preferred route. It stays their route even if
+  // another route scores higher.
+  preferredRouteKept: z.boolean(),
+});
+export type RoleMatch = z.infer<typeof RoleMatch>;
+
+export const MatchResponse = z.object({
+  scoreMeaning: z.literal(SCORE_MEANING),
+  roles: z.array(RoleMatch), // ordered by rank
+});
+export type MatchResponse = z.infer<typeof MatchResponse>;
