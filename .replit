@@ -32,3 +32,7 @@ outputType = "console"
 [[ports]]
 localPort = 3000
 externalPort = 80
+
+[deployment]
+deploymentTarget = "autoscale"
+run = ["sh", "-c", "npm start"]
