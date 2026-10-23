@@ -109,6 +109,9 @@ export const exampleConfirmedProfile = {
 // POST /api/match
 export const exampleMatchRequest = exampleConfirmedProfile satisfies MatchRequest;
 
+// Real output of the match engine for exampleConfirmedProfile, with the illustrative
+// weights in matchEngine.test.ts and one FICTIONAL evidence row (fictional-evidence-1: CI/CD basics +1).
+// matchEngine.test.ts checks that the engine still gives exactly this.
 export const exampleMatchResponse = {
   scoreMeaning: SCORE_MEANING,
   roles: [
@@ -117,13 +120,13 @@ export const exampleMatchResponse = {
       rank: 1,
       score: 78,
       scoreExplanation:
-        "Example only, with illustrative weights. Your confirmed skills cover 14 of this role's 18 " +
-        "skill-weight points: 14 / 18 x 100 = 78 (rounded). Not counted: Docker (weight 2), which you " +
-        "marked as not sure, and database design (weight 2), which is not on your confirmed profile.",
+        "Your confirmed skills cover 14 of this role's 18 skill-weight points: 14 / 18 x 100 = 78 (rounded). " +
+        "Not counted (you marked as not sure): Docker (weight 2). " +
+        "Not counted (not on your confirmed profile): Database design (weight 2).",
       strengths: [
+        { skillId: "api-basics", weight: 3, isRequired: true },
         { skillId: "nodejs", weight: 3, isRequired: true },
         { skillId: "sql", weight: 3, isRequired: true },
-        { skillId: "api-basics", weight: 3, isRequired: true },
         { skillId: "git", weight: 2, isRequired: true },
         { skillId: "javascript", weight: 2, isRequired: false },
         { skillId: "testing-basics", weight: 1, isRequired: false },
@@ -135,13 +138,12 @@ export const exampleMatchResponse = {
     {
       roleId: "qa-automation",
       rank: 2,
-      score: 67,
+      score: 63,
       scoreExplanation:
-        "Example only, with illustrative weights. Your confirmed skills cover 10 of this role's 15 " +
-        "skill-weight points: 10 / 15 x 100 = 67 (rounded). Not counted: test automation (weight 3, " +
-        "required) and CI/CD basics (weight 2), which are not on your confirmed profile. " +
-        "This is your preferred route, so it stays your route " +
-        "even though backend development scores higher.",
+        "Your confirmed skills cover 10 of this role's 16 skill-weight points: 10 / 16 x 100 = 63 (rounded). " +
+        "Not counted (not on your confirmed profile): CI/CD basics (weight 3), Test automation (weight 3, required). " +
+        "Trend evidence changed the weight of CI/CD basics from 2 to 3 (+1 from evidence fictional-evidence-1). " +
+        "This is your preferred route, so it stays your route even though Backend Development scores higher.",
       strengths: [
         { skillId: "testing-basics", weight: 3, isRequired: true },
         { skillId: "api-basics", weight: 2, isRequired: true },
@@ -150,8 +152,21 @@ export const exampleMatchResponse = {
         { skillId: "sql", weight: 1, isRequired: false },
       ],
       gaps: [
+        {
+          skillId: "ci-cd-basics",
+          weight: 3, // effective weight, after evidence
+          isRequired: false,
+          baseWeight: 2,
+          evidenceAdjustments: [
+            {
+              evidenceId: "fictional-evidence-1",
+              direction: "rising",
+              adjustment: 1,
+              explanation: "FICTIONAL example adjustment, for format testing only.",
+            },
+          ],
+        },
         { skillId: "test-automation", weight: 3, isRequired: true },
-        { skillId: "ci-cd-basics", weight: 2, isRequired: false },
       ],
       unconfirmedSkills: [],
       preferredRouteKept: true,

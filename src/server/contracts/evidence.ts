@@ -20,6 +20,10 @@ export const EvidenceItem = z.object({
 });
 export type EvidenceItem = z.infer<typeof EvidenceItem>;
 
+// Whether a source says a skill's demand is going up or down.
+export const TrendDirection = z.enum(["rising", "declining"]);
+export type TrendDirection = z.infer<typeof TrendDirection>;
+
 // A pointer from somewhere else (e.g. a pathway step) to an EvidenceItem.
 // An object, not a bare ID, so fields can be added later without breaking M1.
 export const EvidenceRef = z.object({

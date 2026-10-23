@@ -100,6 +100,13 @@ After every install, check: `grep -c package-firewall.replit.internal package-lo
 | 2026-10-23 | All `/api` routes are mounted through one `apiRouter` (`src/server/routes/index.ts`). | `server.ts` changes once; later phases add routes without touching it. |
 | 2026-10-23 | Commit the generated Prisma client; no `postinstall`. | Replit runs it as is; regenerate after schema changes. |
 | 2026-10-23 | Proposal (asked M3/M4): `priorityAdjustment` is -1 to +1, added to the role-skill weight. | Small, explainable effect; to be confirmed. |
+| 2026-10-23 | Match score logic is a pure function (`src/server/matching/matchEngine.ts`); the route reads the database and passes data in. | Tests need no database; the formula sits in one readable place. |
+| 2026-10-23 | Unknown skill IDs or `preferredRouteId` return `INVALID_INPUT` with a `details` entry per bad ID. | Never guess what the graduate meant. |
+| 2026-10-23 | Evidence total per skill limited to -1..+1, effective weight at least 0.5 (**proposed, to confirm with M3/M4**). | Evidence can shift priorities but never wipe out a skill or dominate a role. |
+| 2026-10-23 | `baseWeight` and `evidenceAdjustments` appear on a role skill only when evidence exists for it. | Old responses keep working; "present" means "evidence changed this". |
+| 2026-10-23 | If the evidence read fails, match with base weights and say so in every explanation. | Evidence is optional; a feature 2 problem must not break matching. |
+| 2026-10-23 | `exampleMatchResponse` is real engine output, checked by a test. | The example M1 builds against cannot drift from what the API returns. |
+| 2026-10-23 | `DATABASE_URL` placeholder uses `sslmode=verify-full`. | node-postgres already treats `require` as `verify-full` and warns about it; writing `verify-full` keeps the same security and removes the warning. |
 | 2026-10-23 | Added error code `INTERNAL_ERROR` (500). | Unexpected problems (e.g. database down) also return our JSON error shape. |
 | 2026-10-23 | Uploads with multer `memoryStorage`, 2 MB limit, one file in field `cv`. | Most used Express upload library; memory storage means the CV never touches disk. |
 | 2026-10-23 | PDF text with unpdf (MIT), not raw pdfjs-dist or pdf-parse. | Maintained (unjs), no dependencies, one-call `extractText`, works in Node without worker set-up; uses Mozilla's PDF.js inside. |
@@ -118,7 +125,7 @@ response: `src/server/contracts/examples.ts`. Status "planned" means the contrac
 |---|---|---|---|---|
 | GET /health | none | `{ status: "ok" }` | setup | done (Replit Agent) |
 | POST /api/profile/extract | multipart upload, field `cv` (PDF or .txt, max 2 MB) | `DraftProfile` | 1 | done, Phase 3 |
-| POST /api/match | `MatchRequest` (= `ConfirmedProfile`) | `MatchResponse` | 3 | planned |
+| POST /api/match | `MatchRequest` (= `ConfirmedProfile`) | `MatchResponse` | 3 | done, Phase 4 |
 | POST /api/pathway | `PathwayRequest` (`{ profile, roleId }`) | `PathwayResponse` | 4 | planned |
 | GET /api/roles | none | `RolesResponse` (roles, skills, weights, `isPlaceholder`) | 3 | done, Phase 2 |
 | GET /api/sdg | none | `SdgResponse` | 5 | planned |
@@ -128,7 +135,7 @@ Errors (all endpoints): body is `ApiError`, `{ "error": { "code", "message", "de
 
 | Code | HTTP | When |
 |---|---|---|
-| INVALID_INPUT | 400 | body or query failed validation |
+| INVALID_INPUT | 400 | body or query failed validation, not JSON, a draft profile, or unknown IDs (`details` lists each problem) |
 | NOT_FOUND | 404 | unknown route, role or skill |
 | FILE_TOO_LARGE | 413 | upload over 2 MB |
 | UNSUPPORTED_FILE | 415 | not PDF or plain text |
@@ -190,6 +197,57 @@ Until that is checked, send only fictional CVs to Gemini.
 Settings (env vars, see `.env.example`): `LLM_PROVIDER` = `mock` (default) or `gemini`; `GEMINI_API_KEY`;
 `GEMINI_MODEL`. With `gemini`, the server will not start unless both are set.
 
+### POST /api/match
+
+Score every role for a CONFIRMED profile. Code: `src/server/routes/match.ts` (validation and database
+reads), `src/server/matching/matchEngine.ts` (pure score logic), `src/server/db/matchData.ts` (reads).
+
+Request: JSON body = `ConfirmedProfile` (see `exampleConfirmedProfile`). Max 100 kB.
+
+```
+curl -s -X POST -H "content-type: application/json" --data @profile.json http://localhost:3000/api/match
+```
+
+Response 200: `MatchResponse` (see `exampleMatchResponse`, which is real engine output). Always includes
+`scoreMeaning` (not a hiring probability). Roles are ranked by score, highest first; ties by role id.
+
+Errors: `INVALID_INPUT` 400 for a body that fails the schema (each Zod problem in `details`), a body that
+is not JSON, a draft profile (`status: "draft"`), or unknown skill IDs / `preferredRouteId` (one `details`
+entry each, e.g. `{ "path": "confirmedSkills.6.skillId", "message": "Unknown skillId \"made-up-skill\"." }`).
+`INTERNAL_ERROR` 500 if roles cannot be read from the database.
+
+**Score formula** (per role):
+
+```
+effective weight = max(0.5, base weight + limit(sum of evidence adjustments for the skill, -1, +1))
+score = round( sum of effective weights of role skills in confirmedSkills
+               / sum of effective weights of all role skills  x 100 )
+```
+
+- Every role skill is in exactly one list: **strengths** (in `confirmedSkills`), **unconfirmedSkills**
+  (in `unconfirmedSkillIds`, "not sure"), or **gaps** (everything else, including removed skills).
+- Only strengths count toward the score. Unconfirmed skills are not counted and are not gaps.
+- An empty `confirmedSkills` list is valid: score 0, and the explanation says so.
+- `scoreExplanation` shows the numbers (e.g. `14 / 18 x 100 = 78 (rounded)`), lists what was not counted
+  and why ("you marked as not sure", "not on your confirmed profile"), and never says "missing" or
+  "you lack".
+- The preferred route (only when `entryPath` is `preferred-route`) gets `preferredRouteKept: true` and
+  is never moved: its rank is still by score, and its explanation says it stays the graduate's route.
+
+**Evidence hook (feature 2 plugs in here).** The route reads `TrendEvidence` rows where
+`priorityAdjustment` is not null. For each skill, the adjustments are added up, the total is limited to
+**-1 to +1 (proposed, to confirm with M3/M4)**, and added to the base weight. The effective weight is
+never below **0.5** (also proposed). When evidence exists for a skill:
+- the skill's result carries `baseWeight` (before) and `evidenceAdjustments` (`evidenceId`, `direction`,
+  `adjustment`, `explanation`), and `weight` is the effective weight;
+- `scoreExplanation` says which skill changed, from what to what, and cites the evidence IDs, e.g.
+  `Trend evidence changed the weight of CI/CD basics from 2 to 3 (+1 from evidence fictional-evidence-1).`
+  It also says when the -1..+1 limit or the 0.5 minimum was applied.
+If reading evidence fails, the match still returns with base weights, and every explanation ends with
+`Trend evidence was not available, so base weights were used.` The evidence tables are empty today,
+so live scores currently use base weights only. All evidence rows are used, including ones with
+`isPlaceholder = true` (see open question below).
+
 Match buckets (decided 2026-10-23): each role skill is in exactly one list. **Strength** if it is in
 `confirmedSkills`; **unconfirmed** if the graduate marked it "not sure" (`unconfirmedSkillIds`); otherwise a
 **gap**, worded to the graduate as "not on your confirmed profile". The score counts confirmed skills only.
@@ -209,7 +267,7 @@ The database holds reference content only. **No user profiles and no CVs are sto
 | RoleSdg | Links a role to an SDG, with a plain-text reason. |
 | SkillSdg | Links a skill to an SDG, with a plain-text reason. |
 | Source | A dated publication that trend evidence comes from (M3/M4 fill it). |
-| TrendEvidence | One claim from one source about one skill: direction (rising/declining), summary, limitation, and optional `priorityAdjustment` + `adjustmentExplanation`. Starts empty; matching will read it later. |
+| TrendEvidence | One claim from one source about one skill: direction (rising/declining), summary, limitation, and optional `priorityAdjustment` + `adjustmentExplanation`. Starts empty. `POST /api/match` reads rows with a `priorityAdjustment` (see the evidence hook). |
 
 Mapping to the proposed evidence contract: one `TrendEvidence` row = one `EvidenceItem`. It has one
 `skillId`, so `linkedSkillIds` has one entry; `title`, `publisher`, `url` and the dates come from its `Source`.
@@ -219,7 +277,8 @@ To agree with M3/M4.
 
 1. Create a free account at neon.tech and make a project (pick a region close to the Replit server).
 2. Neon dashboard > **Connect** > copy the connection string. Use the **direct** one (host without
-   `-pooler`): `prisma migrate` needs a direct connection. It ends in `?sslmode=require`.
+   `-pooler`): `prisma migrate` needs a direct connection. Neon gives it with `?sslmode=require`; change
+   that to `?sslmode=verify-full` (same security in node-postgres today, and no warning at start-up).
 3. Local: put it in `.env` as `DATABASE_URL="..."` (`.env` is git-ignored; see `.env.example`).
 4. Replit: **Tools > Secrets**, add key `DATABASE_URL` with the same value. Add it before running the
    new code on Replit: the server stops at start-up without it.
@@ -242,6 +301,8 @@ Commands (run by M2, from the project root):
   (migration `20261023030501_init` applied and seeded on Neon; `GET /api/roles` checked 2026-10-23)
 - [x] Phase 3: CV upload and extraction (`POST /api/profile/extract`), mock + Gemini adapters, 14 route tests
   - [ ] M2: try `LLM_PROVIDER=gemini` with a real key and the two fictional sample CVs, after checking provider terms
+- [x] Phase 4: `POST /api/match` with explained scores and the trend-evidence hook (pure engine + route tests)
+  - [ ] M3/M4: confirm the -1..+1 adjustment scale and the 0.5 minimum weight
 
 ## Data, licences and privacy notes
 

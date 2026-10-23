@@ -1,6 +1,7 @@
 import * as z from "zod";
-import { RoleId, SkillId } from "./ids.ts";
+import { EvidenceId, RoleId, SkillId } from "./ids.ts";
 import { ConfirmedProfile } from "./profile.ts";
+import { TrendDirection } from "./evidence.ts";
 
 // Sent with every match response, so the frontend always shows what a score means.
 export const SCORE_MEANING =
@@ -11,12 +12,27 @@ export const SCORE_MEANING =
 export const MatchRequest = ConfirmedProfile;
 export type MatchRequest = z.infer<typeof MatchRequest>;
 
+// One piece of trend evidence that changed a skill's weight (feature 2, M3/M4).
+export const EvidenceAdjustment = z.object({
+  evidenceId: EvidenceId,
+  direction: TrendDirection,
+  // This row's own adjustment. The total per skill is limited to -1..+1.
+  adjustment: z.number(),
+  explanation: z.string().min(1),
+});
+export type EvidenceAdjustment = z.infer<typeof EvidenceAdjustment>;
+
 // One of the role's skills, as it appears in a match result.
 export const RoleSkillResult = z.object({
   skillId: SkillId,
-  // How much this skill counts for the role (scale set in the database seed).
+  // How much this skill counts for the role, after any trend evidence
+  // (the "effective weight"; base scale 1 to 3 is set in the database seed).
   weight: z.number().positive(),
   isRequired: z.boolean(),
+  // Only present when trend evidence exists for this skill:
+  // the weight before evidence, and the evidence that changed it.
+  baseWeight: z.number().positive().optional(),
+  evidenceAdjustments: z.array(EvidenceAdjustment).optional(),
 });
 export type RoleSkillResult = z.infer<typeof RoleSkillResult>;
 

@@ -1,8 +1,10 @@
 import "../env.ts";
 import { Router } from "express";
 import { prisma } from "../db/client.ts";
+import { loadEvidence, loadKnownSkillIds, loadRoles } from "../db/matchData.ts";
 import { createLlmAdapter } from "../extraction/llmAdapter.ts";
 import { errorHandler, notFoundHandler } from "./errors.ts";
+import { createMatchRouter } from "./match.ts";
 import { createProfileRouter } from "./profile.ts";
 import { rolesRouter } from "./roles.ts";
 
@@ -22,6 +24,8 @@ apiRouter.use(
     loadCatalogue: () => prisma.skill.findMany({ select: { id: true, name: true }, orderBy: { id: "asc" } }),
   }),
 );
+
+apiRouter.use(createMatchRouter({ loadRoles, loadKnownSkillIds, loadEvidence }));
 
 // Unknown /api paths get a JSON 404. Any error becomes our standard error shape.
 apiRouter.use("/api", notFoundHandler);

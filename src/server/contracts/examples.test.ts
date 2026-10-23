@@ -56,6 +56,19 @@ test("a skill cannot be both confirmed and removed", () => {
   assert.equal(ConfirmedProfile.safeParse(profile).success, false);
 });
 
+test("a role skill without the optional evidence fields is still valid (old shape)", () => {
+  assertValid(MatchResponse, {
+    ...ex.exampleMatchResponse,
+    roles: [{ ...ex.exampleMatchResponse.roles[0], gaps: [{ skillId: "docker", weight: 2, isRequired: false }] }],
+  });
+});
+
+test("an evidence adjustment with an unknown direction is rejected", () => {
+  const response = JSON.parse(JSON.stringify(ex.exampleMatchResponse)); // a copy we can change
+  response.roles[1].gaps[0].evidenceAdjustments[0].direction = "sideways";
+  assert.equal(MatchResponse.safeParse(response).success, false);
+});
+
 test("a score above 100 is rejected", () => {
   const [first, ...rest] = ex.exampleMatchResponse.roles;
   const response = { ...ex.exampleMatchResponse, roles: [{ ...first, score: 101 }, ...rest] };
