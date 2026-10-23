@@ -9,4 +9,7 @@ app.get("/health", (_req, res) => {
 
 app.use(apiRouter);
 
+// Frontend (M1): static files, after the API so they can never replace an /api route.
+app.use(express.static("frontend/public"));
+
 app.listen(Number(process.env.PORT ?? 3000), "0.0.0.0");
