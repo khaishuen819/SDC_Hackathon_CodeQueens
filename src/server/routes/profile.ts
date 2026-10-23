@@ -1,7 +1,7 @@
 import { Router, type RequestHandler } from "express";
 import multer from "multer";
 import { DraftProfile } from "../contracts/index.ts";
-import { keepCatalogueIdsOnly } from "../extraction/cleanDraft.ts";
+import { cleanDraft } from "../extraction/cleanDraft.ts";
 import { MAX_CV_BYTES, readCvText } from "../extraction/cvText.ts";
 import type { LlmAdapter, SkillCatalogue } from "../extraction/llmAdapter.ts";
 import { ApiFailure } from "./errors.ts";
@@ -24,7 +24,9 @@ export function createProfileRouter(deps: ProfileRouteDeps) {
 
     const { text, warnings } = await readCvText(req.file);
     const catalogue = await deps.loadCatalogue();
-    const draft = keepCatalogueIdsOnly(await deps.adapter.extractProfile(text, catalogue), catalogue);
+    // Mock evidence is fixed fiction, not quotes from this CV, so it skips the evidence checks.
+    const cvTextForChecks = deps.adapter.name === "mock" ? null : text;
+    const draft = cleanDraft(await deps.adapter.extractProfile(text, catalogue), catalogue, cvTextForChecks);
 
     // Check our own output against the contract before sending it.
     res.json(DraftProfile.parse({ ...draft, warnings: [...warnings, ...draft.warnings] }));
