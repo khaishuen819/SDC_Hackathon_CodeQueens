@@ -2,11 +2,14 @@ import * as z from "zod";
 import { ResourceId, RoleId, SkillId } from "./ids.ts";
 import { ConfirmedProfile } from "./profile.ts";
 import { EvidenceRef } from "./evidence.ts";
+import { CriteriaReview, SnapshotId, SkillReview, TrendMeta } from "./criteria.ts";
 
 // POST /api/pathway
 export const PathwayRequest = z.object({
   profile: ConfirmedProfile,
   roleId: RoleId, // the route the graduate chose
+  snapshotId: SnapshotId.optional(),
+  criteriaReview: CriteriaReview.optional(),
 });
 export type PathwayRequest = z.infer<typeof PathwayRequest>;
 
@@ -50,3 +53,7 @@ export const PathwayResponse = z.object({
   steps: z.array(PathwayStep), // ordered by `order`
 });
 export type PathwayResponse = z.infer<typeof PathwayResponse>;
+
+export const VersionedPathwayResponse = PathwayResponse.extend({ criteria: TrendMeta, review: SkillReview })
+  .refine((r) => r.criteria.snapshotId === r.review.targetSnapshotId, { error: "Pathway and optional guidance must use the same version." });
+export type VersionedPathwayResponse = z.infer<typeof VersionedPathwayResponse>;

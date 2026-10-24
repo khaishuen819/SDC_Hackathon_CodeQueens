@@ -2,14 +2,20 @@ import * as z from "zod";
 import { EvidenceId, RoleId, SkillId } from "./ids.ts";
 import { ConfirmedProfile } from "./profile.ts";
 import { TrendDirection } from "./evidence.ts";
+import { CriteriaReview, SnapshotId, SkillReview, TrendMeta } from "./criteria.ts";
 
 // Sent with every match response, so the frontend always shows what a score means.
 export const SCORE_MEANING =
   "The score (0 to 100) shows how much of this role's weighted skill list is covered by your confirmed skills. " +
   "It is not a hiring probability and does not predict whether you will get a job.";
 
+// Used only by the versioned one-point integration, not legacy weighted routes.
+export const COUNT_SCORE_MEANING =
+  "The score is the percentage of this role's listed skills confirmed in your profile; each skill counts once. " +
+  "Unconfirmed skills receive no credit yet and can be updated later. It is not a proficiency assessment or hiring probability.";
+
 // POST /api/match: the body is the confirmed profile itself.
-export const MatchRequest = ConfirmedProfile;
+export const MatchRequest = ConfirmedProfile.safeExtend({ snapshotId: SnapshotId.optional(), criteriaReview: CriteriaReview.optional() });
 export type MatchRequest = z.infer<typeof MatchRequest>;
 
 // One piece of trend evidence that changed a skill's weight (feature 2, M3/M4).
@@ -65,3 +71,10 @@ export const MatchResponse = z.object({
   roles: z.array(RoleMatch), // ordered by rank
 });
 export type MatchResponse = z.infer<typeof MatchResponse>;
+
+export const VersionedMatchResponse = MatchResponse.omit({ scoreMeaning: true }).extend({
+  scoreMeaning: z.literal(COUNT_SCORE_MEANING), criteria: TrendMeta, review: SkillReview,
+}).refine((r) => r.criteria.snapshotId === r.review.targetSnapshotId && r.roles.every((role) =>
+  [...role.strengths, ...role.gaps, ...role.unconfirmedSkills].every((s) => s.weight === 1 && !s.evidenceAdjustments?.length)),
+{ error: "Versioned matching requires one pinned version and one point per skill." });
+export type VersionedMatchResponse = z.infer<typeof VersionedMatchResponse>;
