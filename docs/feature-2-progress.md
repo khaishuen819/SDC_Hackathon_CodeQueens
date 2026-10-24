@@ -6,8 +6,9 @@ Approved basis: V4 automation/scoring design and implementation plan, reviewed24
 The user authorizes local implementation and small commits on this feature branch,
 superseding CLAUDE.md's earlier M2-only commit restriction for this work.
 Latest instruction (24 October): pause and notify the user before EVERY push.
-Phase 2 code was pushed (`ae96541`, `dfe4338`). Phase 3 commits stay local until the
-user approves a push. Keep at least a conservative 15% session-token reserve.
+Phase 2 code (`ae96541`, `dfe4338`) and Phase 3 (`e6384e0`..`272902c`) were pushed after
+approval. Phase 4 commits stay local until the user approves a push. Keep at least a
+conservative 15% session-token reserve.
 Main merges and Replit publishing are separate actions. The proficiency picker
 removal is a separate change for Jong to apply; it is not bundled here.
 
@@ -26,8 +27,9 @@ removal is a separate change for Jong to apply; it is not bundled here.
 ## Checkpoints
 
 Phase1's offline foundation is complete. Phase2's reference/catalogue checkpoint
-is below. Phase 3's source/interpretation kernels are implemented locally (see the
-Phase 3 section at the end); Phases 4–7 have not been implemented.
+is below. Phase 3's source/interpretation kernels and Phase 4's durable store and
+refresh service are implemented (see their sections at the end); Phases 5–7 have
+not been implemented.
 
 1. Completed: shared schemas/versioned contracts.85 backend checks passed at this checkpoint.
 2. Completed: source/canonical admission rules, stable identity and one-point/citation-only adapters.112 backend checks and type-checking passed.
@@ -201,5 +203,58 @@ Not verified or not done:
   retraction workflow exists.
 - Phase 4 must resupply all cached waiting items when the interpreter context changes
   (old-context active entries are dropped) and should cap processed/quarantined
-  history when persisting queue state.
+  history when persisting queue state. Both are done in Phase 4 (below).
 - No database, snapshot, route, frontend or deployment change.
+
+## Phase 4 — local checkpoint, 24 October 2026
+
+Durable, restart-safe criteria versions and the refresh service. Not wired into
+routes (Phase 5); the migration is not applied to Neon (Phase 7 runbook).
+
+Local commits (not pushed), each shown as a diff and approved before committing:
+
+1. `e3c759e` store contract and in-memory store: `CriteriaStore`, shared pure rules
+   (75 s lease, 60 s between reservation starts, publish only for the current base, a
+   newer generation and the held lease), content-hash check on every snapshot read,
+   validated `QueueItem`/`QueueState` and a strict `RefreshPublicState` (no profile data).
+2. `4c32ca3` snapshot tables: `CriteriaSnapshot` and the single `CriteriaHead` row. The
+   migration `20261024130000_dynamic_criteria_snapshots` is additive only, with a
+   single-row check and triggers rejecting UPDATE, DELETE and TRUNCATE on snapshots.
+3. `cac0446` PostgreSQL store: one transaction per write, `SELECT ... FOR UPDATE` on the
+   head row and the database clock, reusing the shared rules.
+4. `1c4fcd1` refresh service: reserve, run one bounded draft from saved state, persist the
+   dispatch before the model call, publish or save, always release. `bootstrapCriteria`,
+   a 200-record queue history cap and the `onDispatch` hook. Fix: `publishIfCurrent`
+   takes an explicit `checked` flag, so a version built from cached sources while feeds
+   are down does not invent a successful check.
+5. This commit: notes and the `TEST_DATABASE_URL` placeholder.
+
+Approved decisions recorded here: `RefreshState` keeps providers, waiting sources, queue
+and notices plus check times; the unused interpretation and staged caches were dropped
+(processed queue keys already prevent re-interpretation). Database tests run only on an
+explicit disposable database. The migration folder uses a standard 14-digit timestamp.
+
+Verification:
+
+- `npm test` without a test database: 196 passed, 9 skipped (database tests, pending),
+  0 failed; 10 frontend checks and TypeScript checking passed.
+- Throwaway PGlite (PostgreSQL 17.5, in memory) with both migrations: `prisma migrate
+  diff` reported no drift; triggers and the single-row check behaved as intended; the
+  shared store contract, database-time lease and direct-SQL immutability tests passed
+  (8 passed, 1 skipped). PGlite was used only as a local verification tool and is not a
+  project dependency.
+- Each new test file failed before its module existed. Deliberate mutations of the memory
+  store, PostgreSQL store and refresh service were each caught.
+
+Not verified or not done:
+
+- True lock contention between separate connections: the four-connection reservation
+  test needs a multi-connection disposable PostgreSQL (`TEST_DATABASE_CONCURRENCY=1`).
+  PGlite accepts one connection.
+- The migration has not been applied to Neon or any shared database.
+- PGlite quirks (dropped reconnects, closing the connection after an SQL error) are
+  handled in the test helpers; real PostgreSQL does not need them.
+- The status display uses the server clock while leases use the database clock, so a
+  small skew is possible. Each admitted skill changes the catalogue fingerprint, so
+  current articles are reinterpreted (two per refresh); this is by design but costs calls.
+- No routes, frontend or deployment change; the public app still uses legacy logic.

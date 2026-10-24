@@ -344,6 +344,8 @@ The database holds reference content only. **No user profiles and no CVs are sto
 | SkillSdg | Links a skill to an SDG, with a plain-text reason. |
 | Source | A dated publication that trend evidence comes from (M3/M4 fill it). |
 | TrendEvidence | One claim from one source about one skill: direction (rising/declining), summary, limitation, and optional `priorityAdjustment` + `adjustmentExplanation`. Starts empty. `POST /api/match` reads rows with a `priorityAdjustment` (see the evidence hook). |
+| CriteriaSnapshot | Feature 2: one immutable, content-addressed version of the public role criteria (JSON). Triggers reject UPDATE, DELETE and TRUNCATE. No personal data. |
+| CriteriaHead | Feature 2: the single `pilot` row pointing at the current snapshot, with generations, the shared refresh lease, cooldown, check times and public queue/cache state. No personal data. |
 
 Mapping to the proposed evidence contract: one `TrendEvidence` row = one `EvidenceItem`. It has one
 `skillId`, so `linkedSkillIds` has one entry; `title`, `publisher`, `url` and the dates come from its `Source`.
@@ -424,6 +426,10 @@ Commands (run by M2, from the project root):
   notes. Each change was shown as a diff and approved by the team leader before a local
   commit; no push without separate approval. Tests use fake fetchers/models and FICTIONAL
   fixtures; one read-only real-feed check was run. No live Gemini call, database or deployment.
+- Claude Code (Claude Opus 5.5): Feature 2 Phase 4 on 24 October 2026 — store contract,
+  snapshot tables and migration, PostgreSQL store, refresh service, tests and these notes,
+  with the same diff-and-approve workflow. Database code was checked on a throwaway
+  in-memory PGlite database only; Neon was not touched.
 
 ## Feature 2 V4 — Phase 2 reference/catalogue checkpoint
 
@@ -514,3 +520,33 @@ Status, verification, plan deviations and limits are in `docs/feature-2-progress
 Settings: `TREND_PROVIDER=disabled` (default, no model calls) or `gemini`, which needs the
 existing `GEMINI_API_KEY` plus `TREND_GEMINI_MODEL`. The Gemini response schema has not been
 checked against the live API yet (Task 7).
+
+## Feature 2 V4 — Phase 4 durable criteria checkpoint
+
+Restart-safe criteria versions with a shared refresh lease. Not wired into routes yet
+(Phase 5). Status, verification and limits are in `docs/feature-2-progress.md`.
+
+| File | Purpose / handoff |
+|---|---|
+| `src/server/trends/snapshotStore.ts` | `CriteriaStore` interface; shared reservation/lease/publish rules; `MemoryCriteriaStore` (tests, local) and `PrismaCriteriaStore` (row lock + database clock). |
+| `src/server/trends/refreshService.ts` | `createRefreshService(...)` with `refresh()` and `loadState()` returning `TrendMeta`; `trendMeta(...)` status rules. Phase 5 routes call these. |
+| `src/server/trends/bootstrap.ts` | `bootstrapCriteria(store, bundle)` stores the validated baseline only when no current snapshot exists. |
+| `prisma/migrations/20261024130000_dynamic_criteria_snapshots/` | Additive tables, single-row check, snapshot immutability triggers. |
+| `src/server/trends/storeContract.ts` | Shared behaviour suite every store must pass. |
+| `src/server/trends/testDatabase.ts`, `*.db.test.ts` | PostgreSQL tests; run only with a disposable `TEST_DATABASE_URL`. |
+
+Running the PostgreSQL tests (disposable database only; never the team database):
+
+```sh
+DATABASE_URL="$TEST_DATABASE_URL" npx prisma migrate deploy
+node --test --test-concurrency=1 src/server/trends/*.db.test.ts
+```
+
+They reset the database between tests (briefly disabling the snapshot trigger, which needs
+table ownership) and refuse to run if `TEST_DATABASE_URL` equals `DATABASE_URL`. Run the
+files one at a time because they share the database. `TEST_DATABASE_CONCURRENCY=1` adds
+the multi-connection reservation test. Without `TEST_DATABASE_URL` they are skipped.
+
+Deploying (Phase 7, with a backup first): apply only this additive migration, bootstrap
+the verified baseline once with `bootstrapCriteria`, and keep `TREND_PROVIDER=disabled`
+until the routes and frontend that read snapshots are released together.
