@@ -84,3 +84,12 @@ test("A6 uncertainty is explicit and timestamps are not model confidence", () =>
   const ctx = context(); ctx.now = NOW;
   assert.equal(evaluateCandidate(candidate(), ctx).status, "promote");
 });
+
+test("A5 a recognised prerequisite must also be an allowed graduate foundation", () => {
+  const c = candidate(); c.capability.prerequisiteSkillIds = ["fixture-skill-9"];
+  const result = evaluateCandidate(c, context());
+  assert.equal(result.status, "stage");
+  assert.ok("reasons" in result && result.reasons.some((r) => r.gate === "A5"));
+  c.capability.prerequisiteSkillIds = ["api-basics"];
+  assert.equal(evaluateCandidate(c, context()).status, "promote");
+});

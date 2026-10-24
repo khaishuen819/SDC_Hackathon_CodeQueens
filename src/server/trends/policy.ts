@@ -52,7 +52,8 @@ export function evaluateCandidate(input: CandidateInterpretation, context: Admis
   if (canonical.length > 1 || (declared && canonical.some((s) => s.skillId !== declared.skillId))) return fail("stage", "A4", "ambiguous-canonical-mapping");
   if (c.relation === "uncertain") return fail("stage", "A4", "uncertain-distinction");
   if (c.fit !== "pilot" || c.relation === "alternative-stack") return fail("stage", "A5", "optional-or-uncertain-route-fit");
-  if (c.capability.prerequisiteSkillIds.some((id) => !b.capabilities.some((s) => s.skillId === id))) return fail("stage", "A5", "prerequisite-not-recognised");
+  if (c.capability.prerequisiteSkillIds.some((id) => !b.capabilities.some((s) => s.skillId === id) ||
+      !context.config.foundationalSkillIds.includes(id))) return fail("stage", "A5", "prerequisite-not-permitted");
   if (c.conflict || c.uncertainties.length) return fail("stage", "A6", "unresolved-support");
   const existing = canonical[0] ?? declared;
   if (existing) {

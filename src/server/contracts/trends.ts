@@ -88,6 +88,7 @@ export const CriteriaBundle = z.strictObject({
   }
   for (const e of b.evidence) {
     if (e.linkedSkillIds.some((id) => !caps.has(id))) issue("evidence", "Unknown linked skill.");
+    if (e.datePrecision !== "unknown" && !e.originalDate?.trim()) issue("evidence", "Known date precision requires the original value.");
     if (e.datePrecision !== "day" && (e.publishedAt !== null || e.publishedDate !== null)) issue("evidence", "Do not invent a publication day.");
     if (e.datePrecision === "day" && (!e.publishedDate || !e.originalDate || (e.publishedAt && e.publishedAt.slice(0, 10) !== e.publishedDate))) issue("evidence", "Publication day/precision disagree.");
   }
@@ -96,16 +97,25 @@ export const CriteriaBundle = z.strictObject({
   for (const tag of b.sdg.skillTags) if (!caps.has(tag.skillId) || !goals.has(tag.sdgId) || tag.isPlaceholder) issue("sdg", "Invalid/unready skill SDG mapping.");
   for (const role of b.roles) {
     unique(role.skills.map((s) => s.skillId), "roles");
+    const definitions = new Set<string>(), outcomes = new Set<string>();
     if (!b.sdg.roleTags.some((t) => t.roleId === role.roleId)) issue("sdg", "Role SDG rationale is required.");
     for (const skill of role.skills) {
       if (!caps.has(skill.skillId)) issue("roles", "Unknown current capability.");
+      const capability = caps.get(skill.skillId);
+      if (capability) {
+        const normal = (s: string) => s.normalize("NFKC").trim().toLowerCase().replace(/\s+/g, " ");
+        const definition = normal(capability.definition), outcome = normal(capability.observableOutcome);
+        if (definitions.has(definition) || outcomes.has(outcome)) issue("roles", "Overlapping capabilities cannot count twice for a role.");
+        definitions.add(definition); outcomes.add(outcome);
+      }
       if (!b.resources.some((r) => r.skillId === skill.skillId && r.cost === "free")) issue("resources", "Current capability needs a ready free resource.");
       if (!b.sdg.skillTags.some((t) => t.skillId === skill.skillId)) issue("sdg", "Current capability needs an SDG rationale.");
       if (decisions.get(`${role.roleId}:${skill.skillId}`)?.action !== "admit") issue("criteriaDecisions", "Current association needs an admission decision.");
     }
   }
   for (const d of b.criteriaDecisions) {
-    if (!roleIds.has(d.roleId) || !caps.has(d.skillId) || !knownEvidence(d.evidenceIds)) issue("criteriaDecisions", "Unknown decision reference.");
+    if (!roleIds.has(d.roleId) || !caps.has(d.skillId) || !knownEvidence(d.evidenceIds) ||
+        d.evidenceIds.some((id) => !evidence.get(id)?.linkedSkillIds.includes(d.skillId))) issue("criteriaDecisions", "Unknown or unrelated decision reference.");
     if ((d.action === "admit") !== associations.has(`${d.roleId}:${d.skillId}`)) issue("criteriaDecisions", "Decision disagrees with current association.");
   }
   const declared = b.capabilities.flatMap((c) => c.prerequisiteSkillIds.map((p) => `${c.skillId}:${p}`)).sort();

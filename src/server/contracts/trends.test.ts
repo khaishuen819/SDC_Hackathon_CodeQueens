@@ -54,3 +54,29 @@ test("year-only source provenance does not invent a publication day", () => {
   Object.assign(data.evidence[0], { publishedDate: null, publishedAt: null, originalDate: "2020", datePrecision: "year" });
   assert.equal(CriteriaBundle.safeParse(data).success, true);
 });
+
+test("co-scored duplicate definitions/outcomes reject, while retired history is retained", () => {
+  const duplicated = bundle(2);
+  duplicated.capabilities[1].definition = duplicated.capabilities[0].definition;
+  duplicated.capabilities[1].observableOutcome = duplicated.capabilities[0].observableOutcome;
+  assert.equal(CriteriaBundle.safeParse(duplicated).success, false);
+  duplicated.roles.forEach((r) => { r.skills = r.skills.filter((s) => s.skillId !== "fixture-skill-1"); });
+  duplicated.criteriaDecisions.forEach((d) => { if (d.skillId === "fixture-skill-1") d.action = "retire"; });
+  assert.equal(CriteriaBundle.safeParse(duplicated).success, true);
+});
+
+test("known date precision requires its original value; wholly unknown dates stay honest", () => {
+  for (const precision of ["year", "month"] as const) {
+    const data = bundle(); Object.assign(data.evidence[0], { publishedDate: null, publishedAt: null, originalDate: null, datePrecision: precision });
+    assert.equal(CriteriaBundle.safeParse(data).success, false);
+    Object.assign(data.evidence[0], { datePrecision: "unknown" });
+    assert.equal(CriteriaBundle.safeParse(data).success, true);
+  }
+});
+
+test("decision evidence must support the decision's capability, not just be a known ID", () => {
+  const data = bundle(2);
+  data.evidence.push({ ...structuredClone(data.evidence[0]), id: "other-fictional-evidence", linkedSkillIds: ["fixture-skill-1"] });
+  data.criteriaDecisions[0].evidenceIds = ["other-fictional-evidence"];
+  assert.equal(CriteriaBundle.safeParse(data).success, false);
+});
