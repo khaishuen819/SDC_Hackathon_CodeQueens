@@ -33,91 +33,6 @@ Target 4.4 concerns relevant technical and vocational skills for work. Each supp
 
 Pending items are not completed submissions. Replace their status with working links when the final files and video are available.
 
-## Try the Live App
-
-**[Open NextArc](https://sdc-hackathon-code-queens-1.replit.app/)** — no local installation is needed to try the deployed prototype.
-
-1. Choose **Jordan (fictional)** or **Sam (fictional)**, or upload another fictional CV: a text PDF or UTF-8 `.txt`, maximum 2 MB.
-2. Review the extracted skills. Correct mistakes, remove incorrect entries, add omissions and confirm your profile.
-3. Keep a preferred career route or explore the two explained role matches.
-4. Choose a route and inspect its learning roadmap, prerequisites, estimated practice time, resources, sources and SDG explanations.
-5. If a suggested capability is already familiar, confirm possession later to update your coverage without another CV upload.
-
-Use fictional CVs only. Our application processes uploads in memory and does not save CV files or profiles to its database. With Gemini extraction enabled, CV text is sent to Google's API; provider data handling depends on the configured service terms and tier.
-
-### Current Prototype Status
-
-**Deployment checked 25 October 2026 MYT:** the public application and reviewed baseline are available. The baseline recognises 16 capabilities and assesses eight capabilities per pilot route, with real learning links, prerequisites and SDG explanations.
-
-**Automatic trend interpretation is currently disabled in production.** The fetching, interpretation, validation, storage and frontend integration are implemented, but the deployed service reports `status: disabled` and no successful update check. Baseline evidence is available; it is not a demonstration of freshly interpreted AI news. Live model acceptance, interpretation quality and a visible source-to-advice refresh still need verification before that capability is presented as working live.
-
-## How to Run
-
-### Option 1 — Use the live app (recommended for judges)
-
-Open **[NextArc](https://sdc-hackathon-code-queens-1.replit.app/)**. No installation or account is needed. Use the fictional sample CVs (Jordan or Sam), or upload another fictional CV.
-
-### Option 2 — Run on Replit
-
-1. Open the [Replit workspace](https://replit.com/t/codequeens/repls/SDCHackathonCodeQueens-1), or import this repository with **Create Repl → Import from GitHub**.
-2. In **Secrets**, add the variables listed under *Configuration* below.
-3. In the **Shell**, prepare the database once:
-   ```bash
-   npm install
-   npx prisma migrate deploy
-   npm run criteria:bootstrap -- --apply
-   ```
-4. Press **Run** for a private preview, or **Publish** to deploy. `.replit` pins Node 24 and starts the app with `npm start`.
-
-### Option 3 — Run locally
-
-You need **Node.js 24 or newer** and a **PostgreSQL database** (a free [Neon](https://neon.tech) database works).
-
-```bash
-git clone https://github.com/khaishuen819/SDC_Hackathon_CodeQueens.git
-cd SDC_Hackathon_CodeQueens
-npm ci
-cp .env.example .env        # PowerShell: Copy-Item .env.example .env
-```
-
-Edit `.env` (see *Configuration*), then prepare the database once and start the app:
-
-```bash
-npx prisma migrate deploy               # creates the tables
-npm run criteria:bootstrap -- --apply   # stores the verified 16-skill baseline
-npm start                               # http://localhost:3000
-```
-
-- `npm run criteria:bootstrap` without `--apply` only reports whether a criteria version exists. With `--apply` it stores the baseline **only if none exists**; it never replaces an existing version.
-- The legacy `npx prisma db seed` is **not** needed and does not set up the new criteria.
-- The app does not set up the database automatically on startup. Without the two commands above, pages return "criteria unavailable".
-
-### Configuration
-
-Set these in `.env` (local) or Replit **Secrets**. Never commit real values.
-
-| Variable | Needed for | Example / notes |
-|---|---|---|
-| `DATABASE_URL` | Always | PostgreSQL connection string, e.g. from Neon |
-| `LLM_PROVIDER` | CV reading | `mock` (default, no key: a fixed, labelled fictional profile) or `gemini` |
-| `GEMINI_API_KEY` | Gemini | Only when `LLM_PROVIDER=gemini` or `TREND_PROVIDER=gemini` |
-| `GEMINI_MODEL` | Gemini CV reading | A current Gemini model ID; free tier needs a Flash model |
-| `TREND_PROVIDER` | AI-news updates | `disabled` (default) or `gemini` |
-| `TREND_GEMINI_MODEL` | Gemini trend updates | Only when `TREND_PROVIDER=gemini` |
-
-**Quickest local trial:** set only `DATABASE_URL`, and leave `LLM_PROVIDER=mock` and `TREND_PROVIDER=disabled`. No Gemini key is needed.
-
-### Frontend-only development (optional)
-
-To work on the frontend against the live backend:
-
-```bash
-API_TARGET=https://sdc-hackathon-code-queens-1.replit.app npm --prefix frontend run dev
-```
-
-PowerShell: `$env:API_TARGET = "https://sdc-hackathon-code-queens-1.replit.app"; npm --prefix frontend run dev`. The page runs at `http://localhost:5173`. Use `API_TARGET=http://localhost:3000` for a local backend.
-
-
 ## Problem and Pilot Scope
 
 Fresh graduates may struggle to connect developments in AI with practical career and learning decisions. Someone with a career direction needs relevant learning priorities; an explorer needs understandable alternatives before choosing what to learn.
@@ -260,6 +175,91 @@ Obtain the actual snapshot ID from `GET /api/trends` or roles metadata. Match/pa
 Missing or mismatched criteria context can return HTTP 409 with `review` and its target version. Saved immutable versions remain usable when available. These questions are optional possession guidance; they do not impose a score-blocking answer gate. Unavailable storage or no initial criteria returns an unavailable error. Ordinary errors retain `{ "error": { "code", "message", "details"? } }`; version-context errors additionally carry the validated review payload. See [contracts](src/server/contracts/) and the [technical notes](docs/m2-technical-notes.md).
 
 
+## Try the Live App
+
+**[Open NextArc](https://sdc-hackathon-code-queens-1.replit.app/)** — no local installation is needed to try the deployed prototype.
+
+1. Choose **Jordan (fictional)** or **Sam (fictional)**, or upload another fictional CV: a text PDF or UTF-8 `.txt`, maximum 2 MB.
+2. Review the extracted skills. Correct mistakes, remove incorrect entries, add omissions and confirm your profile.
+3. Keep a preferred career route or explore the two explained role matches.
+4. Choose a route and inspect its learning roadmap, prerequisites, estimated practice time, resources, sources and SDG explanations.
+5. If a suggested capability is already familiar, confirm possession later to update your coverage without another CV upload.
+
+Use fictional CVs only. Our application processes uploads in memory and does not save CV files or profiles to its database. With Gemini extraction enabled, CV text is sent to Google's API; provider data handling depends on the configured service terms and tier.
+
+### Current Prototype Status
+
+**Deployment checked 25 October 2026 MYT:** the public application and reviewed baseline are available. The baseline recognises 16 capabilities and assesses eight capabilities per pilot route, with real learning links, prerequisites and SDG explanations.
+
+**Automatic trend interpretation is currently disabled in production.** The fetching, interpretation, validation, storage and frontend integration are implemented, but the deployed service reports `status: disabled` and no successful update check. Baseline evidence is available; it is not a demonstration of freshly interpreted AI news. Live model acceptance, interpretation quality and a visible source-to-advice refresh still need verification before that capability is presented as working live.
+
+## How to Run
+
+### Option 1 — Use the live app (recommended for judges)
+
+Open **[NextArc](https://sdc-hackathon-code-queens-1.replit.app/)**. No installation or account is needed. Use the fictional sample CVs (Jordan or Sam), or upload another fictional CV.
+
+### Option 2 — Run on Replit
+
+1. Open the [Replit workspace](https://replit.com/t/codequeens/repls/SDCHackathonCodeQueens-1), or import this repository with **Create Repl → Import from GitHub**.
+2. In **Secrets**, add the variables listed under *Configuration* below.
+3. In the **Shell**, prepare the database once:
+   ```bash
+   npm install
+   npx prisma migrate deploy
+   npm run criteria:bootstrap -- --apply
+   ```
+4. Press **Run** for a private preview, or **Publish** to deploy. `.replit` pins Node 24 and starts the app with `npm start`.
+
+### Option 3 — Run locally
+
+You need **Node.js 24 or newer** and a **PostgreSQL database** (a free [Neon](https://neon.tech) database works).
+
+```bash
+git clone https://github.com/khaishuen819/SDC_Hackathon_CodeQueens.git
+cd SDC_Hackathon_CodeQueens
+npm ci
+cp .env.example .env        # PowerShell: Copy-Item .env.example .env
+```
+
+Edit `.env` (see *Configuration*), then prepare the database once and start the app:
+
+```bash
+npx prisma migrate deploy               # creates the tables
+npm run criteria:bootstrap -- --apply   # stores the verified 16-skill baseline
+npm start                               # http://localhost:3000
+```
+
+- `npm run criteria:bootstrap` without `--apply` only reports whether a criteria version exists. With `--apply` it stores the baseline **only if none exists**; it never replaces an existing version.
+- The legacy `npx prisma db seed` is **not** needed and does not set up the new criteria.
+- The app does not set up the database automatically on startup. Without the two commands above, pages return "criteria unavailable".
+
+### Configuration
+
+Set these in `.env` (local) or Replit **Secrets**. Never commit real values.
+
+| Variable | Needed for | Example / notes |
+|---|---|---|
+| `DATABASE_URL` | Always | PostgreSQL connection string, e.g. from Neon |
+| `LLM_PROVIDER` | CV reading | `mock` (default, no key: a fixed, labelled fictional profile) or `gemini` |
+| `GEMINI_API_KEY` | Gemini | Only when `LLM_PROVIDER=gemini` or `TREND_PROVIDER=gemini` |
+| `GEMINI_MODEL` | Gemini CV reading | A current Gemini model ID; free tier needs a Flash model |
+| `TREND_PROVIDER` | AI-news updates | `disabled` (default) or `gemini` |
+| `TREND_GEMINI_MODEL` | Gemini trend updates | Only when `TREND_PROVIDER=gemini` |
+
+**Quickest local trial:** set only `DATABASE_URL`, and leave `LLM_PROVIDER=mock` and `TREND_PROVIDER=disabled`. No Gemini key is needed.
+
+### Frontend-only development (optional)
+
+To work on the frontend against the live backend:
+
+```bash
+API_TARGET=https://sdc-hackathon-code-queens-1.replit.app npm --prefix frontend run dev
+```
+
+PowerShell: `$env:API_TARGET = "https://sdc-hackathon-code-queens-1.replit.app"; npm --prefix frontend run dev`. The page runs at `http://localhost:5173`. Use `API_TARGET=http://localhost:3000` for a local backend.
+
+
 ## Tests and Verification
 
 ```bash
@@ -341,11 +341,11 @@ The project's source code is licensed under the [Apache License 2.0](LICENSE). T
 ## Submission Checklist
 
 - [x] Team name, domain (Domain 1 / Domain 2) and SDG track filled in
-- [ ] Slide deck link added
-- [ ] Demo video link added
+- [x] Slide deck link added
+- [x] Demo video link added
 - [x] Replit used, with proof of use in submission
 - [x] Preliminary submission completed (SDC2026_TeamName_Preliminary.pdf)
-- [ ] Technology declaration completed (SDC2026_TeamName_TechDeclaration.pdf)
+- [x] Technology declaration completed (SDC2026_TeamName_TechDeclaration.pdf)
 - [x] Submission files renamed with your team name (replace TeamName)
 - [x] "How to Run" steps verified
 - [x] No API keys or secrets committed to the repository
