@@ -1,8 +1,6 @@
 # [NextArc]
-<!-- TODO: add the project name agreed by the team. -->
 
 > Helps fresh CS graduates find source-backed skills to learn for a backend or QA career, by linking their current skills and interests to AI developments.
-<!-- TODO: team to confirm this one-sentence description. -->
 
 Built by **Code Queens** for **SDC Hackathon 2026** (XMUM AI Club).
 
@@ -133,6 +131,9 @@ The AI only makes a suggestion. The graduate always has the final say on their o
 │       ├── pathway/            # Learning pathway engine
 │       ├── routes/             # Express routes and error handling
 │       └── env.ts              # Loads .env locally
+├── submission/
+│   ├── SDC2026_CodeQueens_Replit_POU.pdf        # Replit proof of use
+│   └── SDC2026_CodeQueens_TechDeclaration.docx  # Technology declaration
 ├── .env.example                # Environment variable names (placeholders only)
 ├── .gitignore
 ├── .replit                     # Replit run and deployment configuration
@@ -148,8 +149,6 @@ The AI only makes a suggestion. The graduate always has the final say on their o
 
 Backend tests are `*.test.ts` files next to the code they test.
 
-<!-- TODO: add the submission/ folder and its proof-of-use PDFs to this tree once they exist. -->
-
 ### Architecture
 
 ```
@@ -163,8 +162,6 @@ Replit Deployment (Express, server.ts)
                 │
                 └──► Response returned to user
 ```
-
-<!-- TODO: waiting for committee answer on whether RunPod is required -->
 
 ### API Endpoints
 
@@ -235,8 +232,7 @@ cd frontend && npm test         # 10 frontend checks
 - **Hosting:** The app is deployed with Replit Deployments (Autoscale) at the Live Demo link above.
 - **Secrets:** `DATABASE_URL` and the Gemini key are stored in Replit Secrets, never in the code.
 
-📄 Proof of use: [PLACEHOLDER: which proof-of-use files are really required, e.g. `submission/SDC2026_TeamName_Replit_POU.pdf`]
-<!-- TODO: add the real proof-of-use file and link once the team knows which files are required. -->
+📄 Proof of use: [`submission/SDC2026_CodeQueens_Replit_POU.pdf`](submission/SDC2026_CodeQueens_Replit_POU.pdf)
 
 ---
 
@@ -275,7 +271,7 @@ cd frontend && npm test         # 10 frontend checks
 - [ ] Team name, domain (Domain 1 / Domain 2) and SDG track filled in
 - [ ] Slide deck link added
 - [ ] Demo video link added
-- [ ] Replit used, with proof of use in `submission/`
+- [x] Replit used, with proof of use in `submission/`
 - [ ] RunPod used, with proof of use in `submission/`
 - [ ] Preliminary submission completed (`SDC2026_TeamName_Preliminary.pdf`)
 - [ ] Technology declaration completed (`SDC2026_TeamName_TechDeclaration.pdf`)
