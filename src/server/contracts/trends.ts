@@ -18,6 +18,15 @@ export const HttpsUrl = z.url().refine((value) => {
   return url.protocol === "https:" && !url.username && !url.password;
 }, "Use an HTTPS URL without credentials.");
 const Reviewed = z.boolean().refine((value) => !value, "Placeholder content is not ready.");
+const DATE_SHAPE = { day: /^\d{4}-\d{2}-\d{2}$/, month: /^\d{4}-\d{2}$/, year: /^\d{4}$/ } as const;
+// Date.parse silently rolls 2025-02-31 into March, so check the calendar itself.
+export function isCalendarDate(value: string): boolean {
+  const match = /^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?$/.exec(value);
+  if (!match) return false;
+  const [y, m, d] = [Number(match[1]), Number(match[2] ?? 1), Number(match[3] ?? 1)];
+  const date = new Date(Date.UTC(y, m - 1, d));
+  return date.getUTCFullYear() === y && date.getUTCMonth() === m - 1 && date.getUTCDate() === d;
+}
 
 export const Capability = z.strictObject({
   skillId: SkillId, name: Text, definition: Text, aliases: z.array(Text), observableOutcome: Text,
@@ -88,9 +97,12 @@ export const CriteriaBundle = z.strictObject({
   }
   for (const e of b.evidence) {
     if (e.linkedSkillIds.some((id) => !caps.has(id))) issue("evidence", "Unknown linked skill.");
-    if (e.datePrecision !== "unknown" && !e.originalDate?.trim()) issue("evidence", "Known date precision requires the original value.");
+    if (e.datePrecision === "unknown") {
+      if (e.originalDate !== null) issue("evidence", "Unknown date precision cannot keep an original date.");
+    } else if (!e.originalDate?.trim()) issue("evidence", "Known date precision requires the original value.");
+    else if (!DATE_SHAPE[e.datePrecision].test(e.originalDate) || !isCalendarDate(e.originalDate)) issue("evidence", "Original date must be a real date matching its precision.");
     if (e.datePrecision !== "day" && (e.publishedAt !== null || e.publishedDate !== null)) issue("evidence", "Do not invent a publication day.");
-    if (e.datePrecision === "day" && (!e.publishedDate || !e.originalDate || (e.publishedAt && e.publishedAt.slice(0, 10) !== e.publishedDate))) issue("evidence", "Publication day/precision disagree.");
+    if (e.datePrecision === "day" && (!e.publishedDate || e.originalDate !== e.publishedDate || (e.publishedAt && e.publishedAt.slice(0, 10) !== e.publishedDate))) issue("evidence", "Publication day/precision disagree.");
   }
   for (const r of b.resources) if (!caps.has(r.skillId) || new URL(r.url).hostname === "example.com") issue("resources", "Unknown skill or placeholder resource.");
   for (const tag of b.sdg.roleTags) if (!roleIds.has(tag.roleId) || !goals.has(tag.sdgId) || tag.isPlaceholder) issue("sdg", "Invalid/unready role SDG mapping.");

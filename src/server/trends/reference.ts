@@ -1,4 +1,5 @@
 import { Instant } from "../contracts/criteria.ts";
+import { isCalendarDate } from "../contracts/trends.ts";
 import type { RoleReference } from "../contracts/trends.ts";
 import { fetchBoundedText } from "./http.ts";
 
@@ -24,7 +25,7 @@ function date(value: unknown): { originalDate: string | null; datePrecision: "da
   if (value === null || value === undefined || value === "") return { originalDate: null, datePrecision: "unknown" };
   const originalDate = text(value, "date");
   const datePrecision = /^\d{4}-\d{2}-\d{2}$/.test(originalDate) ? "day" : /^\d{4}-\d{2}$/.test(originalDate) ? "month" : /^\d{4}$/.test(originalDate) ? "year" : null;
-  if (!datePrecision || Number.isNaN(Date.parse(originalDate))) throw new Error("Invalid reference date precision.");
+  if (!datePrecision || !isCalendarDate(originalDate)) throw new Error("Invalid reference date precision.");
   return { originalDate, datePrecision };
 }
 

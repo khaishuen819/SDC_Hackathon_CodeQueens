@@ -37,6 +37,15 @@ test("software flags stay observations and missing source dates stay unknown", (
   assert.equal("skills" in result, false); assert.equal("roles" in result, false);
 });
 
+test("impossible calendar dates are rejected rather than rolled over", () => {
+  for (const bad of ["2025-02-31", "2023-02-29", "2025-13", "2025-00-10"]) {
+    const t = structuredClone(tasks); (t.row[0] as any).date_updated = bad;
+    assert.throws(() => parseRoleReference(t, software, "2026-10-24T12:00:00Z"), /date/);
+  }
+  const leap = structuredClone(tasks); (leap.row[0] as any).date_updated = "2024-02-29";
+  assert.equal(parseRoleReference(leap, software, "2026-10-24T12:00:00Z").tasks[0].originalDate, "2024-02-29");
+});
+
 test("real O*NET null task classifications remain explicitly unknown", () => {
   const t = structuredClone(tasks); (t.row[1] as any).task_type = null;
   assert.equal(parseRoleReference(t, software, "2026-10-24T12:00:00Z").tasks[1].taskType, "Unknown");

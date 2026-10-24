@@ -74,6 +74,30 @@ test("known date precision requires its original value; wholly unknown dates sta
   }
 });
 
+test("evidence dates must be real and agree with their precision and publication day", () => {
+  const none = { publishedDate: null, publishedAt: null };
+  for (const bad of [
+    { datePrecision: "day", originalDate: "2020-02-31", publishedDate: "2020-03-02", publishedAt: null },
+    { datePrecision: "day", originalDate: "2019-06-30" },
+    { datePrecision: "day", originalDate: "2020" },
+    { datePrecision: "month", originalDate: "2020-01-15", ...none },
+    { datePrecision: "month", originalDate: "2020-13", ...none },
+    { datePrecision: "year", originalDate: "2020-01", ...none },
+    { datePrecision: "year", originalDate: "not a date", ...none },
+    { datePrecision: "unknown", originalDate: "2020-01-01", ...none },
+  ]) {
+    const data = bundle(); Object.assign(data.evidence[0], bad);
+    assert.equal(CriteriaBundle.safeParse(data).success, false, JSON.stringify(bad));
+  }
+  for (const good of [
+    { datePrecision: "month", originalDate: "2020-02", ...none },
+    { datePrecision: "day", originalDate: "2020-02-29", publishedDate: "2020-02-29", publishedAt: "2020-02-29T08:00:00Z" },
+  ]) {
+    const data = bundle(); Object.assign(data.evidence[0], good);
+    assert.equal(CriteriaBundle.safeParse(data).success, true, JSON.stringify(good));
+  }
+});
+
 test("decision evidence must support the decision's capability, not just be a known ID", () => {
   const data = bundle(2);
   data.evidence.push({ ...structuredClone(data.evidence[0]), id: "other-fictional-evidence", linkedSkillIds: ["fixture-skill-1"] });
