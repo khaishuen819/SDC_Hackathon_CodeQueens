@@ -146,6 +146,7 @@ Replit deployment: Express serves the frontend and API
 |-- submission/
 |   |-- SDC2026_CodeQueens_Preliminary.pdf
 |   |-- SDC2026_CodeQueens_Replit_POU.pdf
+|   |-- SDC2026_CodeQueens_TechDeclaration.pdf
 |   `-- SDC2026_CodeQueens_Slides.pdf
 |-- .env.example
 |-- .replit
