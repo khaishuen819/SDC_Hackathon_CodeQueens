@@ -6,7 +6,7 @@
   "description": "M1 frontend: plain HTML, CSS and JavaScript. No build step, no dependencies.",
   "scripts": {
     "dev": "node dev-server.mjs",
-    "test": "node --test checks/profile.check.mjs checks/roadmap.check.mjs checks/api.check.mjs checks/trends.check.mjs"
+    "test": "node --test checks/profile.check.mjs checks/roadmap.check.mjs checks/api.check.mjs checks/trends.check.mjs checks/criteria-flow.check.mjs"
   },
   "engines": {
     "node": ">=24"

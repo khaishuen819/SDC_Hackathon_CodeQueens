@@ -5,6 +5,7 @@
 import { api, ApiError, ERROR_HINTS } from "./api.js";
 import { checkFile, skillCatalogue, reviewModel, buildConfirmedProfile } from "./profile.js";
 import { lineOf, buildStations, snakeRows, columnsFor } from "./roadmap.js";
+import { createCriteriaFlow } from "./criteria-flow.js";
 
 const STEPS = [
   ["upload", "Upload CV"],
@@ -35,6 +36,12 @@ function freshState() {
     levels: {},
     route: null, // roleId or "explore"
     profile: null, // the ConfirmedProfile last sent
+    acceptedSnapshotId: null,
+    criteria: null,
+    skillReview: null, // server guidance; separate from the CV review model
+    answersBySnapshotId: {},
+    learningChoicesBySkillId: {},
+    panelErrors: {},
     match: null,
     compareOpen: false,
     chosen: null,
@@ -44,8 +51,9 @@ function freshState() {
   };
 }
 
-// Reference data survives "Start over".
+// Reference data is replaced only by a current, accepted response.
 const ref = { roles: null, catalogue: null, sdg: null, sdgFailed: false, evidence: null, evidenceFailed: false };
+const criteriaFlow = createCriteriaFlow(api);
 let state = freshState();
 let cols = columnsFor(window.innerWidth);
 let requestId = 0; // ignores answers to requests the user has moved away from
@@ -115,43 +123,83 @@ function goTo(screen, patch = {}) {
 
 // Any change on the profile makes old results out of date: clear them.
 function profileChanged(patch) {
-  update({ ...patch, match: null, pathway: null, chosen: null, maxStep: Math.min(state.maxStep, 2), error: null });
+  invalidateRequests();
+  Object.assign(ref, { sdg: null, evidence: null, sdgFailed: false, evidenceFailed: false });
+  update({ ...patch, profile: null, match: null, pathway: null, chosen: null, acceptedSnapshotId: null,
+    criteria: null, skillReview: null, answersBySnapshotId: {}, learningChoicesBySkillId: {}, panelErrors: {},
+    maxStep: Math.min(state.maxStep, 2), error: null });
 }
 
 // ---------- actions ----------
 
+function invalidateRequests() {
+  criteriaFlow.invalidate();
+  return ++requestId;
+}
+
+function navigate(screen) {
+  invalidateRequests();
+  goTo(screen);
+}
+
 async function loadRoles() {
-  if (ref.roles) return;
   const roles = await api.roles();
-  ref.roles = roles;
-  ref.catalogue = skillCatalogue(roles);
+  return { roles, catalogue: skillCatalogue(roles) };
+}
+
+function acceptReady(view, id, answers = []) {
+  if (id !== requestId || view.status !== "ready") return null;
+  const catalogue = skillCatalogue(view.rolesResponse);
+  // Retain explicit CV corrections if the registry advanced while matching.
+  const form = reviewModel(state.draft, catalogue);
+  const choices = Object.fromEntries([...catalogue.keys()].map(skillId => [skillId,
+    Object.hasOwn(state.choices, skillId) ? state.choices[skillId] : "leave"]));
+  Object.assign(ref, { roles: view.rolesResponse, catalogue, sdg: null, evidence: null, sdgFailed: false, evidenceFailed: false });
+  return {
+    profile: view.profile, match: view.matchResponse, acceptedSnapshotId: view.snapshotId,
+    criteria: view.criteria, skillReview: view.review, panelErrors: {}, choices,
+    review: { found: form.found, unknown: form.unknown, others: form.others },
+    answersBySnapshotId: { ...state.answersBySnapshotId, [view.snapshotId]: answers.map(answer => ({ ...answer })) },
+  };
+}
+
+function acceptedReview() {
+  return { ...(state.skillReview?.fromSnapshotId ? { fromSnapshotId: state.skillReview.fromSnapshotId } : {}),
+    targetSnapshotId: state.acceptedSnapshotId, answers: state.answersBySnapshotId[state.acceptedSnapshotId] ?? [] };
 }
 
 function setFile(file) {
   if (!file) return;
+  invalidateRequests();
   const code = checkFile(file);
   const uploadError = code ? new ApiError(code, code === "FILE_TOO_LARGE" ? "This file is over 2 MB." : "This file type isn't supported.") : null;
   update({ file: code ? null : file, uploadError });
 }
 
 async function useSample(name) {
+  const id = invalidateRequests();
   try {
     const res = await fetch(`samples/${encodeURIComponent(name)}`);
     if (!res.ok) throw new Error(String(res.status));
     const blob = await res.blob();
+    if (id !== requestId) return;
     setFile(new File([blob], name, { type: "text/plain" }));
   } catch {
+    if (id !== requestId) return;
     update({ uploadError: new ApiError("NETWORK", "We couldn't load the sample CV.") });
   }
 }
 
 async function readCv() {
   if (!state.file) return;
-  const id = ++requestId;
+  const id = invalidateRequests(), file = state.file;
   goTo("reading", { uploadError: null });
   try {
-    const [draft] = await Promise.all([api.extract(state.file), loadRoles()]);
+    const draft = await api.extract(file);
     if (id !== requestId) return;
+    const references = await loadRoles();
+    if (id !== requestId) return;
+    Object.assign(ref, references, { sdg: null, evidence: null, sdgFailed: false, evidenceFailed: false });
     const review = reviewModel(draft, ref.catalogue);
     goTo("review", {
       draft,
@@ -160,6 +208,12 @@ async function readCv() {
       levels: {},
       route: null,
       profile: null,
+      acceptedSnapshotId: null,
+      criteria: null,
+      skillReview: null,
+      answersBySnapshotId: {},
+      learningChoicesBySkillId: {},
+      panelErrors: {},
       match: null,
       pathway: null,
       chosen: null,
@@ -180,27 +234,29 @@ async function confirmProfile() {
     route: state.route,
   });
   const id = ++requestId;
+  const fromSnapshotId = ref.roles?.criteria?.snapshotId;
   goTo("matching");
   try {
-    const match = await api.match(profile);
-    if (id !== requestId) return;
-    goTo("results", { profile, match, compareOpen: false, pathway: null, chosen: null });
+    const view = await criteriaFlow.confirm(profile, { fromSnapshotId });
+    const accepted = acceptReady(view, id);
+    if (!accepted) return;
+    goTo("results", { ...accepted, compareOpen: false, pathway: null, chosen: null });
   } catch (err) {
     if (id !== requestId) return;
-    update({ screen: "review", error: asApiError(err), retry: "confirm" });
+    update({ screen: state.match ? "results" : "review", error: asApiError(err), retry: "confirm" });
   }
 }
 
 async function chooseRoute(roleId) {
   const id = ++requestId;
+  const profile = state.profile, review = acceptedReview();
   goTo("building", { chosen: roleId });
-  // SDG and evidence are optional: a failure only empties their panel.
-  const sdg = ref.sdg ? Promise.resolve(ref.sdg) : api.sdg().then((r) => { ref.sdg = r; ref.sdgFailed = false; }, () => { ref.sdgFailed = true; });
-  const evidence = ref.evidence ? Promise.resolve(ref.evidence) : api.evidence().then((r) => { ref.evidence = r; ref.evidenceFailed = false; }, () => { ref.evidenceFailed = true; });
   try {
-    const [pathway] = await Promise.all([api.pathway(state.profile, roleId), sdg, evidence]);
-    if (id !== requestId) return;
-    goTo("roadmap", { pathway, view: state.view });
+    const view = await criteriaFlow.loadPathway(profile, roleId, review);
+    if (id !== requestId || view.status !== "ready" || view.snapshotId !== state.acceptedSnapshotId) return;
+    Object.assign(ref, { sdg: view.sdg, evidence: view.evidence,
+      sdgFailed: Boolean(view.panelErrors.sdg), evidenceFailed: Boolean(view.panelErrors.evidence) });
+    goTo("roadmap", { pathway: view.pathway, panelErrors: view.panelErrors, view: state.view });
   } catch (err) {
     if (id !== requestId) return;
     update({ screen: "results", error: asApiError(err), retry: "choose-again" });
@@ -209,7 +265,8 @@ async function chooseRoute(roleId) {
 
 function restart() {
   if (state.draft && !window.confirm("Start over? Your checked profile and results will be cleared.")) return;
-  requestId++;
+  invalidateRequests();
+  Object.assign(ref, { roles: null, catalogue: null, sdg: null, sdgFailed: false, evidence: null, evidenceFailed: false });
   state = freshState();
   render(true);
 }
@@ -218,11 +275,11 @@ const actions = {
   restart,
   step: (el) => {
     const target = el.dataset.screen;
-    if (STEP_OF[target] <= state.maxStep) goTo(target);
+    if (STEP_OF[target] <= state.maxStep) navigate(target);
   },
-  go: (el) => goTo(el.dataset.screen),
+  go: (el) => navigate(el.dataset.screen),
   sample: (el) => useSample(el.dataset.file),
-  "clear-file": () => update({ file: null, uploadError: null }),
+  "clear-file": () => { invalidateRequests(); update({ file: null, uploadError: null }); },
   read: readCv,
   choice: (el) => profileChanged({ choices: { ...state.choices, [el.dataset.skill]: el.dataset.value } }),
   route: (el) => profileChanged({ route: el.dataset.value }),
@@ -773,4 +830,9 @@ window.addEventListener("resize", () => {
 
 render();
 // Load route names early for the upload page; extraction loads them again if this fails.
-loadRoles().then(() => { if (state.screen === "upload") render(); }, () => {});
+const startupRequest = requestId;
+loadRoles().then(references => {
+  if (startupRequest !== requestId || state.screen !== "upload") return;
+  Object.assign(ref, references);
+  render();
+}, () => {});
