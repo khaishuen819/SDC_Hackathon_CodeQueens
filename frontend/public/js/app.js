@@ -4,8 +4,9 @@
 
 import { api, ApiError, ERROR_HINTS } from "./api.js";
 import { checkFile, skillCatalogue, reviewModel, buildConfirmedProfile } from "./profile.js";
-import { lineOf, buildStations, snakeRows, columnsFor } from "./roadmap.js";
+import { lineOf, buildStations, stationDetails, snakeRows, columnsFor } from "./roadmap.js";
 import { createCriteriaFlow } from "./criteria-flow.js";
+import { recordSkillAnswer, learningChoice, buildOptionalQuestions, formatEvidenceDate, trendNotices } from "./trends.js";
 
 const STEPS = [
   ["upload", "Upload CV"],
@@ -15,7 +16,6 @@ const STEPS = [
 ];
 const STEP_OF = { upload: 1, reading: 1, review: 2, matching: 3, results: 3, building: 4, roadmap: 4 };
 const LOADING = { reading: "Reading your CV…", matching: "Matching your profile…", building: "Drawing your line…" };
-const WEIGHT_LABEL = { 1: "nice to have", 2: "important", 3: "core" };
 const COST_LABEL = { free: "free", paid: "paid", unknown: "cost unknown" };
 const SAMPLES = [
   { file: "backend-graduate.txt", label: "Jordan (fictional), backend projects" },
@@ -42,6 +42,7 @@ function freshState() {
     answersBySnapshotId: {},
     learningChoicesBySkillId: {},
     panelErrors: {},
+    pending: null,
     match: null,
     compareOpen: false,
     chosen: null,
@@ -70,9 +71,10 @@ function esc(value) {
 const skillName = (id) => (ref.catalogue && ref.catalogue.get(id)) || id;
 const roleById = (id) => ref.roles && ref.roles.roles.find((r) => r.roleId === id);
 const isSafeUrl = (url) => /^https?:\/\//i.test(url);
-const isSampleUrl = (url) => /^https?:\/\/(www\.)?example\.(com|org|net)\//i.test(url);
-const weightLabel = (w) => WEIGHT_LABEL[w] ?? `weight ${w}`;
+const isSampleUrl = (url) => /^https?:\/\/(?:[^/]+\.)?example(?:\.(?:com|org|net))?(?=[:/]|$)/i.test(url);
 const hoursText = (h) => (h == null ? "time not known yet" : `~${h} h`);
+const estimateText = (hours, basis) => hours == null ? "Time estimate unavailable" :
+  `${basis === "app" ? "App-estimated" : basis === "provider" ? "Provider-estimated" : "Estimated"} ${hoursText(hours)}`;
 
 function lineBadge(role, size = "") {
   const line = lineOf(role);
@@ -99,12 +101,13 @@ function errorBox(err, { retry, back } = {}) {
 }
 
 function placeholderBanner() {
-  return `<div class="notice ph" role="note"><span class="icon" aria-hidden="true">!</span><span><strong>Sample data.</strong> Roles, weights, resources and SDG reasons are placeholder content that has not been reviewed yet. Scores and hours are for illustration only.</span></div>`;
+  return `<div class="notice ph" role="note"><span class="icon" aria-hidden="true">!</span><span><strong>Sample data.</strong> Some roles, skills, resources or SDG reasons are placeholders. Scores and hours are illustrative.</span></div>`;
 }
 
 function announce(text) {
+  const id = requestId;
   liveEl.textContent = "";
-  setTimeout(() => { liveEl.textContent = text; }, 50);
+  setTimeout(() => { if (id === requestId) liveEl.textContent = text; }, 50);
 }
 
 // ---------- state changes ----------
@@ -118,7 +121,7 @@ function update(patch) {
 function goTo(screen, patch = {}) {
   // patch.maxStep resets progress (a new CV); otherwise progress only grows.
   const maxStep = patch.maxStep ?? Math.max(state.maxStep, STEP_OF[screen] ?? 1);
-  update({ ...patch, screen, maxStep, open: null, error: patch.error ?? null });
+  update({ ...patch, screen, maxStep, open: patch.open ?? null, error: patch.error ?? null });
 }
 
 // Any change on the profile makes old results out of date: clear them.
@@ -127,7 +130,7 @@ function profileChanged(patch) {
   Object.assign(ref, { sdg: null, evidence: null, sdgFailed: false, evidenceFailed: false });
   update({ ...patch, profile: null, match: null, pathway: null, chosen: null, acceptedSnapshotId: null,
     criteria: null, skillReview: null, answersBySnapshotId: {}, learningChoicesBySkillId: {}, panelErrors: {},
-    maxStep: Math.min(state.maxStep, 2), error: null });
+    pending: null, maxStep: Math.min(state.maxStep, 2), error: null });
 }
 
 // ---------- actions ----------
@@ -139,7 +142,7 @@ function invalidateRequests() {
 
 function navigate(screen) {
   invalidateRequests();
-  goTo(screen);
+  goTo(screen, { pending: null });
 }
 
 async function loadRoles() {
@@ -152,8 +155,10 @@ function acceptReady(view, id, answers = []) {
   const catalogue = skillCatalogue(view.rolesResponse);
   // Retain explicit CV corrections if the registry advanced while matching.
   const form = reviewModel(state.draft, catalogue);
+  const confirmed = new Set(view.profile.confirmedSkills.map(skill => skill.skillId));
+  const unsure = new Set(view.profile.unconfirmedSkillIds), removed = new Set(view.profile.removedSkillIds);
   const choices = Object.fromEntries([...catalogue.keys()].map(skillId => [skillId,
-    Object.hasOwn(state.choices, skillId) ? state.choices[skillId] : "leave"]));
+    confirmed.has(skillId) ? "have" : unsure.has(skillId) ? "notsure" : removed.has(skillId) ? "remove" : "leave"]));
   Object.assign(ref, { roles: view.rolesResponse, catalogue, sdg: null, evidence: null, sdgFailed: false, evidenceFailed: false });
   return {
     profile: view.profile, match: view.matchResponse, acceptedSnapshotId: view.snapshotId,
@@ -173,7 +178,7 @@ function setFile(file) {
   invalidateRequests();
   const code = checkFile(file);
   const uploadError = code ? new ApiError(code, code === "FILE_TOO_LARGE" ? "This file is over 2 MB." : "This file type isn't supported.") : null;
-  update({ file: code ? null : file, uploadError });
+  update({ file: code ? null : file, uploadError, pending: null });
 }
 
 async function useSample(name) {
@@ -193,7 +198,7 @@ async function useSample(name) {
 async function readCv() {
   if (!state.file) return;
   const id = invalidateRequests(), file = state.file;
-  goTo("reading", { uploadError: null });
+  goTo("reading", { uploadError: null, pending: null });
   try {
     const draft = await api.extract(file);
     if (id !== requestId) return;
@@ -226,7 +231,7 @@ async function readCv() {
 }
 
 async function confirmProfile() {
-  if (!state.route) return;
+  if (!state.route || state.pending) return;
   const profile = buildConfirmedProfile({
     choices: state.choices,
     levels: state.levels,
@@ -235,32 +240,91 @@ async function confirmProfile() {
   });
   const id = ++requestId;
   const fromSnapshotId = ref.roles?.criteria?.snapshotId;
-  goTo("matching");
+  goTo("matching", { pending: "confirm" });
   try {
     const view = await criteriaFlow.confirm(profile, { fromSnapshotId });
     const accepted = acceptReady(view, id);
     if (!accepted) return;
-    goTo("results", { ...accepted, compareOpen: false, pathway: null, chosen: null });
+    goTo("results", { ...accepted, compareOpen: false, pathway: null, chosen: null, pending: null, maxStep: 3 });
   } catch (err) {
     if (id !== requestId) return;
-    update({ screen: state.match ? "results" : "review", error: asApiError(err), retry: "confirm" });
+    update({ screen: state.match ? "results" : "review", pending: null, error: asApiError(err), retry: "confirm" });
   }
 }
 
-async function chooseRoute(roleId) {
+async function chooseRoute(roleId, { openSkillId = null } = {}) {
+  if (state.pending) return;
   const id = ++requestId;
   const profile = state.profile, review = acceptedReview();
-  goTo("building", { chosen: roleId });
+  goTo("building", { chosen: roleId, pending: "pathway" });
   try {
     const view = await criteriaFlow.loadPathway(profile, roleId, review);
     if (id !== requestId || view.status !== "ready" || view.snapshotId !== state.acceptedSnapshotId) return;
+    buildStations(roleById(roleId), ref.roles.roles.find(role => role.roleId !== roleId), profile, view.pathway, ref.catalogue);
     Object.assign(ref, { sdg: view.sdg, evidence: view.evidence,
       sdgFailed: Boolean(view.panelErrors.sdg), evidenceFailed: Boolean(view.panelErrors.evidence) });
-    goTo("roadmap", { pathway: view.pathway, panelErrors: view.panelErrors, view: state.view });
+    const open = openSkillId && stationDetails(roleById(roleId), view.pathway, ref.catalogue, openSkillId) ? openSkillId : null;
+    goTo("roadmap", { pathway: view.pathway, panelErrors: view.panelErrors, view: state.view, open, pending: null });
   } catch (err) {
     if (id !== requestId) return;
-    update({ screen: "results", error: asApiError(err), retry: "choose-again" });
+    update({ screen: "results", pending: null, error: asApiError(err), retry: "choose-again" });
   }
+}
+
+async function changeRecommendations(kind, skillId, answer) {
+  if (state.pending || !state.profile || !state.acceptedSnapshotId) return;
+  const control = state.criteria?.refreshControl;
+  if (kind === "refresh" && control?.state !== "ready" && control?.retryAt && Date.parse(control.retryAt) > Date.now()) {
+    announce(`Updates are ${control.state}. Check again after ${control.retryAt}.`);
+    return;
+  }
+  let answers = acceptedReview().answers;
+  try {
+    if (kind === "possession") {
+      if (!ref.catalogue.has(skillId)) return;
+      answers = recordSkillAnswer(state, skillId, answer).answersBySnapshotId[state.acceptedSnapshotId];
+    }
+  } catch (error) { update({ error: asApiError(error), retry: null }); return; }
+  const id = ++requestId, target = state.acceptedSnapshotId;
+  const screen = state.screen === "roadmap" ? "roadmap" : "results", chosen = state.chosen;
+  const profile = state.profile, review = { ...acceptedReview(), answers };
+  update({ pending: kind, error: null, retry: null });
+  try {
+    const ready = kind === "refresh" ? await criteriaFlow.confirm(profile, { fromSnapshotId: target, answers })
+      : await criteriaFlow.updatePossession(profile, review);
+    if (id !== requestId || ready.status !== "ready") return;
+    const path = screen === "roadmap" ? await criteriaFlow.loadPathway(ready.profile, chosen,
+      { ...(ready.review.fromSnapshotId ? { fromSnapshotId: ready.review.fromSnapshotId } : {}), targetSnapshotId: ready.snapshotId, answers }) : null;
+    if (id !== requestId || (path && path.status !== "ready")) return;
+    if (path) buildStations(ready.rolesResponse.roles.find(role => role.roleId === chosen),
+      ready.rolesResponse.roles.find(role => role.roleId !== chosen), ready.profile, path.pathway, skillCatalogue(ready.rolesResponse));
+    const accepted = acceptReady(ready, id, answers);
+    if (!accepted) return;
+    if (path) Object.assign(ref, { sdg: path.sdg, evidence: path.evidence,
+      sdgFailed: Boolean(path.panelErrors.sdg), evidenceFailed: Boolean(path.panelErrors.evidence) });
+    const open = path && state.open && stationDetails(roleById(chosen), path.pathway, ref.catalogue, state.open) ? state.open : null;
+    update({ ...accepted, screen, chosen, open, pathway: path?.pathway ?? null, panelErrors: path?.panelErrors ?? {},
+      maxStep: screen === "roadmap" ? 4 : 3, pending: null, error: null });
+    if (!open) document.getElementById("skill-guidance-title")?.focus({ preventScroll: true });
+    announce(kind === "refresh" ? "Update check finished. Review the source status and saved criteria." : "Skill answer updated. Scores use confirmed coverage.");
+  } catch (error) {
+    if (id !== requestId) return;
+    update({ pending: null, error: asApiError(error), retry: null });
+    announce("The update could not be completed. Your previous results are kept.");
+  }
+}
+
+function chooseLearning(skillId, value) {
+  if (state.pending || !ref.catalogue?.has(skillId)) return;
+  const next = learningChoice(state, skillId, value);
+  update({ learningChoicesBySkillId: next.learningChoicesBySkillId });
+  announce(value === "add" ? "Added to your learning plan for this session. Possession and scores are unchanged." : "Not now selected. Possession and scores are unchanged.");
+}
+
+function seeWhy(skillId, roleId) {
+  if (state.pending) return;
+  if (state.screen === "roadmap" && stationDetails(roleById(state.chosen), state.pathway, ref.catalogue, skillId)) update({ open: skillId });
+  else chooseRoute(roleId, { openSkillId: skillId });
 }
 
 function restart() {
@@ -279,7 +343,7 @@ const actions = {
   },
   go: (el) => navigate(el.dataset.screen),
   sample: (el) => useSample(el.dataset.file),
-  "clear-file": () => { invalidateRequests(); update({ file: null, uploadError: null }); },
+  "clear-file": () => { invalidateRequests(); update({ file: null, uploadError: null, pending: null }); },
   read: readCv,
   choice: (el) => profileChanged({ choices: { ...state.choices, [el.dataset.skill]: el.dataset.value } }),
   route: (el) => profileChanged({ route: el.dataset.value }),
@@ -288,7 +352,11 @@ const actions = {
   choose: (el) => chooseRoute(el.dataset.role),
   "choose-again": () => chooseRoute(state.chosen),
   view: (el) => update({ view: el.dataset.value }),
-  open: (el) => update({ open: el.dataset.skill }),
+  open: (el) => { if (!state.pending) update({ open: el.dataset.skill }); },
+  possession: (el) => changeRecommendations("possession", el.dataset.skill, el.dataset.value),
+  learning: (el) => chooseLearning(el.dataset.skill, el.dataset.value),
+  why: (el) => seeWhy(el.dataset.skill, el.dataset.role),
+  refresh: () => changeRecommendations("refresh"),
   close: closeDrawer,
 };
 
@@ -300,6 +368,69 @@ function closeDrawer() {
 }
 
 // ---------- screens ----------
+
+function trendPanel() {
+  const notices = trendNotices(state.criteria), control = state.criteria?.refreshControl;
+  return `<section class="card pad stack" aria-label="AI trend updates">
+    <h2 style="font-size:22px">AI trend updates</h2>
+    <p class="small">${notices.slice(0, 2).map(esc).join(" ")}</p>
+    ${control && control.state !== "ready" ? `<p class="small">Updates are ${esc(control.state)}.${control.retryAt ? ` Next eligible check: ${esc(control.retryAt)}.` : ""}</p>` : ""}
+    <details><summary>Source check details</summary><ul class="trend-notices small">${notices.slice(2).map(line => `<li>${esc(line)}</li>`).join("")}</ul></details>
+    <p class="small muted">AI interpretations are app estimates based on the listed sources. A tool update alone does not establish hiring growth.</p>
+    <div><button type="button" class="btn2" data-action="refresh" data-key="refresh" ${state.pending ? "disabled" : ""}>Check for updates</button></div>
+    ${state.pending ? `<p class="small" role="status">Updating your recommendations…</p>` : ""}
+  </section>`;
+}
+
+function possessionAnswer(skillId) {
+  return acceptedReview().answers.find(answer => answer.skillId === skillId)?.answer
+    ?? (state.profile.confirmedSkills.some(skill => skill.skillId === skillId) ? "have"
+      : state.profile.unconfirmedSkillIds.includes(skillId) ? "not-sure" : null);
+}
+
+function skillControls(skillId, roleId, { showWhy = true } = {}) {
+  const answer = possessionAnswer(skillId), choice = state.learningChoicesBySkillId[skillId];
+  const disabled = state.pending ? "disabled" : "";
+  const status = answer === "have" ? "Confirmed in your profile" : answer === "not-yet" ? "You marked this Not yet"
+    : answer === "not-sure" ? "You marked this Not sure" : "Possession is not confirmed";
+  return `<div class="stack skill-actions">
+    <p class="small"><strong>${esc(status)}</strong>. Only confirmed possession earns coverage credit.</p>
+    <div class="seg-group" role="group" aria-label="Possession of ${esc(skillName(skillId))}">
+      ${[["have", "Have"], ["not-yet", "Not yet"], ["not-sure", "Not sure"]].map(([value, label]) =>
+        `<button type="button" class="seg${answer === value ? " on" : ""}" aria-pressed="${answer === value}" data-action="possession" data-skill="${esc(skillId)}" data-value="${value}" data-key="possession-${esc(skillId)}-${value}" ${disabled}>${label}</button>`).join("")}
+    </div>
+    <p class="small muted">Choose Have if you already have this skill. Learning choices below do not change possession or scores.</p>
+    <div class="row">
+      ${showWhy ? `<button class="btn2" type="button" data-action="why" data-skill="${esc(skillId)}" data-role="${esc(roleId)}" data-key="why-${esc(skillId)}" ${disabled}>See why it matters</button>` : ""}
+      <button class="btn2" type="button" aria-pressed="${choice === "add"}" data-action="learning" data-skill="${esc(skillId)}" data-value="add" data-key="learn-${esc(skillId)}" ${disabled}>Add to my learning plan</button>
+      <button class="back" type="button" aria-pressed="${choice === "not-now"}" data-action="learning" data-skill="${esc(skillId)}" data-value="not-now" data-key="later-${esc(skillId)}" ${disabled}>Not now</button>
+    </div>
+    ${choice ? `<p class="small">${choice === "add" ? "Added to your learning plan for this session." : "Not now selected. Your score is unchanged."}</p>` : ""}
+  </div>`;
+}
+
+function guidancePanel(roleId) {
+  const selected = roleId ? [roleId] : state.profile.preferredRouteId ? [state.profile.preferredRouteId] : state.match.roles.map(role => role.roleId);
+  const matched = state.match.roles.filter(role => selected.includes(role.roleId));
+  const ids = new Set(matched.flatMap(role => [...role.gaps, ...role.unconfirmedSkills].map(skill => skill.skillId)));
+  if (roleId && state.pathway) for (const step of state.pathway.steps) ids.add(step.skillId);
+  const questions = new Map(buildOptionalQuestions(state.skillReview, state.profile, acceptedReview().answers).map(q => [q.skillId, q]));
+  const goals = Object.entries(state.learningChoicesBySkillId).filter(([, choice]) => choice === "add");
+  return `<section class="card pad stack" aria-labelledby="skill-guidance-title" aria-busy="${Boolean(state.pending)}">
+    <h2 id="skill-guidance-title" tabindex="-1" style="font-size:24px">Skills to learn or confirm</h2>
+    <p class="small muted">These questions are optional. You can use your results and pathway without answering every skill.</p>
+    <div class="guidance-grid">${[...ids].map(id => {
+      const question = questions.get(id);
+      const route = roleId ?? matched.find(role => [...role.gaps, ...role.unconfirmedSkills].some(skill => skill.skillId === id))?.roleId;
+      return `<article class="skill-guidance stack"><h3>${esc(skillName(id))}</h3>
+        ${question ? `<p class="small">${esc(question.why)}</p>` : ""}${skillControls(id, route)}</article>`;
+    }).join("") || `<p class="small">All listed skills for this selection are confirmed in your profile.</p>`}</div>
+    <div class="stack" style="gap:6px"><h3>Your learning plan — this session only</h3>
+      ${goals.length ? `<ul>${goals.map(([id]) => `<li>${esc(skillName(id))}</li>`).join("")}</ul>` : `<p class="small muted">No learning goals added yet.</p>`}
+      <p class="small muted">Reloading or starting over clears these choices. Adding a goal does not confirm that you have learned it.</p>
+    </div>
+  </section>`;
+}
 
 function renderStepper() {
   const cur = STEP_OF[state.screen];
@@ -416,7 +547,8 @@ function renderReview() {
     <div><button class="back" type="button" data-action="go" data-screen="upload" data-key="back-upload"><span class="ar">←</span> Upload a different CV</button></div>
     <div class="stack" style="gap:8px">
       <h1 id="screen-title" tabindex="-1">Check what we found</h1>
-      <p class="lead">Fix anything wrong before we match. AI can miss skills, so add any we didn't find. Skills you mark "not sure" are not counted as zero.</p>
+      <p class="lead">Fix anything wrong before we match. AI can miss skills, so add any we didn't find. Only skills you confirm earn coverage credit; Not sure does not mean you lack the skill.</p>
+      <p class="small muted">The optional level is self-reported. It does not affect the coverage score.</p>
     </div>
     ${d.warnings.length ? `<div class="notice info" role="note"><div class="stack" style="gap:2px"><strong>Notes from reading your CV</strong>${d.warnings.map((w) => `<span>· ${esc(w)}</span>`).join("")}</div></div>` : ""}
 
@@ -437,7 +569,7 @@ function renderReview() {
     </div>
 
     ${r.others.length ? `<div class="card" style="padding:8px 22px 12px">
-      <h2 style="font-size:24px;margin:14px 0 2px">Other skills on these lines</h2>
+      <h2 style="font-size:24px;margin:14px 0 2px">Other recognised skills</h2>
       <p class="small muted" style="margin-bottom:8px">Not found in your CV. Add the ones you have.</p>
       ${r.others.map((id) => `<div class="skill-row">
         <span style="font-size:16px;font-weight:500;flex:1 1 200px">${esc(skillName(id))}</span>
@@ -475,29 +607,28 @@ function renderReview() {
   </section>`;
 }
 
-function skillChips(list, cls, withWeight) {
-  return list.map((s) => `<span class="chip ${cls}">${esc(skillName(s.skillId))}${withWeight ? ` · ${esc(weightLabel(s.weight))}` : ""}</span>`).join("");
+function skillChips(list, cls) {
+  return list.map((s) => `<span class="chip ${cls}">${esc(skillName(s.skillId))}</span>`).join("");
 }
 
 function evidenceNotes(m) {
-  const all = [...m.strengths, ...m.gaps, ...m.unconfirmedSkills].filter((s) => s.evidenceAdjustments && s.evidenceAdjustments.length);
-  if (!all.length) return "";
-  return `<div class="small" style="color:var(--ink-2)"><strong>Trend evidence:</strong> ${all.map((s) => `${esc(skillName(s.skillId))} weight ${esc(s.baseWeight)} → ${esc(s.weight)} (${s.evidenceAdjustments.map((a) => esc(a.evidenceId)).join(", ")})`).join("; ")}</div>`;
+  if (!m.evidence?.length) return "";
+  return `<div><button class="back" type="button" data-action="choose" data-role="${esc(m.roleId)}" ${state.pending ? "disabled" : ""}>View supporting sources in this route's roadmap</button></div>`;
 }
 
 function routeCard(m, { mine, closest, secondary }) {
   const role = roleById(m.roleId) ?? { roleId: m.roleId, name: m.roleId, skills: [] };
   const line = lineOf(role);
   const gapsBlock = mine
-    ? `<div class="to-learn"><strong style="font-size:17px">To learn for this route (${m.gaps.length})</strong>
-        <span class="small muted">Not on your confirmed profile yet. These become your next stations.</span>
-        <div class="chips">${m.gaps.length ? skillChips(m.gaps, "gap", true) : `<span>Nothing: you have every skill on this line!</span>`}</div></div>`
+    ? `<div class="to-learn"><strong style="font-size:17px">Not confirmed for this route (${m.gaps.length})</strong>
+        <span class="small muted">Learn these skills or confirm existing knowledge. Each listed skill counts once.</span>
+        <div class="chips">${m.gaps.length ? skillChips(m.gaps, "gap") : `<span>${m.unconfirmedSkills.length ? "Some listed skills are still unconfirmed. Check them below." : "All listed skills are confirmed in your profile."}</span>`}</div></div>`
     : `<div class="stack" style="gap:8px"><strong style="font-size:15px">Not on your confirmed profile (${m.gaps.length})</strong>
-        <div class="chips">${m.gaps.length ? skillChips(m.gaps, "gap", true) : `<span class="small muted">None</span>`}</div></div>`;
+        <div class="chips">${m.gaps.length ? skillChips(m.gaps, "gap") : `<span class="small muted">None</span>`}</div></div>`;
   const haveBlock = `<div class="stack" style="gap:8px"><strong style="font-size:15px">${mine ? "Already on your profile" : "Why it matches: skills you have"}</strong>
-    <div class="chips">${m.strengths.length ? skillChips(m.strengths, "have", true) : `<span class="small muted">None yet</span>`}</div></div>`;
+    <div class="chips">${m.strengths.length ? skillChips(m.strengths, "have") : `<span class="small muted">None yet</span>`}</div></div>`;
   const unsureBlock = m.unconfirmedSkills.length
-    ? `<div class="stack" style="gap:8px"><strong style="font-size:15px">Not sure (not counted, not a gap)</strong><div class="chips">${skillChips(m.unconfirmedSkills, "unsure", false)}</div></div>`
+    ? `<div class="stack" style="gap:8px"><strong style="font-size:15px">Not sure — no possession credit yet</strong><div class="chips">${skillChips(m.unconfirmedSkills, "unsure")}</div></div>`
     : "";
   return `<article class="card route-card">
     <div class="route-head">${lineBadge(role)}<h2>${esc(role.name)}</h2>
@@ -505,14 +636,14 @@ function routeCard(m, { mine, closest, secondary }) {
     </div>
     <div class="route-stripe ${line.cls}"></div>
     <div class="route-body">
-      <div class="row" style="align-items:flex-end;gap:6px 16px"><span class="score">${esc(m.score)}</span><span class="small muted" style="padding-bottom:6px">/ 100 skill coverage · rank ${esc(m.rank)} of ${state.match.roles.length}</span></div>
+      <div class="row" style="align-items:flex-end;gap:6px 16px"><span class="score">${esc(m.score)}</span><span class="small muted" style="padding-bottom:6px">/ 100 confirmed coverage · rank ${esc(m.rank)} of ${state.match.roles.length}</span></div>
       <p class="meaning">${esc(state.match.scoreMeaning)}</p>
       ${m.preferredRouteKept && m.rank > 1 ? `<p>Another route scored higher, but this stays <strong>your</strong> route. You decide.</p>` : ""}
       <details><summary>How was this calculated?</summary><p class="mono small" style="margin-top:8px;color:var(--ink-2)">${esc(m.scoreExplanation)}</p></details>
       ${mine ? gapsBlock + haveBlock : haveBlock + gapsBlock}
       ${unsureBlock}
       ${evidenceNotes(m)}
-      <div><button class="${secondary ? "btn2" : "btn"}" type="button" data-action="choose" data-role="${esc(m.roleId)}" data-key="choose-${esc(m.roleId)}">${mine ? `See my ${esc(role.name)} roadmap →` : secondary ? `See the ${esc(role.name)} roadmap` : `Choose the ${esc(role.name)} line →`}</button></div>
+      <div><button class="${secondary ? "btn2" : "btn"}" type="button" data-action="choose" data-role="${esc(m.roleId)}" data-key="choose-${esc(m.roleId)}" ${state.pending ? "disabled" : ""}>${mine ? `See my ${esc(role.name)} roadmap →` : secondary ? `See the ${esc(role.name)} roadmap` : `Choose the ${esc(role.name)} line →`}</button></div>
     </div>
   </article>`;
 }
@@ -541,7 +672,9 @@ function renderResults() {
       ? "Here is what is not on your profile yet for this route, and how much of its skill list you already cover."
       : "We compared your confirmed skills with each line's skill list. The closest match is first, but it is only a suggestion: you choose the route."}</p>
     ${state.error ? errorBox(state.error, { retry: state.retry }) : ""}
+    ${trendPanel()}
     ${body}
+    ${guidancePanel()}
   </section>`;
 }
 
@@ -550,11 +683,12 @@ function renderResults() {
 function stationsForRoadmap() {
   const role = roleById(state.chosen);
   const other = ref.roles.roles.find((r) => r.roleId !== state.chosen) ?? null;
-  return { role, other, stations: buildStations(role, other, state.profile, state.pathway) };
+  return { role, other, stations: buildStations(role, other, state.profile, state.pathway, ref.catalogue) };
 }
 
 function stopMeta(s) {
-  return `stop ${s.order} · ${s.required ? "required" : "optional"} · ${hoursText(s.hours)}${s.notSure ? " · not sure: check if you know it" : ""}`;
+  const kind = s.isPrerequisite ? s.countsForCoverage ? "prerequisite and listed skill" : "prerequisite" : "listed skill";
+  return `stop ${s.order} · ${kind} · ${estimateText(s.hours, s.estimateBasis)}${s.notSure ? " · Not sure" : s.possessionState === "not-yet" ? " · Not yet" : ""}`;
 }
 
 function mapView(stations, role, other) {
@@ -566,7 +700,7 @@ function mapView(stations, role, other) {
       ${r.turnRight ? `<div class="turn turn-r"></div>` : ""}${r.turnLeft ? `<div class="turn turn-l"></div>` : ""}
       <div class="scells${r.leftToRight ? "" : " rev"}">
         ${r.cells.map((s) => {
-          const dot = s.kind === "term" ? "term" : s.kind === "here" ? "here" : s.kind === "passed" ? "have" : s.notSure ? "unsure" : s.required ? "todo big" : "todo";
+          const dot = s.kind === "term" ? "term" : s.kind === "here" ? "here" : s.kind === "passed" ? "have" : s.notSure ? "unsure" : "todo";
           const tag = s.zone ? `<span class="stag">${esc(s.zone)}</span>` : "";
           const xchg = s.interchange ? `<span class="smeta strong">⇄ also on the ${esc(otherLetter)} line</span>` : "";
           const inner = `<span class="sdot ${dot}" aria-hidden="true"></span><span class="sname">${esc(s.name)}</span>`;
@@ -611,8 +745,8 @@ function listView(stations, role, other) {
       } else {
         const step = steps.get(s.skillId);
         dot = s.notSure ? "unsure" : "todo";
-        body = `<button type="button" class="stop${s.required ? " req" : ""}" data-action="open" data-skill="${esc(s.skillId)}" data-key="open-${esc(s.skillId)}">
-          <span class="row" style="gap:8px"><span class="mono small muted">STOP ${esc(s.order)}</span><span class="name">${esc(s.name)}</span><span class="pill">${s.required ? "required" : "optional"}</span>${s.notSure ? `<span class="chip unsure" style="font-size:12px;padding:2px 8px">not sure: check if you know it</span>` : ""}<span class="mono small" style="margin-left:auto">${esc(hoursText(s.hours))}</span></span>
+        body = `<button type="button" class="stop" data-action="open" data-skill="${esc(s.skillId)}" data-key="open-${esc(s.skillId)}">
+          <span class="row" style="gap:8px"><span class="mono small muted">STOP ${esc(s.order)}</span><span class="name">${esc(s.name)}</span><span class="pill">${s.isPrerequisite ? "prerequisite" : "listed skill"}</span>${s.notSure ? `<span class="chip unsure" style="font-size:12px;padding:2px 8px">Not sure</span>` : ""}<span class="mono small" style="margin-left:auto">${esc(estimateText(s.hours, s.estimateBasis))}</span></span>
           ${s.interchange && other ? `<span class="xchg">${lineBadge(other, "xs")}Interchange: also counts on the ${esc(other.name)} line</span>` : ""}
           <span style="color:var(--ink-2)">${esc(step ? step.why : "")}</span>
           ${firstResource(step)}
@@ -650,7 +784,7 @@ function sdgPanel(role, skillIds) {
 function evidenceItem(item) {
   const title = isSafeUrl(item.url) ? `<a href="${esc(item.url)}" target="_blank" rel="noopener noreferrer">${esc(item.title)}</a>` : esc(item.title);
   return `<li class="res"><strong>${title}</strong>
-    <span class="small muted">${esc(item.publisher)} · published ${esc(item.publishedDate)} · checked ${esc(item.retrievedAt)}</span>
+    <span class="small muted">${esc(item.publisher)} · ${esc(formatEvidenceDate(item))} · checked ${esc(item.checkedAt ?? "time not recorded")}</span>
     <span class="small"><strong>Supports:</strong> ${esc(item.supportedClaim)}</span>
     <span class="small"><strong>Limits:</strong> ${esc(item.limitation)}</span></li>`;
 }
@@ -663,21 +797,21 @@ function evidencePanel(skillIds) {
     const items = ref.evidence.items.filter((i) => i.linkedSkillIds.some((id) => skillIds.has(id)));
     inner = items.length
       ? `<ul class="res-list">${items.map(evidenceItem).join("")}</ul>`
-      : `<p class="small" style="color:var(--ink-2)">No reviewed trend evidence for this route yet. Each source will show its title, publisher, published date, date checked, the claim it supports and its limits.</p>`;
+      : `<p class="small" style="color:var(--ink-2)">No trend evidence is listed for this selection. Available sources show publisher dates, actual check times, supported claims and limits.</p>`;
   }
   return `<div class="card pad stack" style="gap:10px"><h2 style="font-size:22px">Sources and trend evidence</h2>${inner}</div>`;
 }
 
 function drawer(role, other) {
   const id = state.open;
-  const info = role.skills.find((s) => s.skillId === id);
-  if (!info) return "";
-  const step = state.pathway.steps.find((s) => s.skillId === id);
+  const detail = stationDetails(role, state.pathway, ref.catalogue, id);
+  if (!detail) return "";
+  const { step } = detail;
   const notSure = state.profile.unconfirmedSkillIds.includes(id);
   const status = step
-    ? `STOP ${step.order} · ${info.isRequired ? "REQUIRED" : "OPTIONAL"}${notSure ? " · NOT SURE: CHECK IF YOU KNOW IT" : ""}`
+    ? `STOP ${step.order} · ${step.isPrerequisite ? "PREREQUISITE" : "LISTED SKILL"}${notSure ? " · NOT SURE" : ""}`
     : "ON YOUR PROFILE";
-  const why = step ? step.why : `${info.name} is ${info.isRequired ? "required" : "optional"} for ${role.name} (${weightLabel(info.weight)}). It is already on your confirmed profile, so it is a station you have passed.`;
+  const why = step ? step.why : `${detail.name} is listed for ${role.name} and confirmed in your profile. It counts once towards this role's coverage.`;
   const resources = step ? step.resources : [];
   const evidenceById = new Map((ref.evidence ? ref.evidence.items : []).map((i) => [i.id, i]));
   const refs = step && step.evidence ? step.evidence : [];
@@ -689,25 +823,27 @@ function drawer(role, other) {
   <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
     <div class="drawer-head">
       <div class="row" style="flex-wrap:nowrap;gap:12px">${lineBadge(role)}
-        <div class="stack" style="gap:2px"><span class="mono small" style="opacity:.85">${esc(status)}</span><h2 id="drawer-title">${esc(info.name)}</h2></div>
+        <div class="stack" style="gap:2px"><span class="mono small" style="opacity:.85">${esc(status)}</span><h2 id="drawer-title">${esc(detail.name)}</h2></div>
       </div>
       <button class="back" type="button" data-action="close" data-key="drawer-close" style="min-height:40px;padding:0 14px">✕ Close</button>
     </div>
     <div class="route-stripe ${lineOf(role).cls}" style="margin-top:-18px"></div>
     <div class="drawer-body">
       <div><h3>Why it's on your list</h3><p style="font-size:15px">${esc(why)}</p></div>
+      ${!detail.countsForCoverage ? `<p class="notice info small">This prerequisite does not add another skill to this role's coverage.</p>` : ""}
+      ${skillControls(id, role.roleId, { showWhy: false })}
       ${onOther ? `<p class="xchg" style="font-size:14px">${lineBadge(other, "xs")}Interchange: this skill is also on the ${esc(other.name)} line.</p>` : ""}
       ${step ? `<div><h3>Where to start</h3>
-        <p class="mono small" style="margin-bottom:8px">Estimated time: ${esc(hoursText(step.estimatedHours))}</p>
+        <p class="mono small" style="margin-bottom:8px">${esc(estimateText(step.estimatedHours, step.estimateBasis))}${step.estimateNote ? ` · ${esc(step.estimateNote)}` : ""}</p>
         ${resources.length ? `<ul class="res-list">${resources.map((r) => {
           const fake = r.isPlaceholder || isSampleUrl(r.url) || !isSafeUrl(r.url);
           const title = fake ? `<strong>${esc(r.title)}</strong>` : `<a href="${esc(r.url)}" target="_blank" rel="noopener noreferrer"><strong>${esc(r.title)}</strong></a>`;
-          return `<li class="res">${title}<span class="small">${esc(r.provider)} · ${esc(COST_LABEL[r.cost] ?? r.cost)}</span><span class="small muted">${esc(r.sourceNote)}</span>${fake ? `<span class="pill ph" style="align-self:flex-start">placeholder: not a real course</span>` : ""}</li>`;
+          return `<li class="res">${title}<span class="small">${esc(r.provider)} · ${esc(COST_LABEL[r.cost] ?? r.cost)}</span><span class="small muted">${esc(r.sourceNote)}</span>${r.estimateBasis ? `<span class="small">${r.estimateBasis === "app" ? "App-estimated" : "Provider-estimated"} practice time${r.estimateNote ? ` · ${esc(r.estimateNote)}` : ""}</span>` : ""}${r.checkedAt ? `<span class="small muted">Resource checked ${esc(r.checkedAt)}</span>` : ""}${fake ? `<span class="pill ph" style="align-self:flex-start">placeholder: not a real course</span>` : ""}</li>`;
         }).join("")}</ul>` : `<p class="small muted">No resource listed yet.</p>`}
       </div>
-      <div><h3>Learn first</h3><p class="small" style="color:var(--ink-2)">${step.prerequisites.length ? esc(step.prerequisites.map(skillName).join(", ")) : "Prerequisite information is not available yet."}</p></div>` : ""}
+      <div><h3>Learn first</h3><p class="small" style="color:var(--ink-2)">${step.prerequisites.length ? esc(step.prerequisites.map(skillName).join(", ")) : "No prerequisites are listed for this step."}</p></div>` : ""}
       <div><h3>Trend evidence</h3>
-        ${refs.length ? `<ul class="res-list">${refs.map((r) => evidenceById.has(r.evidenceId) ? evidenceItem(evidenceById.get(r.evidenceId)) : `<li class="res small">${esc(r.evidenceId)}</li>`).join("")}</ul>` : `<p class="small muted">No reviewed trend evidence for this skill yet.</p>`}
+        ${refs.length ? `<ul class="res-list">${refs.map((r) => evidenceById.has(r.evidenceId) ? evidenceItem(evidenceById.get(r.evidenceId)) : `<li class="res small">Source details unavailable (${esc(r.evidenceId)}).</li>`).join("")}</ul>` : `<p class="small muted">No trend evidence is listed for this skill.</p>`}
       </div>
       ${sdgTags.length ? `<div><h3>SDG links</h3>${sdgTags.map((t) => {
         const g = goals.get(t.sdgId);
@@ -722,10 +858,11 @@ function renderRoadmap() {
   const toLearn = stations.filter((s) => s.kind === "stop");
   const known = toLearn.filter((s) => s.hours != null);
   const totalHours = known.reduce((a, s) => a + s.hours, 0);
+  const confirmed = new Set(state.profile.confirmedSkills.map(skill => skill.skillId));
   const summary = toLearn.length === 0
-    ? "You already have every skill on this line. Nice!"
-    : `${toLearn.length} station(s) to go, top to bottom.${known.length ? ` About ${totalHours} h in total${known.length < toLearn.length ? " for the stations with a time estimate" : ""}.` : ""}`;
-  const skillIds = new Set(role.skills.map((s) => s.skillId));
+    ? role.skills.every(skill => confirmed.has(skill.skillId)) ? "All listed skills are confirmed in your profile." : "Some listed skills remain unconfirmed; learning guidance is unavailable."
+    : `${toLearn.length} learning step(s), with prerequisites before dependent skills.${known.length ? ` The displayed practice estimates total about ${totalHours} h${known.length < toLearn.length ? " for the steps with an estimate" : ""}.` : ""}`;
+  const skillIds = new Set([...role.skills.map((s) => s.skillId), ...state.pathway.steps.map(step => step.skillId)]);
   const map = state.view === "map";
   const tab = (value, label) => `<button type="button" class="seg${state.view === value ? " on" : ""}" aria-pressed="${state.view === value}" data-action="view" data-value="${value}" data-key="view-${value}">${label}</button>`;
 
@@ -736,6 +873,8 @@ function renderRoadmap() {
       <div class="stack" style="gap:2px"><span class="small muted" style="font-weight:600;letter-spacing:.1em;text-transform:uppercase">Your roadmap</span><h1 id="screen-title" tabindex="-1">${esc(role.name)} line</h1></div>
     </div>
     <p class="lead">${esc(summary)} Click any station for why it's on your list and where to start.</p>
+    ${state.error ? errorBox(state.error, { retry: state.retry }) : ""}
+    ${trendPanel()}
     <div class="card" style="padding:10px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;font-size:14px">
       <strong>Key</strong>
       <span class="row" style="gap:8px"><span class="dot have inline" aria-hidden="true"></span>on your profile</span>
@@ -745,7 +884,8 @@ function renderRoadmap() {
     </div>
     <div class="seg-group" role="group" aria-label="Roadmap view">${tab("map", "Map view")}${tab("list", "List with details")}</div>
     ${map ? mapView(stations, role, other) : listView(stations, role, other)}
-    <p class="small muted">Prerequisites between skills are not available yet, so stations are ordered required first, then by weight.</p>
+    <p class="small muted">Steps follow the saved pathway's prerequisite order. Prerequisites outside the role's listed skills do not add coverage criteria. Time estimates are labelled by their app or provider basis.</p>
+    ${guidancePanel(role.roleId)}
     <div class="grid-2">${sdgPanel(role, skillIds)}${evidencePanel(skillIds)}</div>
     ${state.open ? drawer(role, other) : ""}
   </section>`;

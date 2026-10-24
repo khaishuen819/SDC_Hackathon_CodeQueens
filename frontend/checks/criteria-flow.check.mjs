@@ -309,3 +309,213 @@ test("actual_app_discards_late_reference_caches_and_pins_both_entry_paths", asyn
     }
   }
 });
+
+// Controlled API state for UI actions. These are fictional outcomes, not accuracy evidence.
+function uiHarness({ prerequisite = false } = {}) {
+  const model = { meta: meta(), failMatch: false, refresh: null, retireTestDesign: false };
+  function guidance(p, r) {
+    const answer = r.answers?.find(a => a.skillId === "test-design")?.answer;
+    const known = p.confirmedSkills.some(s => s.skillId === "test-design");
+    return { ...review(r.targetSnapshotId), ...(r.fromSnapshotId ? { fromSnapshotId: r.fromSnapshotId } : {}),
+      questions: known || answer === "not-yet" || model.retireTestDesign ? [] : [{ ...review().questions[0],
+        state: p.unconfirmedSkillIds.includes("test-design") ? "not-sure" : "unanswered" }] };
+  }
+  const criteria = id => ({ ...model.meta, snapshotId: id });
+  const h = harness({
+    refreshTrends: async () => model.refresh ? model.refresh() : structuredClone(model.meta),
+    roles: async (id = S) => {
+      const result = roles(id);
+      if (model.retireTestDesign) result.roles[1].skills = result.roles[1].skills.filter(skill => skill.skillId !== "test-design");
+      return { ...result, criteria: criteria(id) };
+    },
+    reconcile: async (p, r) => {
+      const updated = mergeSkillAnswers(p, r.answers);
+      return { status: "ready", profile: updated, snapshotId: r.targetSnapshotId,
+        criteria: criteria(r.targetSnapshotId), review: guidance(updated, r) };
+    },
+    match: async (p, c) => {
+      if (model.failMatch) throw new ApiError("TRENDS_UNAVAILABLE", "Fictional storage outage.", [], { status: 503 });
+      const result = match(c.snapshotId), qa = result.roles[1];
+      const have = p.confirmedSkills.some(s => s.skillId === "test-design"), unsure = p.unconfirmedSkillIds.includes("test-design");
+      const skill = { skillId: "test-design", weight: 1, isRequired: true };
+      qa.score = have ? 100 : 50;
+      qa.strengths = have ? [...qa.strengths, skill] : qa.strengths;
+      qa.gaps = !have && !unsure ? [skill] : [];
+      qa.unconfirmedSkills = unsure ? [skill] : [];
+      qa.scoreExplanation = have ? "Fictional confirmed coverage: 2/2." : "Fictional confirmed coverage: 1/2.";
+      if (model.retireTestDesign) {
+        qa.score = 100; qa.strengths = [qa.strengths[0]]; qa.gaps = []; qa.unconfirmedSkills = [];
+        qa.scoreExplanation = "Fictional saved version retired a role association; the skill remains recognised.";
+      }
+      return { ...result, criteria: criteria(c.snapshotId), review: guidance(p, c.criteriaReview) };
+    },
+    pathway: async (p, role, c) => {
+      const path = pathway(c.snapshotId, role);
+      path.criteria = criteria(c.snapshotId); path.review = guidance(p, c.criteriaReview);
+      if (model.retireTestDesign || p.confirmedSkills.some(s => s.skillId === "test-design")) path.steps = [];
+      else if (prerequisite) {
+        path.steps = [{ order: 1, skillId: "historical-skill", why: "Fictional foundation for the next step.",
+          estimatedHours: 2, resources: [], prerequisites: [], isPrerequisite: true, estimateBasis: "app",
+          estimateNote: "Fictional practice estimate.", evidence: [{ evidenceId: "fixture-evidence" }], possessionState: "unconfirmed" },
+        { ...path.steps[0], order: 2, prerequisites: ["historical-skill"], estimatedHours: 3, estimateBasis: "provider",
+          estimateNote: "Fictional provider duration.", resources: [{ resourceId: "fixture-resource", title: "Fictional tutorial",
+            provider: "Fictional provider", url: "https://fixture.example/course", cost: "free", sourceNote: "Fictional fixture only.",
+            isPlaceholder: false, checkedAt: "2026-10-24T08:00:00Z", estimateBasis: "provider", estimateNote: "Fictional duration." }] }];
+      }
+      return path;
+    },
+    evidence: async id => ({ criteria: criteria(id), items: prerequisite ? [{
+      id: "fixture-evidence", title: "<img src=x onerror=alert(1)>", publisher: "Fictional publisher",
+      url: "javascript:alert(1)", publishedDate: "2025-01-01", originalDate: "2025", publishedAt: null,
+      datePrecision: "year", dateBasis: "published", retrievedAt: "2026-01-01", checkedAt: "2026-10-24T09:00:00Z",
+      supportedClaim: "Fictional evidence only.", limitation: "No real-world claim.", linkedSkillIds: ["historical-skill", "test-design"],
+    }] : [] }),
+  });
+  return { ...h, model };
+}
+
+async function mountUi(h, label) {
+  const handlers = new Map(), nodes = Object.fromEntries(["app", "stepper", "live"].map(id => [id, { innerHTML: "", textContent: "", querySelector: () => null }]));
+  const saved = { window: globalThis.window, document: globalThis.document, CSS: globalThis.CSS }, originalApi = { ...browserApi };
+  globalThis.window = { innerWidth: 1000, scrollTo() {}, confirm: () => true, addEventListener() {} };
+  globalThis.CSS = { escape: value => String(value) };
+  globalThis.document = { activeElement: null, body: { style: {} }, getElementById: id => nodes[id] ?? null,
+    querySelector: () => null, addEventListener: (event, handler) => handlers.set(event, handler) };
+  Object.assign(browserApi, h.api, { extract: async () => {
+    h.calls.push({ name: "extract", args: [] });
+    return { status: "draft", extractedSkills: [{ skillId: "api-basics", rawName: "API", evidence: "Fictional CV", confidence: 1 }], projects: [], experience: [], warnings: [] };
+  } });
+  await import(`../public/js/app.js?ui-${label}`);
+  const ui = {
+    html: () => nodes.app.innerHTML,
+    settle: async () => { await new Promise(setImmediate); await new Promise(setImmediate); },
+    click: (action, rest = {}) => handlers.get("click")({ target: { closest: () => ({ dataset: { action, ...rest }, disabled: false }) } }),
+    close() {
+      Object.assign(browserApi, originalApi);
+      for (const [key, value] of Object.entries(saved)) { if (value === undefined) delete globalThis[key]; else globalThis[key] = value; }
+    },
+  };
+  await ui.settle();
+  handlers.get("change")({ target: { id: "cv-input", files: [{ name: "fictional.txt", size: 100 }] } });
+  ui.click("read"); await ui.settle();
+  ui.click("route", { value: "qa-automation" });
+  return ui;
+}
+
+test("skill_controls_keep_learning_separate_and_update_coverage_without_another_CV", async () => {
+  const h = uiHarness(), ui = await mountUi(h, "skills");
+  try {
+    ui.click("confirm"); await ui.settle();
+    assert.match(ui.html(), /See why it matters/);
+    assert.match(ui.html(), /Add to my learning plan/);
+    assert.match(ui.html(), /Not now/);
+    assert.doesNotMatch(ui.html(), /nice to have|weight 1/);
+    const initialMatches = h.calls.filter(c => c.name === "match").length;
+    ui.click("learning", { skill: "test-design", value: "add" }); await ui.settle();
+    assert.match(ui.html(), /Added to your learning plan/);
+    assert.match(ui.html(), /this session/i);
+    assert.equal(h.calls.filter(c => c.name === "match").length, initialMatches);
+    assert.match(ui.html(), /class="score">50</);
+    ui.click("possession", { skill: "test-design", value: "not-yet" }); await ui.settle();
+    assert.match(ui.html(), /Not yet/);
+    ui.click("learning", { skill: "test-design", value: "not-now" }); await ui.settle();
+    assert.match(ui.html(), /class="score">50</);
+    ui.click("possession", { skill: "test-design", value: "not-sure" }); await ui.settle();
+    assert.doesNotMatch(ui.html(), /you have every skill/i);
+    assert.match(ui.html(), /class="score">50</);
+    ui.click("possession", { skill: "test-design", value: "have" }); await ui.settle();
+    assert.match(ui.html(), /class="score">100</);
+    const matches = h.calls.filter(c => c.name === "match");
+    assert.deepEqual(matches.at(-1).args[1].criteriaReview.answers, [{ skillId: "test-design", answer: "have" }]);
+    assert.ok(matches.every(c => c.args[1].snapshotId === S));
+    assert.equal(h.calls.filter(c => c.name === "refreshTrends").length, 1);
+    assert.equal(h.calls.filter(c => c.name === "extract").length, 1);
+    ui.click("go", { screen: "review" }); await ui.settle();
+    assert.match(ui.html(), /aria-pressed="true"[^>]*data-action="choice"[^>]*data-skill="test-design"[^>]*data-value="have"/);
+  } finally { ui.close(); }
+});
+
+test("an_initial_Not_sure_only_gap_is_never_presented_as_full_coverage", async () => {
+  const h = uiHarness(), ui = await mountUi(h, "not-sure");
+  try {
+    ui.click("choice", { skill: "test-design", value: "notsure" });
+    ui.click("confirm"); await ui.settle();
+    assert.match(ui.html(), /class="score">50</);
+    assert.doesNotMatch(ui.html(), /you have every skill/i);
+    assert.match(ui.html(), /Not sure/);
+  } finally { ui.close(); }
+});
+
+test("prerequisite_drawers_show_named_details_original_dates_and_estimate_basis_safely", async () => {
+  const h = uiHarness({ prerequisite: true }), ui = await mountUi(h, "prerequisite");
+  try {
+    ui.click("confirm"); await ui.settle();
+    const count = h.calls.filter(c => c.name === "match").length;
+    ui.click("why", { skill: "test-design", role: "qa-automation" }); await ui.settle();
+    assert.match(ui.html(), /id="drawer-title">Test design</);
+    assert.equal(h.calls.filter(c => c.name === "match").length, count, "reading an explanation must not change possession");
+    assert.match(ui.html(), /Provider-estimated/);
+    assert.doesNotMatch(ui.html(), /href="https:\/\/fixture.example\/course"/);
+    ui.click("close"); ui.click("open", { skill: "historical-skill" }); await ui.settle();
+    assert.match(ui.html(), /id="drawer-title">Historical skill</);
+    assert.match(ui.html(), /prerequisite/i);
+    assert.match(ui.html(), /does not add.*coverage/i);
+    assert.match(ui.html(), /App-estimated/);
+    assert.match(ui.html(), /Published 2025 \(year only\)/);
+    assert.match(ui.html(), /2026-10-24T09:00:00Z/);
+    assert.doesNotMatch(ui.html(), /2025-01-01|checked 2026-01-01|href="javascript:|<img src=x/);
+    assert.match(ui.html(), /&lt;img src=x/);
+    assert.doesNotMatch(ui.html(), /ordered required first, then by weight|No reviewed trend evidence/);
+  } finally { ui.close(); }
+});
+
+test("manual_updates_are_single_flight_and_honour_cooldown_without_timer_work", async () => {
+  const h = uiHarness(), ui = await mountUi(h, "updates");
+  try {
+    ui.click("confirm"); await ui.settle();
+    const gate = deferred();
+    h.model.refresh = async () => gate.promise;
+    ui.click("refresh"); ui.click("refresh"); await ui.settle();
+    assert.equal(h.calls.filter(c => c.name === "refreshTrends").length, 2, "one initial refresh and one manual update");
+    assert.match(ui.html(), /data-action="refresh"[^>]*disabled/);
+    h.model.meta = meta(S, { status: "partial", refreshControl: { state: "cooldown", retryAt: "2099-10-24T10:01:00Z" } });
+    gate.resolve(h.model.meta); await ui.settle();
+    assert.match(ui.html(), /cooldown/);
+    assert.match(ui.html(), /2099-10-24T10:01:00Z/);
+    ui.click("refresh"); await ui.settle();
+    assert.equal(h.calls.filter(c => c.name === "refreshTrends").length, 2);
+  } finally { ui.close(); }
+});
+
+test("a_failed_possession_update_keeps_the_previous_profile_score_and_learning_choice", async () => {
+  const h = uiHarness(), ui = await mountUi(h, "failed-answer");
+  try {
+    ui.click("confirm"); await ui.settle();
+    ui.click("learning", { skill: "test-design", value: "add" });
+    h.model.failMatch = true;
+    ui.click("possession", { skill: "test-design", value: "have" }); await ui.settle();
+    assert.match(ui.html(), /Fictional storage outage/);
+    assert.match(ui.html(), /class="score">50</);
+    assert.match(ui.html(), /Added to your learning plan/);
+    h.model.failMatch = false;
+    ui.click("possession", { skill: "test-design", value: "not-sure" }); await ui.settle();
+    const sent = h.calls.filter(c => c.name === "match").at(-1).args[1].criteriaReview.answers;
+    assert.deepEqual(sent, [{ skillId: "test-design", answer: "not-sure" }]);
+  } finally { ui.close(); }
+});
+
+test("a_saved_version_without_the_open_station_closes_details_and_restores_scrolling", async () => {
+  const h = uiHarness(), ui = await mountUi(h, "retired-detail");
+  try {
+    ui.click("confirm"); await ui.settle();
+    ui.click("why", { skill: "test-design", role: "qa-automation" }); await ui.settle();
+    assert.match(ui.html(), /role="dialog"/);
+    h.model.retireTestDesign = true;
+    h.model.meta = meta(T);
+    ui.click("refresh"); await ui.settle();
+    assert.doesNotMatch(ui.html(), /role="dialog"/);
+    assert.equal(globalThis.document.body.style.overflow, "");
+    assert.equal(h.calls.filter(c => c.name === "match").at(-1).args[1].snapshotId, T);
+    assert.match(ui.html(), /QA Automation line/);
+  } finally { ui.close(); }
+});

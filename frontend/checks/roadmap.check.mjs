@@ -3,6 +3,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { buildStations, snakeRows, columnsFor, lineOf } from "../public/js/roadmap.js";
+import * as roadmap from "../public/js/roadmap.js";
 
 const backend = {
   roleId: "backend-development", name: "Backend Development",
@@ -17,6 +18,7 @@ const qa = {
   roleId: "qa-automation", name: "QA Automation",
   skills: [{ skillId: "git", name: "Git", weight: 2, isRequired: true }, { skillId: "docker", name: "Docker", weight: 1, isRequired: false }],
 };
+const catalogue = new Map(backend.skills.map(s => [s.skillId, s.name]));
 const profile = {
   status: "confirmed",
   confirmedSkills: [{ skillId: "nodejs" }],
@@ -35,18 +37,46 @@ const pathway = {
 };
 
 test("stations: CV, passed skills, you are here, stops in order, goal", () => {
-  const s = buildStations(backend, qa, profile, pathway);
+  const s = buildStations(backend, qa, profile, pathway, catalogue);
   assert.deepEqual(s.map((x) => x.kind), ["term", "passed", "here", "stop", "stop", "stop", "term"]);
   assert.deepEqual(s.filter((x) => x.kind === "stop").map((x) => x.skillId), ["sql", "git", "docker"]);
   assert.equal(s[1].skillId, "nodejs");
 });
 
 test("stations: zones, not sure, hours and interchanges", () => {
-  const stops = buildStations(backend, qa, profile, pathway).filter((x) => x.kind === "stop");
-  assert.deepEqual(stops.map((x) => x.zone), ["Required stops", null, "Optional stops"]);
+  const stops = buildStations(backend, qa, profile, pathway, catalogue).filter((x) => x.kind === "stop");
+  assert.deepEqual(stops.map((x) => x.zone), ["Route skills", null, null]);
   assert.equal(stops[2].notSure, true);
   assert.equal(stops[2].hours, null);
   assert.deepEqual(stops.map((x) => x.interchange), [false, true, true]);
+});
+
+test("a prerequisite outside the role resolves names and details without adding coverage", () => {
+  const names = new Map([...catalogue, ["foundation", "Fictional foundation"]]);
+  const path = { ...pathway, steps: [
+    { ...pathway.steps[1], order: 2, prerequisites: ["foundation"] },
+    { order: 1, skillId: "foundation", why: "Fictional prerequisite explanation", estimatedHours: 2,
+      resources: [], prerequisites: [], isPrerequisite: true, estimateBasis: "app", estimateNote: "Fictional practice estimate" },
+  ] };
+  const before = structuredClone(backend);
+  const stations = buildStations(backend, qa, profile, path, names);
+  const stops = stations.filter(s => s.kind === "stop");
+  assert.deepEqual(stops.map(s => s.skillId), ["foundation", "sql"]);
+  assert.equal(stops[0].name, "Fictional foundation");
+  assert.equal(stops[0].isPrerequisite, true);
+  assert.equal(stops[0].countsForCoverage, false);
+  assert.equal(stops[1].countsForCoverage, true);
+  assert.equal(stops[0].estimateBasis, "app");
+  assert.deepEqual(stops.map(s => s.zone), ["Prerequisite steps", "Route skills"]);
+  assert.ok(!stations.some(s => s.kind === "passed" && s.skillId === "foundation"));
+  assert.deepEqual(backend, before);
+  assert.equal(typeof roadmap.stationDetails, "function");
+  const detail = roadmap.stationDetails(backend, path, names, "foundation");
+  assert.equal(detail.name, "Fictional foundation");
+  assert.equal(detail.step.why, "Fictional prerequisite explanation");
+  assert.equal(detail.countsForCoverage, false);
+  assert.equal(roadmap.stationDetails(backend, path, names, "not-a-station"), null);
+  assert.throws(() => buildStations(backend, qa, profile, path, catalogue), /catalogue/i);
 });
 
 test("snakeRows: rows alternate direction and turn at the right ends", () => {

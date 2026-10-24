@@ -13,7 +13,16 @@ export function lineOf(role) {
 // Your CV -> skills already on the profile -> You are here -> pathway steps -> Goal.
 // role: RoleInfo from /api/roles; other: the other RoleInfo (for interchanges) or null;
 // profile: the ConfirmedProfile sent; pathway: PathwayResponse for this role.
-export function buildStations(role, other, profile, pathway) {
+export function stationDetails(role, pathway, catalogue, skillId) {
+  const association = role.skills.find(skill => skill.skillId === skillId) ?? null;
+  const step = pathway.steps.find(item => item.skillId === skillId) ?? null;
+  if (!association && !step) return null;
+  const name = catalogue?.get(skillId);
+  if (!name) throw new Error("The skills catalogue is missing a station name.");
+  return { skillId, name, association, step, countsForCoverage: Boolean(association) };
+}
+
+export function buildStations(role, other, profile, pathway, catalogue) {
   const info = new Map(role.skills.map((s) => [s.skillId, s]));
   const onOther = new Set(other ? other.skills.map((s) => s.skillId) : []);
   const confirmed = new Set(profile.confirmedSkills.map((s) => s.skillId));
@@ -21,30 +30,36 @@ export function buildStations(role, other, profile, pathway) {
 
   const passed = role.skills.filter((s) => confirmed.has(s.skillId));
   const stations = [];
-  stations.push({ kind: "term", name: "Your CV", meta: `${passed.length} of ${role.skills.length} stations already on your profile` });
+  stations.push({ kind: "term", name: "Your CV", meta: `${passed.length} of ${role.skills.length} listed skills confirmed` });
   for (const s of passed) {
-    stations.push({ kind: "passed", skillId: s.skillId, name: s.name, interchange: onOther.has(s.skillId) });
+    stations.push({ kind: "passed", skillId: s.skillId, name: stationDetails(role, pathway, catalogue, s.skillId).name, interchange: onOther.has(s.skillId) });
   }
   stations.push({ kind: "here", name: "You are here" });
 
-  let lastRequired = null;
+  let lastZone = null;
   for (const step of [...pathway.steps].sort((a, b) => a.order - b.order)) {
     const s = info.get(step.skillId);
     const required = s ? s.isRequired : false;
+    const detail = stationDetails(role, pathway, catalogue, step.skillId);
+    const zone = step.isPrerequisite ? "Prerequisite steps" : "Route skills";
     stations.push({
       kind: "stop",
       skillId: step.skillId,
-      name: s ? s.name : step.skillId,
+      name: detail.name,
       order: step.order,
       required,
+      countsForCoverage: detail.countsForCoverage,
+      isPrerequisite: Boolean(step.isPrerequisite),
+      possessionState: step.possessionState,
+      estimateBasis: step.estimateBasis,
       notSure: notSure.has(step.skillId),
       hours: step.estimatedHours,
       interchange: onOther.has(step.skillId),
-      zone: required !== lastRequired ? (required ? "Required stops" : "Optional stops") : null,
+      zone: zone !== lastZone ? zone : null,
     });
-    lastRequired = required;
+    lastZone = zone;
   }
-  stations.push({ kind: "term", name: `Goal: ${role.name}`, meta: "Every station on this line covered" });
+  stations.push({ kind: "term", name: `Goal: ${role.name}`, meta: "Learning does not automatically confirm possession" });
   return stations;
 }
 

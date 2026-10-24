@@ -237,6 +237,12 @@ details summary { cursor: pointer; font-size: 15px; font-weight: 600; color: var
 .res-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
 .res { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 15px; }
 
+/* Optional skill answers and session-only learning choices. */
+.guidance-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 16px; }
+.skill-guidance { border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+.skill-actions { gap: 10px; }
+.trend-notices { padding-left: 20px; overflow-wrap: anywhere; }
+
 /* ---------- SDG ---------- */
 .sdg-num { flex: 0 0 44px; height: 44px; border-radius: 8px; background: var(--ink); color: #fff; display: flex; align-items: center; justify-content: center; font-family: var(--font-head); font-weight: 700; font-size: 20px; }
 
