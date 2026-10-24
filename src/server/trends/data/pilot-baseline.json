@@ -595,16 +595,16 @@
     {
       "resourceId": "baseline-test-design-1",
       "skillId": "test-design",
-      "title": "Best Practices",
-      "url": "https://playwright.dev/docs/best-practices",
-      "provider": "Playwright",
+      "title": "ISTQB CTFL v4.0.1: equivalence partitioning and boundary value analysis",
+      "url": "https://istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf",
+      "provider": "ISTQB",
       "cost": "free",
       "isPlaceholder": false,
-      "sourceNote": "Public provider documentation checked on 2026-10-24. Suggested practice: Read user-visible behaviour and isolation guidance and design cases for a fictional form.",
+      "sourceNote": "ISTQB CTFL v4.0.1 sections 4.1, 4.2.1 and 4.2.2, printed pages 39-40. Read specification-based testing, valid/invalid partitions and boundary selection, then derive cases for a fictional input range. Public PDF; no paid examination or course required.",
       "estimatedHours": 4,
       "estimateBasis": "app",
-      "estimateNote": "App estimate for selected reading and introductory practice: Read user-visible behaviour and isolation guidance and design cases for a fictional form. Not provider duration, mastery time or user-tested completion time.",
-      "checkedAt": "2026-10-24T04:28:53.7414703Z"
+      "estimateNote": "App estimate: 1 hour selected reading plus 3 hours deriving and checking normal, invalid and boundary cases for a fictional form. Not the full syllabus duration or measured learner completion time.",
+      "checkedAt": "2026-10-24T04:38:57.3168358Z"
     },
     {
       "resourceId": "baseline-python-1",
@@ -623,16 +623,16 @@
     {
       "resourceId": "baseline-bug-reporting-1",
       "skillId": "bug-reporting",
-      "title": "Creating an issue",
-      "url": "https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/creating-an-issue",
-      "provider": "GitHub Docs",
+      "title": "Bug Writing Guidelines",
+      "url": "https://bugzilla.mozilla.org/page.cgi?id=bug-writing.html",
+      "provider": "Mozilla",
       "cost": "free",
       "isPlaceholder": false,
-      "sourceNote": "Public provider documentation checked on 2026-10-24. Suggested practice: Read how issue title/body fields work; practise steps, expected/actual results and evidence on fictional data.",
+      "sourceNote": "Read Writing precise steps to reproduce and Providing additional information. The guide includes examples separating observed and expected results and appropriate diagnostic evidence. Practise a fictional defect report; no Bugzilla account or real bug submission needed.",
       "estimatedHours": 2,
       "estimateBasis": "app",
-      "estimateNote": "App estimate for selected reading and introductory practice: Read how issue title/body fields work; practise steps, expected/actual results and evidence on fictional data. Not provider duration, mastery time or user-tested completion time.",
-      "checkedAt": "2026-10-24T04:28:54.3563989Z"
+      "estimateNote": "App estimate: 30 minutes reading plus 90 minutes drafting and checking a fictional report for steps, expected/actual results and relevant evidence. Not a provider duration or measured learner outcome.",
+      "checkedAt": "2026-10-24T04:38:58.1525880Z"
     }
   ],
   "evidence": [
@@ -872,18 +872,18 @@
     },
     {
       "id": "baseline-doc-test-design",
-      "title": "Best Practices",
-      "publisher": "Playwright",
-      "url": "https://playwright.dev/docs/best-practices",
-      "publishedDate": null,
+      "title": "ISTQB CTFL v4.0.1: equivalence partitioning and boundary value analysis",
+      "publisher": "ISTQB",
+      "url": "https://istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf",
+      "publishedDate": "2024-09-15",
       "publishedAt": null,
-      "originalDate": null,
-      "datePrecision": "unknown",
+      "originalDate": "2024-09-15",
+      "datePrecision": "day",
       "dateBasis": "updated",
       "retrievedAt": "2026-10-24",
-      "checkedAt": "2026-10-24T04:28:53.7414703Z",
-      "supportedClaim": "The linked public documentation provides introductory material for test-design.",
-      "limitation": "Documents a capability, not graduate hiring demand or an AI growth forecast. Pilot boundary: Coverage reasoning; no extra point merely for running the same test.",
+      "checkedAt": "2026-10-24T04:38:57.3168358Z",
+      "supportedClaim": "Sections 4.1-4.2.2 explain deriving cases from specified behaviour, including valid/invalid partitions and their boundaries.",
+      "limitation": "Introductory instruction, not observed learner attainment, graduate hiring demand or an AI growth forecast.",
       "linkedSkillIds": [
         "test-design"
       ]
@@ -908,18 +908,18 @@
     },
     {
       "id": "baseline-doc-bug-reporting",
-      "title": "Creating an issue",
-      "publisher": "GitHub Docs",
-      "url": "https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/creating-an-issue",
+      "title": "Bug Writing Guidelines",
+      "publisher": "Mozilla",
+      "url": "https://bugzilla.mozilla.org/page.cgi?id=bug-writing.html",
       "publishedDate": null,
       "publishedAt": null,
       "originalDate": null,
       "datePrecision": "unknown",
       "dateBasis": "updated",
       "retrievedAt": "2026-10-24",
-      "checkedAt": "2026-10-24T04:28:54.3563989Z",
-      "supportedClaim": "The linked public documentation provides introductory material for bug-reporting.",
-      "limitation": "Documents a capability, not graduate hiring demand or an AI growth forecast. Pilot boundary: Communicating a defect; separate from implementing tests or debugging fixes.",
+      "checkedAt": "2026-10-24T04:38:58.1525880Z",
+      "supportedClaim": "The guide teaches reproducible steps, distinct expected/actual results and relevant supporting information using concrete bug-report examples.",
+      "limitation": "Introductory instruction, not observed learner attainment, graduate hiring demand or an AI growth forecast.",
       "linkedSkillIds": [
         "bug-reporting"
       ]

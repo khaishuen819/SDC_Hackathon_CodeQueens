@@ -112,14 +112,6 @@
       "failure": null
     },
     {
-      "skillId": "test-design",
-      "url": "https://playwright.dev/docs/best-practices",
-      "status": 200,
-      "checkedAt": "2026-10-24T04:28:53.7414703Z",
-      "contentSha256": "46ce32297cd81fe6e8f5bbf91030975d58744f2b14c7171f3fedae4b3d278b4b",
-      "failure": null
-    },
-    {
       "skillId": "python",
       "url": "https://docs.python.org/3/tutorial/",
       "status": 200,
@@ -144,11 +136,19 @@
       "failure": null
     },
     {
-      "skillId": "bug-reporting",
-      "url": "https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/creating-an-issue",
+      "skillId": "test-design",
+      "url": "https://istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf",
       "status": 200,
-      "checkedAt": "2026-10-24T04:28:54.3563989Z",
-      "contentSha256": "2da784cb682cdbbf8ee1d7c1fd15f9d6ab09f8ac04ac00d4bf74fd0675a343b6",
+      "checkedAt": "2026-10-24T04:38:57.3168358Z",
+      "contentSha256": "3b072f81db5c7671aadacc42553e726faa93913a969cc7a89e9dc28c2318d1f1",
+      "failure": null
+    },
+    {
+      "skillId": "bug-reporting",
+      "url": "https://bugzilla.mozilla.org/page.cgi?id=bug-writing.html",
+      "status": 200,
+      "checkedAt": "2026-10-24T04:38:58.1525880Z",
+      "contentSha256": "0b6379415ebb1acf779fdfe06e597166db3ff660243c62483704f836e5e99c79",
       "failure": null
     }
   ],
@@ -157,6 +157,25 @@
     "estimates": "Code Queens introductory reading/practice estimates; not provider durations or research findings. Python guide assumes existing programming knowledge.",
     "sdgSource": "https://sdgs.un.org/goals/goal4#targets_and_indicators",
     "sdgClaim": "Target 4.4 concerns relevant technical skills for work. Our mappings describe possible contributions, not achieved impact.",
-    "scoreScope": "Eight distinct pilot capabilities per role. All 16 legacy IDs remain recognised; JavaScript/Python/Node.js/TypeScript/Docker are learning/stack options, not co-required points. Sources do not establish AI growth; Phase 3 supplies live interpretation."
+    "scoreScope": "Eight distinct pilot capabilities per role. All 16 legacy IDs remain recognised; JavaScript/Python/Node.js/TypeScript/Docker are learning/stack options, not co-required points. Sources do not establish AI growth; Phase 3 supplies live interpretation.",
+    "corrections": {
+      "checkedAt": "2026-10-24T04:39:53.402Z",
+      "reason": "Independent review found tool-operation guides did not teach two promised outcomes. Replaced them with instructional primary sources; no capability boundary or role denominator changed.",
+      "coverage": [
+        {
+          "skillId": "test-design",
+          "resourceId": "baseline-test-design-1",
+          "url": "https://istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf",
+          "reviewedInstruction": "Printed pages 39-40 explain specification-based test cases, valid/invalid partitions and testing boundary values and their neighbours."
+        },
+        {
+          "skillId": "bug-reporting",
+          "resourceId": "baseline-bug-reporting-1",
+          "url": "https://bugzilla.mozilla.org/page.cgi?id=bug-writing.html",
+          "reviewedInstruction": "Writing precise steps to reproduce gives a worked expected/actual report; Providing additional information explains appropriate diagnostics and reduced test cases."
+        }
+      ],
+      "rights": "Only links and brief original summaries of ISTQB/Mozilla instruction are stored. Copyright remains with the publishers; no PDF content or logo is redistributed."
+    }
   }
 }

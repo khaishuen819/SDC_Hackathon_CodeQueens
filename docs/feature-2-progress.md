@@ -77,7 +77,7 @@ API/frontend integration, then actual deployment/demo checks, each in its own ph
 - Seed reruns insert missing demo rows only and preserve existing catalogue rows.
   A database-free regression checks reviewed content and prohibits snapshot access.
 
-Verification before independent review: **143 backend tests, 10 frontend checks and
+Verification: **143 backend tests, 10 frontend checks and
 TypeScript checking passed**, using the lockfile. Sixteen public resource URLs returned
 HTTP 200; public page topics were checked. We have not completed the learning courses,
 tested learning outcomes, called Gemini, migrated a database or deployed this change.
@@ -97,3 +97,27 @@ and adaptations are in the reference/provenance files and the technical notes.
 
 Next approved phase: Phase3 live retrieval/interpretation. Do not start it as part of
 this Phase2 checkpoint. Publication still awaits the user's review before any push.
+
+### Independent review and correction
+
+One fresh-context read-only review found no critical issues and one important content
+gap: Playwright best practices and GitHub's issue-creation instructions did not teach
+the full promised test-case design and reproducible-report outcomes. These links were
+replaced with the official ISTQB CTFL v4.0.1 syllabus (sections 4.1–4.2.2, printed
+pages39–40) and Mozilla Bug Writing Guidelines. Their instructional passages and HTTP200
+responses were checked, and evidence/provenance/estimates were updated without changing
+the promised outcomes or eight-point role denominators. Only links and short original
+summaries are stored; publisher copyright remains intact. This is a content correction,
+verified against the actual instruction and existing catalogue tests, not a new learning
+feature or a test that merely asserts a replacement URL.
+
+Deferred minor: date validation should reject impossible calendar dates such as
+`2025-02-31` and contradictory `originalDate`/precision/day combinations. The reviewer
+reproduced these malformed-input edge cases; the checked-in reference did not contain
+them. Add regressions before broadening ingestion. Do not interpret this as a finding
+that the current stored dates are fabricated.
+
+The review explicitly deferred later-phase refresh/queue controls, durable publication,
+restart fallback and browser/version integration. Native-import success on the target
+runtime and real database/deployment verification also remain pending. The valid offline
+checkpoint does not establish any of those capabilities.

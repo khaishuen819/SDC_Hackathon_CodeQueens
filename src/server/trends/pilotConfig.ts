@@ -19,7 +19,7 @@ export const pilotConfig: PilotConfig = {
   roleIds: ["backend-development", "qa-automation"],
   sourceHosts: ["github.blog", "blog.jetbrains.com"],
   resourceHosts: ["developer.mozilla.org", "nodejs.org", "www.typescriptlang.org", "www.postgresql.org", "git-scm.com",
-    "docs.github.com", "docs.python.org", "docs.docker.com", "ubuntu.com", "playwright.dev"],
+    "docs.github.com", "docs.python.org", "docs.docker.com", "ubuntu.com", "playwright.dev", "istqb.org", "bugzilla.mozilla.org"],
   foundationalSkillIds: ["git", "sql", "api-basics", "testing-basics", "javascript", "python", "linux-basics"],
   taskAnchors: scopes.map(({ taskId, roleId, referenceTaskIds }) => ({ taskId, roleId, referenceTaskIds })),
   sdgTemplates: scopes.map(({ taskId, purpose }) => ({ templateId: `${taskId.toLowerCase()}-skills-for-work`, taskId, sdgId: "sdg-4",

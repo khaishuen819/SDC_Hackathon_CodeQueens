@@ -462,8 +462,8 @@ SDG mappings refer to [target 4.4](https://sdgs.un.org/goals/goal4), relevant te
 skills for work. The role/skill explanations describe possible contributions through
 accessible practice, not measured attainment of an SDG or guaranteed employment.
 
-Verification: 143 backend tests, 10 frontend checks and TypeScript checking passed
-before independent review. Real O*NET data contained null task classifications, which
+Verification: 143 backend tests, 10 frontend checks and TypeScript checking passed.
+Real O*NET data contained null task classifications, which
 are preserved as `Unknown`, not silently given a Core/Supplemental classification.
 All 16 resource links returned HTTP200. Public page topics were checked; no complete
 learning course or learner outcome was evaluated.
@@ -473,3 +473,16 @@ Public tables were retrieved with PowerShell HTTPS and passed through the same p
 provenance identifies this explicitly. The native fetch command needs a successful
 target-runtime check before operational reliance. No automatic source/model refresh,
 durable head, database migration or production readiness is implied by this checkpoint.
+
+Independent review correction: use ISTQB CTFL v4.0.1 sections4.1–4.2.2 (printed
+pages39–40) for test-case design and Mozilla Bug Writing Guidelines for reproducible
+reports. The previous tool-operation links were too narrow for those promised outcomes.
+Replacement instruction and HTTP200 responses were checked; evidence and provenance
+identify the corrected sources. Only links/short original summaries are stored;
+ISTQB/Mozilla retain their copyright. No paid exam, course or bug submission is required.
+
+Deferred minor from review: strengthen malformed-date validation in the reference
+parser and bundle schema before broadening ingestion. Current stored dates were not
+found invalid; edge cases include normalised impossible calendar dates and mismatched
+original date/declared precision/publication day. Details and boundaries are in
+`docs/feature-2-progress.md`.
