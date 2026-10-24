@@ -62,3 +62,13 @@ export type Source = Prisma.SourceModel
  * 
  */
 export type TrendEvidence = Prisma.TrendEvidenceModel
+/**
+ * Model CriteriaSnapshot
+ * 
+ */
+export type CriteriaSnapshot = Prisma.CriteriaSnapshotModel
+/**
+ * Model CriteriaHead
+ * 
+ */
+export type CriteriaHead = Prisma.CriteriaHeadModel
