@@ -27,7 +27,7 @@ Target 4.4 concerns relevant technical and vocational skills for work. Each supp
 | Replit workspace | [Team project](https://replit.com/t/codequeens/repls/SDCHackathonCodeQueens-1) |
 | Replit proof of use | [SDC2026_CodeQueens_Replit_POU.pdf](submission/SDC2026_CodeQueens_Replit_POU.pdf) |
 | Preliminary PRD | [SDC2026_CodeQueens_Preliminary.pdf](submission/SDC2026_CodeQueens_Preliminary.pdf) |
-| Technical & Tools Declaration | Final signed PDF pending: `submission/SDC2026_CodeQueens_TechDeclaration.pdf` |
+| Technical & Tools Declaration | [SDC2026_CodeQueens_TechDeclaration.pdf](submission/SDC2026_CodeQueens_TechDeclaration.pdf) |
 | Slide deck | [SDC2026_CodeQueens_Slides.pdf](submission/SDC2026_CodeQueens_Slides.pdf) |
 | YouTube pitch/demo | [NextArc pitch and demo video](https://youtu.be/6mnbyhZJxhc) |
 
