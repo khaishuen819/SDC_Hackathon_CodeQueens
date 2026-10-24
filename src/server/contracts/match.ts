@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { EvidenceId, RoleId, SkillId } from "./ids.ts";
 import { ConfirmedProfile } from "./profile.ts";
-import { TrendDirection } from "./evidence.ts";
+import { TrendDirection, EvidenceRef } from "./evidence.ts";
 import { CriteriaReview, SnapshotId, SkillReview, TrendMeta } from "./criteria.ts";
 
 // Sent with every match response, so the frontend always shows what a score means.
@@ -74,6 +74,7 @@ export type MatchResponse = z.infer<typeof MatchResponse>;
 
 export const VersionedMatchResponse = MatchResponse.omit({ scoreMeaning: true }).extend({
   scoreMeaning: z.literal(COUNT_SCORE_MEANING), criteria: TrendMeta, review: SkillReview,
+  roles: z.array(RoleMatch.extend({ evidence: z.array(EvidenceRef).optional() })),
 }).refine((r) => r.criteria.snapshotId === r.review.targetSnapshotId && r.roles.every((role) =>
   [...role.strengths, ...role.gaps, ...role.unconfirmedSkills].every((s) => s.weight === 1 && !s.evidenceAdjustments?.length)),
 { error: "Versioned matching requires one pinned version and one point per skill." });

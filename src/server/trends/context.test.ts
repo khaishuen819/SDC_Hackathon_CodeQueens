@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createCriteriaContextLoader } from "./context.ts";
+import { createCriteriaContextLoader, prepareCriteriaRequest } from "./context.ts";
 import { MemoryCriteriaStore, emptyPublicState } from "./snapshotStore.ts";
-import { bundle, NOW } from "./testFixtures.ts";
+import { bundle, profile, NOW } from "./testFixtures.ts";
 
 const UNKNOWN = `criteria-${"f".repeat(64)}`;
 test("context rejects absent, unknown and malformed versions without a fabricated baseline", async () => {
@@ -61,4 +61,22 @@ test("storage failure is unavailable rather than a pretend source fallback", asy
     assert.doesNotMatch(error.message, /private database detail/);
     return true;
   });
+});
+
+test("missing or mismatched version context carries reload guidance but unanswered skills remain ready", async () => {
+  const store = new MemoryCriteriaStore();
+  const id = await store.bootstrap(bundle(2));
+  const deps = { loadContext: createCriteriaContextLoader({ store, disabled: true }), loadSnapshot: store.readSnapshot.bind(store) };
+  await assert.rejects(prepareCriteriaRequest(profile(["api-basics"]), {}, deps), (error: any) => {
+    assert.equal(error.code, "CRITERIA_CONTEXT_REQUIRED");
+    assert.equal(error.review.targetSnapshotId, id);
+    assert.equal(error.review.questions[0].skillId, "fixture-skill-1");
+    return true;
+  });
+  await assert.rejects(prepareCriteriaRequest(profile(), { snapshotId: id, criteriaReview: { targetSnapshotId: UNKNOWN } }, deps), { code: "CRITERIA_CONTEXT_REQUIRED" });
+  await assert.rejects(prepareCriteriaRequest(profile(), { criteriaReview: { fromSnapshotId: UNKNOWN, targetSnapshotId: id } }, deps), { code: "CRITERIA_UNAVAILABLE" });
+  const ready = await prepareCriteriaRequest(profile(["api-basics"]), { snapshotId: id }, deps);
+  assert.equal(ready.result.status, "ready");
+  assert.equal(ready.result.review.questions[0].state, "unanswered");
+  assert.deepEqual(ready.result.profile.unconfirmedSkillIds, []);
 });

@@ -26,6 +26,9 @@ export const LearningResource = z.object({
   sourceNote: z.string().min(1),
   // true for seeded content that nobody has reviewed yet. Show it as placeholder.
   isPlaceholder: z.boolean(),
+  estimateBasis: z.enum(["provider", "app"]).optional(),
+  estimateNote: z.string().min(1).optional(),
+  checkedAt: z.iso.datetime({ offset: true }).optional(),
 });
 export type LearningResource = z.infer<typeof LearningResource>;
 
@@ -43,6 +46,10 @@ export const PathwayStep = z.object({
   prerequisites: z.array(SkillId),
   // Trend evidence for this step. Filled later by feature 2 (M3/M4).
   evidence: z.array(EvidenceRef).optional(),
+  estimateBasis: z.enum(["provider", "app"]).optional(),
+  estimateNote: z.string().min(1).optional(),
+  possessionState: z.enum(["unconfirmed", "not-yet"]).optional(),
+  isPrerequisite: z.boolean().optional(),
 });
 export type PathwayStep = z.infer<typeof PathwayStep>;
 
