@@ -176,3 +176,25 @@ test("a version built from cached sources while the feeds are down does not adva
   assert.deepEqual([second.lastSuccessfulCheckAt, second.status], [firstCheck, "partial"]);
   assert.ok(second.providers.every((p) => p.status === "failed"));
 });
+
+test("a deadline after a healthy check remains visible after rereading saved status", async () => {
+  const h = harness();
+  const id = await bootstrapCriteria(h.store, bundle());
+  const reservation = await h.store.reserveRefresh();
+  assert.equal(reservation.status, "acquired");
+  if (reservation.status !== "acquired") return;
+  const head = await h.store.readRefreshState();
+  await h.store.saveRefreshState(reservation.generation, { ...head.state, providers: SOURCE_PROVIDERS.map((p) => ({
+    providerId: p.providerId, status: "ok" as const, lastAttemptAt: h.iso(), lastSuccessfulCheckAt: h.iso(),
+  })) }, true);
+  await h.store.releaseRefresh(reservation.generation);
+  const svc = service(h, interpreter(irrelevant), 30);
+  assert.equal((await svc.loadState()).status, "fresh");
+  h.clock.advance(61_000); h.mode.feeds = "hang";
+  await svc.refresh();
+  const reread = await service(h, interpreter(irrelevant)).loadState();
+  assert.equal(reread.snapshotId, id);
+  assert.equal(reread.status, "partial");
+  assert.match(reread.notices.join(" "), /deadline/i);
+  assert.equal(Date.parse(reread.lastSuccessfulCheckAt!), T0);
+});

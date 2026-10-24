@@ -37,7 +37,8 @@ function notices(run: RefreshRun, admitted: number): string[] {
 export function trendMeta(head: RefreshState, options: { disabled: boolean; now: number; control?: Control; extra?: string[] }): TrendMeta {
   const counts = queueCounts(head.state.queue), providers = head.state.providers;
   const status = !head.snapshotId ? "unavailable" : options.disabled ? "disabled"
-    : !head.lastSuccessfulCheckAt || !providers.length || providers.some((p) => p.status !== "ok" && p.status !== "unchanged") || counts.deferredItemCount || counts.quarantinedItemCount ? "partial" : "fresh";
+    : !head.lastSuccessfulCheckAt || (head.lastAttemptAt && Date.parse(head.lastAttemptAt) > Date.parse(head.lastSuccessfulCheckAt)) ||
+      !providers.length || providers.some((p) => p.status !== "ok" && p.status !== "unchanged") || counts.deferredItemCount || counts.quarantinedItemCount ? "partial" : "fresh";
   const derived: Control = head.leaseGeneration !== null && head.leaseExpiresAt && Date.parse(head.leaseExpiresAt) > options.now ? { state: "busy", retryAt: head.leaseExpiresAt }
     : head.nextAllowedAt && Date.parse(head.nextAllowedAt) > options.now ? { state: "cooldown", retryAt: head.nextAllowedAt } : { state: "ready", retryAt: null };
   return TrendMeta.parse({ snapshotId: head.snapshotId, policyVersion: "count-coverage-v1", status, lastSuccessfulCheckAt: head.lastSuccessfulCheckAt,
@@ -87,9 +88,13 @@ export function createRefreshService(deps: RefreshServiceDeps): RefreshService {
       }
       return [];
     } catch (error) {
-      await deps.store.recordFailure(generation, null);
-      const reason = error instanceof Error && /deadline|lease/i.test(error.message) ? error.message : "The update check failed.";
-      return [`${reason} The last valid criteria are kept.`];
+      const message = error instanceof Error ? error.message : "";
+      const reason = /deadline/i.test(message) ? "The refresh deadline was exceeded." : /lease/i.test(message)
+        ? "The refresh lease was lost." : "The update check failed.";
+      const notice = `${reason} The last valid criteria are kept.`;
+      const head = await deps.store.readRefreshState();
+      await deps.store.recordFailure(generation, { ...head.state, notices: [notice, ...head.state.notices].slice(0, 10) });
+      return [notice];
     }
   }
 
