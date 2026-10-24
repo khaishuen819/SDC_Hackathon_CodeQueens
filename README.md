@@ -1,6 +1,11 @@
 # [PLACEHOLDER: project name]
 <!-- TODO: add the project name agreed by the team. -->
 
+> **Continuing development? Read [HANDOFF.md](HANDOFF.md) first.** It contains the
+> approved product story, Domain1 requirements, current Feature2 status and the next
+> implementation phase. This README describes the existing integration; its older
+> weighted-scoring/content notes do not supersede the approved V4 feature-branch plan.
+
 > Helps fresh CS graduates find source-backed skills to learn for a backend or QA career, by linking their current skills and interests to AI developments.
 <!-- TODO: team to confirm this one-sentence description. -->
 

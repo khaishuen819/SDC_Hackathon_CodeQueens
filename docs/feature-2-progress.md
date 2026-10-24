@@ -6,7 +6,9 @@ Approved basis: V4 automation/scoring design and implementation plan, reviewed24
 The user authorizes local implementation and small commits on this feature branch,
 superseding CLAUDE.md's earlier M2-only commit restriction for this work.
 Latest instruction (24 October): pause and notify the user before EVERY push.
-No Phase 2 work has been pushed. Keep at least a conservative 15% session-token reserve.
+At the Phase2 coding checkpoint, the work had not been pushed. The user subsequently
+authorised publishing that checkpoint with a self-contained handoff; future pushes
+still need their own pause/notification. Keep a conservative 15% session-token reserve.
 Main merges and Replit publishing are separate actions. The proficiency picker
 removal is a separate change for Jong to apply; it is not bundled here.
 
@@ -96,7 +98,8 @@ O*NET data uses CC BY 4.0, independently of Apache-2.0 source code. Exact attrib
 and adaptations are in the reference/provenance files and the technical notes.
 
 Next approved phase: Phase3 live retrieval/interpretation. Do not start it as part of
-this Phase2 checkpoint. Publication still awaits the user's review before any push.
+this Phase2 checkpoint. The user reviewed the checkpoint and authorised the publication
+accompanying [HANDOFF.md](../HANDOFF.md); future pushes still require a pause/notification.
 
 ### Independent review and correction
 
