@@ -36,7 +36,7 @@ export async function criteriaHarness(initial: CriteriaBundle = bundle(2)) {
   const id = await store.bootstrap(initial);
   const loadContext = createCriteriaContextLoader({ store, disabled: true, now: () => now });
   const loadSnapshot = store.readSnapshot.bind(store);
-  return { store, id, loadContext, loadSnapshot, async publish(next: CriteriaBundle) {
+  return { store, id, loadContext, loadSnapshot, now: () => new Date(now).toISOString(), advance: (ms: number) => { now += ms; }, async publish(next: CriteriaBundle) {
     now += 76_000;
     const reservation = await store.reserveRefresh();
     if (reservation.status !== "acquired") throw new Error("Fixture reservation failed.");

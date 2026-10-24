@@ -1,5 +1,6 @@
 import * as z from "zod";
 import { RoleId, SdgId, SkillId } from "./ids.ts";
+import { TrendMeta } from "./criteria.ts";
 
 // One of the 17 UN Sustainable Development Goals.
 export const SdgGoal = z
@@ -39,3 +40,7 @@ export const SdgResponse = z.object({
   skillTags: z.array(SkillSdgTag),
 });
 export type SdgResponse = z.infer<typeof SdgResponse>;
+
+export const VersionedSdgResponse = SdgResponse.extend({ criteria: TrendMeta })
+  .refine((r) => r.criteria.snapshotId !== null, "SDG data requires a pinned version.");
+export type VersionedSdgResponse = z.infer<typeof VersionedSdgResponse>;

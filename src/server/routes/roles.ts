@@ -1,35 +1,17 @@
 import { Router } from "express";
-import { prisma } from "../db/client.ts";
-import { RolesResponse } from "../contracts/index.ts";
+import { VersionedRolesResponse } from "../contracts/roles.ts";
+import { readSnapshotQuery } from "../trends/context.ts";
+import type { CriteriaContextLoader } from "../trends/context.ts";
 
-export const rolesRouter = Router();
-
-// GET /api/roles: roles with their skills and weights, read from the database.
-rolesRouter.get("/api/roles", async (_req, res) => {
-  const rows = await prisma.role.findMany({
-    orderBy: { id: "asc" },
-    include: {
-      skills: {
-        include: { skill: true },
-        orderBy: [{ weight: "desc" }, { skillId: "asc" }],
-      },
-    },
+export function createRolesRouter(deps: { loadContext: CriteriaContextLoader }) {
+  const router = Router();
+  router.get("/api/roles", async (req, res) => {
+    const { snapshot, meta } = await deps.loadContext(readSnapshotQuery(req.query));
+    const names = new Map(snapshot.bundle.capabilities.map((c) => [c.skillId, c.name]));
+    res.json(VersionedRolesResponse.parse({ isPlaceholder: false, criteria: meta,
+      recognisedSkills: snapshot.bundle.capabilities.map((c) => ({ skillId: c.skillId, name: c.name })),
+      roles: snapshot.bundle.roles.map((r) => ({ ...r, skills: r.skills.map((s) => ({ ...s, name: names.get(s.skillId)! })) })),
+    }));
   });
-
-  const roles = rows.map((role) => ({
-    roleId: role.id,
-    name: role.name,
-    description: role.description,
-    skills: role.skills.map((rs) => ({
-      skillId: rs.skillId,
-      name: rs.skill.name,
-      weight: rs.weight,
-      isRequired: rs.isRequired,
-    })),
-    isPlaceholder:
-      role.isPlaceholder || role.skills.some((rs) => rs.isPlaceholder || rs.skill.isPlaceholder),
-  }));
-
-  // Check our own output against the contract before sending it.
-  res.json(RolesResponse.parse({ isPlaceholder: roles.some((r) => r.isPlaceholder), roles }));
-});
+  return router;
+}

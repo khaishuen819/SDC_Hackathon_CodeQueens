@@ -1,48 +1,24 @@
 import express, { Router } from "express";
-import { MatchRequest, MatchResponse } from "../contracts/index.ts";
-import { findUnknownIds, matchRoles, type EvidenceInput, type RoleInput } from "../matching/matchEngine.ts";
+import { MatchRequest } from "../contracts/match.ts";
+import { ConfirmedProfile } from "../contracts/profile.ts";
+import { findUnknownIds } from "../matching/matchEngine.ts";
+import { prepareCriteriaRequest } from "../trends/context.ts";
+import type { CriteriaRequestDeps } from "../trends/context.ts";
+import { presentMatch } from "../trends/presentation.ts";
 import { ApiFailure, zodDetails } from "./errors.ts";
 
-// What this route needs. Passed in (not imported) so tests run with no database.
-export type MatchRouteDeps = {
-  loadRoles: () => Promise<RoleInput[]>;
-  loadKnownSkillIds: () => Promise<string[]>;
-  loadEvidence: () => Promise<EvidenceInput[]>;
-};
-
+export type MatchRouteDeps = CriteriaRequestDeps;
 export function createMatchRouter(deps: MatchRouteDeps) {
   const router = Router();
-
-  // POST /api/match: body = ConfirmedProfile -> MatchResponse.
   router.post("/api/match", express.json({ limit: "100kb" }), async (req, res) => {
     const parsed = MatchRequest.safeParse(req.body);
-    if (!parsed.success) {
-      const isDraft = typeof req.body === "object" && req.body?.status === "draft";
-      const message = isDraft
-        ? "This is a draft profile. The graduate must check and confirm it before matching."
-        : "The confirmed profile is not valid.";
-      throw new ApiFailure("INVALID_INPUT", message, zodDetails(parsed.error));
-    }
-    const profile = parsed.data;
-
-    const [roles, knownSkillIds] = await Promise.all([deps.loadRoles(), deps.loadKnownSkillIds()]);
-    const unknown = findUnknownIds(profile, knownSkillIds, roles.map((r) => r.roleId));
-    if (unknown.length > 0) {
-      throw new ApiFailure("INVALID_INPUT", "The profile uses skill or role IDs we do not know.", unknown);
-    }
-
-    // Trend evidence is optional: if it cannot be read, match with base weights.
-    let evidence: EvidenceInput[] | null;
-    try {
-      evidence = await deps.loadEvidence();
-    } catch (err) {
-      console.error("Trend evidence read failed:", err instanceof Error ? `${err.name}: ${err.message}` : "unknown");
-      evidence = null;
-    }
-
-    // Check our own output against the contract before sending it.
-    res.json(MatchResponse.parse(matchRoles(profile, roles, evidence)));
+    if (!parsed.success) throw new ApiFailure("INVALID_INPUT", req.body?.status === "draft"
+      ? "This is a draft profile. Confirm it before matching." : "The confirmed profile is not valid.", zodDetails(parsed.error));
+    const ready = await prepareCriteriaRequest(ConfirmedProfile.parse(parsed.data), parsed.data, deps);
+    const bundle = ready.context.snapshot.bundle;
+    const unknown = findUnknownIds(ready.result.profile, bundle.capabilities.map((c) => c.skillId), bundle.roles.map((r) => r.roleId));
+    if (unknown.length) throw new ApiFailure("INVALID_INPUT", "The profile uses skill or role IDs we do not know.", unknown);
+    res.json(presentMatch(ready.result.profile, ready.context, ready.result.review, ready.previous));
   });
-
   return router;
 }

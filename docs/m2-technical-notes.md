@@ -550,3 +550,32 @@ the multi-connection reservation test. Without `TEST_DATABASE_URL` they are skip
 Deploying (Phase 7, with a backup first): apply only this additive migration, bootstrap
 the verified baseline once with `bootstrapCriteria`, and keep `TREND_PROVIDER=disabled`
 until the routes and frontend that read snapshots are released together.
+
+## Feature 2 Phase 5 — 24 October 2026
+
+The API now reads one immutable criteria version per request. GET roles/evidence/sdg
+accept optional snapshotId and return criteria; roles adds full recognisedSkills.
+Match keeps its direct confirmed-profile body; pathway keeps {profile,roleId}.
+Both add snapshotId and/or criteriaReview; a target version is required and the two
+fields must agree. Missing/mismatched context gives409 with validated review;
+unanswered skills do not. Unknown versions give CRITERIA_UNAVAILABLE; unavailable
+storage/no initial baseline gives TRENDS_UNAVAILABLE. Historical versions stay dated.
+
+GET /api/trends returns TrendMeta; POST /api/trends/refresh accepts no fields and
+obeys shared controls; POST /api/trends/reconcile takes {profile,review:{targetSnapshotId,
+fromSnapshotId?,answers?}} and returns {status:"ready",profile,snapshotId,review,criteria}.
+All personal state remains ephemeral. Startup validates baseline files but never
+migrates or populates a DB head. Real bootstrap is an explicit release operation.
+
+One-point confirmed coverage excludes legacy adjustments/proficiency. Pathways retain
+citations, prerequisites, estimates and source dates. Retired skills stay recognised.
+New criteriaApi.ts permits injected end-to-end HTTP testing; production index.ts uses
+one Prisma store and refresh service. Shared DatedEvidenceItem avoids schema cycles
+without changing public snapshot fields. Pure matching/pathway engines are unchanged.
+
+AI assistance log: Codex reviewed the peer Phase2–4 handoff/code, reproduced/fixed
+persistent timeout status, and implemented Phase5 with fictional-data regressions.
+No new library or live model/cloud service was added. The team owns review/release.
+Checkpoint:207 backend passed,9 disposable-DB tests skipped, typecheck passed.
+Final results/limits are recorded in docs/feature-2-progress.md. Phase6/7 remain;
+no Neon migration, actual bootstrap, live Gemini check or deployment was performed.

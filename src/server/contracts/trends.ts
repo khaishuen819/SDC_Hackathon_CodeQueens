@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { EvidenceItem } from "./evidence.ts";
+import { DatedEvidenceItem } from "./evidence.ts";
 import { LearningResource } from "./pathway.ts";
 import { SdgResponse } from "./sdg.ts";
 import { RoleId, SkillId, SourceId, EvidenceId, SdgId, PILOT_ROLE_IDS } from "./ids.ts";
@@ -44,11 +44,7 @@ export const BundleResource = LearningResource.extend({
 export type BundleResource = z.infer<typeof BundleResource>;
 // The old evidence response retains its day-only fields. A versioned bundle
 // also supports honest month/year/unknown precision without inventing a day.
-export const BundleEvidence = EvidenceItem.omit({ publishedDate: true }).extend({
-  url: HttpsUrl, publishedDate: z.iso.date().nullable(), publishedAt: Instant.nullable(),
-  originalDate: z.string().nullable(), datePrecision: z.enum(["day", "month", "year", "unknown"]),
-  dateBasis: z.enum(["published", "updated"]), checkedAt: Instant,
-}).strict();
+export const BundleEvidence = DatedEvidenceItem.extend({ url: HttpsUrl }).strict();
 export type BundleEvidence = z.infer<typeof BundleEvidence>;
 const BundleRole = z.strictObject({
   roleId: RoleId, name: Text, description: Text, isPlaceholder: Reviewed,

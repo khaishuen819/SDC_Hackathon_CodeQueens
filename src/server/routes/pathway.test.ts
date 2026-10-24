@@ -1,85 +1,42 @@
-// Tests for POST /api/pathway. No database: the route gets fake loaders.
-// Run with: npm test
-
-import { after, test } from "node:test";
+import test from "node:test";
 import assert from "node:assert/strict";
-import type { AddressInfo } from "node:net";
-import type { Server } from "node:http";
-import express from "express";
-import { ApiError, PathwayResponse } from "../contracts/index.ts";
-import { exampleConfirmedProfile, exampleExtractResponse, examplePathwayResponse } from "../contracts/examples.ts";
-import { exampleEvidence, exampleResources, exampleRoles } from "../matching/exampleInputs.ts";
-import { errorHandler } from "./errors.ts";
+import { VersionedPathwayResponse } from "../contracts/pathway.ts";
 import { createPathwayRouter } from "./pathway.ts";
+import { startApp, request, criteriaHarness } from "./criteriaTestSupport.ts";
+import { bundle, profile } from "../trends/testFixtures.ts";
 
-const knownSkillIds = [...new Set(exampleRoles.flatMap((r) => r.skills.map((s) => s.skillId))), "python"];
-
-const servers: Server[] = [];
-after(() => servers.forEach((s) => s.close()));
-
-async function startApp(): Promise<string> {
-  const app = express();
-  app.use(
-    createPathwayRouter({
-      loadRoles: async () => exampleRoles,
-      loadKnownSkillIds: async () => knownSkillIds,
-      loadResources: async (skillIds) => exampleResources.filter((r) => skillIds.includes(r.skillId)),
-      loadEvidence: async () => exampleEvidence,
-    }),
-  );
-  app.use(errorHandler);
-  const server = app.listen(0);
-  servers.push(server);
-  await new Promise((resolve) => server.once("listening", resolve));
-  return `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
-}
-
-async function postPathway(body: unknown) {
-  const res = await fetch(`${await startApp()}/api/pathway`, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  return { status: res.status, body: (await res.json()) as unknown };
-}
-
-function assertError(result: { status: number; body: unknown }, status: number, code: string) {
-  assert.equal(result.status, status);
-  const error = ApiError.parse(result.body).error;
-  assert.equal(error.code, code);
-  return error;
-}
-
-test("a valid request returns the example pathway, which passes the schema", async () => {
-  const result = await postPathway({ profile: exampleConfirmedProfile, roleId: "qa-automation" });
-  assert.equal(result.status, 200);
-  assert.deepEqual(PathwayResponse.parse(result.body), examplePathwayResponse);
+test("pathways offer omitted and unsure skills immediately and remove them after explicit Have", async () => {
+  const h = await criteriaHarness(), base = await startApp(createPathwayRouter(h));
+  for (const answer of [undefined, "not-sure", "not-yet"] as const) {
+    const result = await request(base, "/api/pathway", { profile: profile(["api-basics"]), roleId: "qa-automation", criteriaReview: {
+      fromSnapshotId: h.id, targetSnapshotId: h.id, answers: answer ? [{ skillId: "fixture-skill-1", answer }] : [] } });
+    assert.equal(result.status, 200);
+    const response = VersionedPathwayResponse.parse(result.body), step = response.steps[0];
+    assert.deepEqual(response.steps.map((s) => s.skillId), ["fixture-skill-1"]);
+    assert.equal(step.possessionState, answer === "not-yet" ? "not-yet" : "unconfirmed");
+    assert.equal(step.estimatedHours, 1); assert.equal(step.estimateBasis, "app");
+    assert.equal(step.resources[0].isPlaceholder, false); assert.deepEqual(step.evidence, [{ evidenceId: "fictional-evidence" }]);
+  }
+  const later = await request(base, "/api/pathway", { profile: profile(["api-basics"]), roleId: "qa-automation", snapshotId: h.id,
+    criteriaReview: { targetSnapshotId: h.id, answers: [{ skillId: "fixture-skill-1", answer: "have" }] } });
+  assert.deepEqual(later.body.steps, []);
 });
 
-test("the pathway is for the requested role, not the preferred route", async () => {
-  // The example graduate prefers QA automation, but asks for backend here.
-  const result = await postPathway({ profile: exampleConfirmedProfile, roleId: "backend-development" });
-  assert.equal(PathwayResponse.parse(result.body).roleId, "backend-development");
+test("pathways preserve the requested route and validate profile, role and version inputs", async () => {
+  const h = await criteriaHarness(), base = await startApp(createPathwayRouter(h)), good = { profile: profile(), roleId: "backend-development", snapshotId: h.id };
+  assert.equal((await request(base, "/api/pathway", good)).body.roleId, "backend-development");
+  for (const bad of [{ ...good, profile: { ...profile(), status: "draft" } }, { ...good, profile: profile(["unknown-skill"]) }, { ...good, snapshotId: "bad" }]) {
+    assert.equal((await request(base, "/api/pathway", bad)).status, 400);
+  }
+  assert.equal((await request(base, "/api/pathway", { ...good, roleId: "unknown-role" })).status, 404);
+  const missing = await request(base, "/api/pathway", { profile: profile(), roleId: "qa-automation" });
+  assert.equal(missing.status, 409); assert.equal(missing.body.review.targetSnapshotId, h.id);
 });
 
-// (f)
-test("a draft profile returns INVALID_INPUT", async () => {
-  const error = assertError(await postPathway({ profile: exampleExtractResponse, roleId: "qa-automation" }), 400, "INVALID_INPUT");
-  assert.match(error.message, /draft profile/);
-});
-
-test("an unknown roleId returns NOT_FOUND", async () => {
-  const error = assertError(await postPathway({ profile: exampleConfirmedProfile, roleId: "data-science" }), 404, "NOT_FOUND");
-  assert.match(error.message, /data-science/);
-});
-
-test("an unknown skill ID returns INVALID_INPUT with a detail", async () => {
-  const profile = { ...exampleConfirmedProfile, unconfirmedSkillIds: ["docker", "made-up-skill"] };
-  const error = assertError(await postPathway({ profile, roleId: "qa-automation" }), 400, "INVALID_INPUT");
-  assert.deepEqual(error.details, [{ path: "unconfirmedSkillIds.1", message: 'Unknown skillId "made-up-skill".' }]);
-});
-
-test("a body without roleId returns INVALID_INPUT", async () => {
-  const error = assertError(await postPathway({ profile: exampleConfirmedProfile }), 400, "INVALID_INPUT");
-  assert.ok(error.details?.some((d) => d.path === "roleId"));
+test("a retained pinned pathway keeps its resources when the current version changes", async () => {
+  const h = await criteriaHarness(), base = await startApp(createPathwayRouter(h));
+  await h.publish(bundle(3));
+  const result = await request(base, "/api/pathway", { profile: profile(["api-basics"]), roleId: "qa-automation", snapshotId: h.id });
+  assert.equal(result.status, 200); assert.equal(result.body.criteria.snapshotId, h.id);
+  assert.deepEqual(result.body.steps.map((s: any) => s.skillId), ["fixture-skill-1"]);
 });

@@ -1,5 +1,7 @@
 # Feature 2 implementation progress
 
+**Latest checkpoint,24 October:** Phase5 backend integration is implemented locally; final review pending. Phase4 was received from GitHub at a3684f2. Later Phase5 commits await per-push approval. Phase6/frontend and Phase7/release remain pending. Earlier checkpoint wording below records its own time.
+
 Owner: Jong (M3). Working branch: `codex/feature-2-automation`.
 Approved basis: V4 automation/scoring design and implementation plan, reviewed24 October2026.
 
@@ -258,3 +260,52 @@ Not verified or not done:
   small skew is possible. Each admitted skill changes the catalogue fingerprint, so
   current articles are reinterpreted (two per refresh); this is by design but costs calls.
 - No routes, frontend or deployment change; the public app still uses legacy logic.
+
+## Phase 5 — backend integration checkpoint, 24 October 2026
+
+Continued from a3684f2. Baseline re-run:196 backend passed,9 DB skipped,10 frontend
+passed and typecheck passed. Reviewed the peer Phase2–4 source/draft/queue/store and
+migration code. Live Gemini acceptance and multi-connection locking remain unverified.
+
+Review fix8a0d4fb: exceptional timeouts lost warnings on later status reads and could
+report old criteria as fresh. Reproduced RED, fixed GREEN: save failure notice under
+the lease; newer unfinished attempts make status partial without changing the last
+success or valid criteria. This fix was pushed before the newer per-push approval
+note was noticed. Remaining commits stay local for review.
+
+- One captured head and explicitly loaded immutable version supplies roles, complete
+  recognition catalogue, matching, pathways, evidence and SDG readers. Unknown
+  versions return409; unavailable storage/no baseline returns503. Historical versions
+  never inherit current-head provider/check timestamps. Startup never auto-bootstraps.
+- Adds GET /api/trends, POST /api/trends/refresh (empty input only), POST
+  /api/trends/reconcile ({profile,review}). Reconcile returns the updated profile,
+  snapshotId, optional guidance and criteria in memory only, never in public storage.
+- Match/pathway require snapshotId or criteriaReview.targetSnapshotId. Both must
+  agree when present. Genuine context errors preserve validated top-level review.
+  Omission/Not sure/unanswered skills give usable200 scores/pathways with zero credit.
+- One point per distinct admitted skill; citation-only pathway evidence. No legacy
+  numerical DB evidence loader is used by the API. Pure engines remain unchanged.
+  Explanations cite role evidence, describe denominator changes and preserve choice.
+- Retired IDs remain recognised by roles, extraction and profile matching. Extra
+  skills/proficiency levels give no score bonus or penalty.
+- Pathways expand/topologically order unconfirmed prerequisites, then pilot required
+  status, supported context and stable IDs. Preparation outside current associations
+  never enlarges the score denominator. Actual resources, original dates, estimate
+  provenance and SDG content remain intact.
+- routes/index.ts constructs one production store/service. New criteriaApi.ts gives
+  injected composition for full fictional-data HTTP checks without real credentials.
+
+Phase6 contract guide: roles/evidence/sdg carry criteria; roles adds recognisedSkills.
+Match/pathway carry criteria/review. Role matches add evidence references. Pathway
+steps add optional possessionState, isPrerequisite, estimateBasis and estimateNote;
+resources retain estimate/check metadata. See the schemas for exact shapes.
+
+Pre-review verification:207 backend passed,9 DB skipped; typecheck passed. Replaced
+obsolete weighted HTTP tests, retaining pure-engine tests. Cases include50→100,
+old/new pinning, real409 transport, retirement, no baseline/no implicit bootstrap,
+and a failed refresh after26hours. A deliberate current-associations-only catalogue
+mutation failed the composed HTTP regression; restored code passed the whole suite.
+
+No live model call, Neon migration/bootstrap, frontend edit or Replit publication.
+Do not deploy this backend alone: Phase6 and coordinated Phase7 release remain.
+The separate proficiency-dropdown patch is not included. Final review follows.

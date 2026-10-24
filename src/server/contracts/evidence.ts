@@ -1,5 +1,6 @@
 import * as z from "zod";
 import { EvidenceId, SkillId } from "./ids.ts";
+import { Instant, TrendMeta } from "./criteria.ts";
 
 // PROPOSED, to be agreed with M3/M4.
 // Feature 2 (trend evidence) belongs to M3/M4. M2 only provides this slot so
@@ -19,6 +20,17 @@ export const EvidenceItem = z.object({
   linkedSkillIds: z.array(SkillId),
 });
 export type EvidenceItem = z.infer<typeof EvidenceItem>;
+
+// A shared leaf schema keeps bundle and HTTP metadata aligned without a
+// response -> bundle -> response import cycle. Unknown days remain null.
+export const DatedEvidenceItem = EvidenceItem.omit({ publishedDate: true }).extend({
+  publishedDate: z.iso.date().nullable(), publishedAt: Instant.nullable(), originalDate: z.string().nullable(),
+  datePrecision: z.enum(["day", "month", "year", "unknown"]), dateBasis: z.enum(["published", "updated"]), checkedAt: Instant,
+});
+export type DatedEvidenceItem = z.infer<typeof DatedEvidenceItem>;
+export const VersionedEvidenceListResponse = z.object({ items: z.array(DatedEvidenceItem), criteria: TrendMeta })
+  .refine((r) => r.criteria.snapshotId !== null, "Evidence requires a pinned version.");
+export type VersionedEvidenceListResponse = z.infer<typeof VersionedEvidenceListResponse>;
 
 // Whether a source says a skill's demand is going up or down.
 export const TrendDirection = z.enum(["rising", "declining", "neutral", "uncertain"]);

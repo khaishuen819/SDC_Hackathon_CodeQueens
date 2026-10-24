@@ -2,13 +2,20 @@ import { SnapshotId, TrendMeta } from "../contracts/criteria.ts";
 import type { CriteriaReview } from "../contracts/criteria.ts";
 import type { ConfirmedProfile } from "../contracts/profile.ts";
 import type { CriteriaContext, CriteriaSnapshot } from "../contracts/trends.ts";
-import { ApiFailure } from "../routes/errors.ts";
+import * as z from "zod";
+import { ApiFailure, zodDetails } from "../routes/errors.ts";
 import { checkedSnapshot } from "./snapshotStore.ts";
 import type { CriteriaStore } from "./snapshotStore.ts";
 import { trendMeta } from "./refreshService.ts";
 import { reconcileCriteria, CriteriaReconciliationError } from "./reconciliation.ts";
 
 export type CriteriaContextLoader = (snapshotId?: string) => Promise<CriteriaContext>;
+const SnapshotQuery = z.object({ snapshotId: SnapshotId.optional() });
+export function readSnapshotQuery(query: unknown): string | undefined {
+  const parsed = SnapshotQuery.safeParse(query);
+  if (!parsed.success) throw new ApiFailure("INVALID_INPUT", "The criteria version query is not valid.", zodDetails(parsed.error));
+  return parsed.data.snapshotId;
+}
 export type CriteriaRequestDeps = {
   loadContext: CriteriaContextLoader;
   loadSnapshot: (snapshotId: string) => Promise<CriteriaSnapshot | null>;

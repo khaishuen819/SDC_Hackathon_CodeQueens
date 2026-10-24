@@ -1,57 +1,17 @@
 import "../env.ts";
-import { Router } from "express";
 import { prisma } from "../db/client.ts";
-import { loadKnownSkillIds, loadReviewedEvidence, loadRoles, loadWeightEvidence } from "../db/matchData.ts";
-import { loadEvidenceList, loadResources, loadSdg } from "../db/referenceData.ts";
 import { createLlmAdapter } from "../extraction/llmAdapter.ts";
-import { errorHandler, notFoundHandler } from "./errors.ts";
-import { createMatchRouter } from "./match.ts";
-import { createPathwayRouter } from "./pathway.ts";
-import { createProfileRouter } from "./profile.ts";
-import { createReferenceRouter } from "./reference.ts";
-import { rolesRouter } from "./roles.ts";
+import { loadPilotBaseline } from "../trends/bootstrap.ts";
+import { pilotConfig } from "../trends/pilotConfig.ts";
+import { PrismaCriteriaStore } from "../trends/snapshotStore.ts";
+import { trendInterpreterFromEnv } from "../trends/interpreter.ts";
+import { createCriteriaApiRouter } from "./criteriaApi.ts";
 
-// All /api routes. server.ts mounts this once; new routes are added here,
-// so server.ts does not need to change again.
-export const apiRouter = Router();
-
-apiRouter.use(rolesRouter);
-
-const adapter = createLlmAdapter(); // stops start-up if LLM settings are wrong
-console.log(`CV extraction provider: ${adapter.name}`);
-
-apiRouter.use(
-  createProfileRouter({
-    adapter,
-    // The skill catalogue from the database, so the model maps to our skillIds.
-    loadCatalogue: () => prisma.skill.findMany({ select: { id: true, name: true }, orderBy: { id: "asc" } }),
-  }),
-);
-
-apiRouter.use(
-  createMatchRouter({
-    loadRoles: () => loadRoles(prisma),
-    loadKnownSkillIds: () => loadKnownSkillIds(prisma),
-    loadEvidence: () => loadWeightEvidence(prisma),
-  }),
-);
-
-apiRouter.use(
-  createPathwayRouter({
-    loadRoles: () => loadRoles(prisma),
-    loadKnownSkillIds: () => loadKnownSkillIds(prisma),
-    loadResources: (skillIds) => loadResources(prisma, skillIds),
-    loadEvidence: () => loadReviewedEvidence(prisma),
-  }),
-);
-
-apiRouter.use(
-  createReferenceRouter({
-    loadSdg: () => loadSdg(prisma),
-    loadEvidenceList: () => loadEvidenceList(prisma),
-  }),
-);
-
-// Unknown /api paths get a JSON 404. Any error becomes our standard error shape.
-apiRouter.use("/api", notFoundHandler);
-apiRouter.use(errorHandler);
+// Validate public inputs/configuration at startup, without reading or seeding
+// a database head. Migration and baseline bootstrap are explicit release steps.
+const { reference } = await loadPilotBaseline();
+const trend = trendInterpreterFromEnv();
+const adapter = createLlmAdapter();
+console.log(`CV extraction provider: ${adapter.name}; trend interpretation: ${trend.provider}`);
+export const apiRouter = createCriteriaApiRouter({ store: new PrismaCriteriaStore(prisma), reference, config: pilotConfig,
+  fetcher: fetch, interpreter: trend.provider === "gemini" ? trend.interpreter : null, adapter });
