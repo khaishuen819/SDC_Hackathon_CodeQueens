@@ -22,6 +22,73 @@ Use fictional CVs only. Our application processes uploads in memory and does not
 
 **Automatic trend interpretation is currently disabled in production.** The fetching, interpretation, validation, storage and frontend integration are implemented, but the deployed service reports `status: disabled` and no successful update check. Baseline evidence is available; it is not a demonstration of freshly interpreted AI news. Live model acceptance, interpretation quality and a visible source-to-advice refresh still need verification before that capability is presented as working live.
 
+## How to Run
+
+### Option 1 — Use the live app (recommended for judges)
+
+Open **[NextArc](https://sdc-hackathon-code-queens-1.replit.app/)**. No installation or account is needed. Use the fictional sample CVs (Jordan or Sam), or upload another fictional CV.
+
+### Option 2 — Run on Replit
+
+1. Open the [Replit workspace](https://replit.com/t/codequeens/repls/SDCHackathonCodeQueens-1), or import this repository with **Create Repl → Import from GitHub**.
+2. In **Secrets**, add the variables listed under *Configuration* below.
+3. In the **Shell**, prepare the database once:
+   ```bash
+   npm install
+   npx prisma migrate deploy
+   npm run criteria:bootstrap -- --apply
+   ```
+4. Press **Run** for a private preview, or **Publish** to deploy. `.replit` pins Node 24 and starts the app with `npm start`.
+
+### Option 3 — Run locally
+
+You need **Node.js 24 or newer** and a **PostgreSQL database** (a free [Neon](https://neon.tech) database works).
+
+```bash
+git clone https://github.com/khaishuen819/SDC_Hackathon_CodeQueens.git
+cd SDC_Hackathon_CodeQueens
+npm ci
+cp .env.example .env        # PowerShell: Copy-Item .env.example .env
+```
+
+Edit `.env` (see *Configuration*), then prepare the database once and start the app:
+
+```bash
+npx prisma migrate deploy               # creates the tables
+npm run criteria:bootstrap -- --apply   # stores the verified 16-skill baseline
+npm start                               # http://localhost:3000
+```
+
+- `npm run criteria:bootstrap` without `--apply` only reports whether a criteria version exists. With `--apply` it stores the baseline **only if none exists**; it never replaces an existing version.
+- The legacy `npx prisma db seed` is **not** needed and does not set up the new criteria.
+- The app does not set up the database automatically on startup. Without the two commands above, pages return "criteria unavailable".
+
+### Configuration
+
+Set these in `.env` (local) or Replit **Secrets**. Never commit real values.
+
+| Variable | Needed for | Example / notes |
+|---|---|---|
+| `DATABASE_URL` | Always | PostgreSQL connection string, e.g. from Neon |
+| `LLM_PROVIDER` | CV reading | `mock` (default, no key: a fixed, labelled fictional profile) or `gemini` |
+| `GEMINI_API_KEY` | Gemini | Only when `LLM_PROVIDER=gemini` or `TREND_PROVIDER=gemini` |
+| `GEMINI_MODEL` | Gemini CV reading | A current Gemini model ID; free tier needs a Flash model |
+| `TREND_PROVIDER` | AI-news updates | `disabled` (default) or `gemini` |
+| `TREND_GEMINI_MODEL` | Gemini trend updates | Only when `TREND_PROVIDER=gemini` |
+
+**Quickest local trial:** set only `DATABASE_URL`, and leave `LLM_PROVIDER=mock` and `TREND_PROVIDER=disabled`. No Gemini key is needed.
+
+### Frontend-only development (optional)
+
+To work on the frontend against the live backend:
+
+```bash
+API_TARGET=https://sdc-hackathon-code-queens-1.replit.app npm --prefix frontend run dev
+```
+
+PowerShell: `$env:API_TARGET = "https://sdc-hackathon-code-queens-1.replit.app"; npm --prefix frontend run dev`. The page runs at `http://localhost:5173`. Use `API_TARGET=http://localhost:3000` for a local backend.
+
+
 ## Team Information
 
 | Field | Details |
@@ -192,59 +259,6 @@ Obtain the actual snapshot ID from `GET /api/trends` or roles metadata. Match/pa
 
 Missing or mismatched criteria context can return HTTP 409 with `review` and its target version. Saved immutable versions remain usable when available. These questions are optional possession guidance; they do not impose a score-blocking answer gate. Unavailable storage or no initial criteria returns an unavailable error. Ordinary errors retain `{ "error": { "code", "message", "details"? } }`; version-context errors additionally carry the validated review payload. See [contracts](src/server/contracts/) and the [technical notes](docs/m2-technical-notes.md).
 
-## Developer Setup
-
-<details>
-<summary>Run locally or prepare a Replit deployment</summary>
-
-Use Node.js **24 or newer**, the committed dependency lock and a PostgreSQL database. The live application above is the quickest way to try the prototype.
-
-```bash
-git clone https://github.com/khaishuen819/SDC_Hackathon_CodeQueens.git
-cd SDC_Hackathon_CodeQueens
-npm ci
-```
-
-Copy `.env.example` to `.env` and configure the variables below. On Replit, set them in Secrets instead. Use the configured model identifiers; no API key or database credential belongs in the README or source.
-
-| Variable | Purpose |
-|---|---|
-| `DATABASE_URL` | PostgreSQL connection string |
-| `LLM_PROVIDER` | `mock` for a fixed labelled fictional draft, or `gemini` for CV extraction |
-| `GEMINI_API_KEY` | Required for either Gemini-enabled service |
-| `GEMINI_MODEL` | Required when `LLM_PROVIDER=gemini` |
-| `TREND_PROVIDER` | `disabled` for baseline-only operation, or `gemini` for interpretation |
-| `TREND_GEMINI_MODEL` | Required when `TREND_PROVIDER=gemini` |
-
-Prepare a fresh database and initialise the versioned baseline:
-
-```bash
-npx prisma generate
-npx prisma migrate deploy
-npm run criteria:bootstrap -- --apply
-npm start
-```
-
-Open `http://localhost:3000`. Bootstrap stores the verified baseline only if no current criteria version exists; it keeps an existing version. `npm run criteria:bootstrap` without `--apply` reports status without writing. Legacy `prisma db seed` does not initialise the new criteria head and is not a substitute. Startup deliberately does not seed or bootstrap automatically.
-
-For Replit, use the existing team workspace, configure Secrets and apply the migration/bootstrap as appropriate for that database. `.replit` pins Node 24 and supplies the Run and Autoscale deployment commands. The backend and static frontend are already served together by `server.ts`; publish the compatible release and verify its actual configuration. Enable Gemini trend interpretation only after a controlled model/refresh check; do not describe disabled mode as live sourcing.
-
-For frontend-only development, explicitly target the backend. The proxy's current default uses an older hostname, so override it:
-
-```bash
-API_TARGET=https://sdc-hackathon-code-queens-1.replit.app npm --prefix frontend run dev
-```
-
-PowerShell equivalent:
-
-```powershell
-$env:API_TARGET = "https://sdc-hackathon-code-queens-1.replit.app"
-npm --prefix frontend run dev
-```
-
-The frontend runs at `http://localhost:5173`. Set `API_TARGET=http://localhost:3000` for a local backend. A separate synthetic verification server is available through `npm --prefix frontend run dev:criteria-fixture`; its fixed fictional data and blocked external adapters are not live evidence.
-
-</details>
 
 ## Tests and Verification
 
@@ -329,9 +343,9 @@ The project's source code is licensed under the [Apache License 2.0](LICENSE). T
 - [x] Team name, domain (Domain 1 / Domain 2) and SDG track filled in
 - [ ] Slide deck link added
 - [ ] Demo video link added
-- [ ] Replit used, with proof of use in submission
+- [x] Replit used, with proof of use in submission
 - [x] Preliminary submission completed (SDC2026_TeamName_Preliminary.pdf)
 - [ ] Technology declaration completed (SDC2026_TeamName_TechDeclaration.pdf)
-- [ ] Submission files renamed with your team name (replace TeamName)
+- [x] Submission files renamed with your team name (replace TeamName)
 - [x] "How to Run" steps verified
 - [x] No API keys or secrets committed to the repository
