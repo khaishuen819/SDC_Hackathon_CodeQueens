@@ -4,6 +4,35 @@ Helps fresh graduates decide what to learn next by connecting their confirmed sk
 
 Built by **Code Queens** for **SDC Hackathon 2026**, hosted by the XMUM AI Club. Our preliminary pilot supports **CS fresh graduates exploring Backend Development or QA Automation**.
 
+## Team Information
+
+| Field | Details |
+|---|---|
+| Team Name | Code Queens |
+| Project | NextArc |
+| Team Domain | Domain 1 — Aiversecity Future-Ready Workforce |
+| SDG Track | **SDG 4 — Quality Education, Target 4.4** |
+| Team Leader | Chew Khai Shuen |
+| University | Sunway University |
+| Number of Members | 4 |
+
+Target 4.4 concerns relevant technical and vocational skills for work. Each supported role and recommended skill explains how its suggested practice can contribute to this target. A learning recommendation is not proof that a user has acquired a skill or improved their employment outcome. [UN Goal 4](https://sdgs.un.org/goals/goal4)
+
+## Links and Submission Materials
+
+| Resource | Link or status |
+|---|---|
+| Source repository | [SDC_Hackathon_CodeQueens](https://github.com/khaishuen819/SDC_Hackathon_CodeQueens) |
+| Live application | [NextArc on Replit](https://sdc-hackathon-code-queens-1.replit.app/) |
+| Replit workspace | [Team project](https://replit.com/t/codequeens/repls/SDCHackathonCodeQueens-1) |
+| Replit proof of use | [SDC2026_CodeQueens_Replit_POU.pdf](submission/SDC2026_CodeQueens_Replit_POU.pdf) |
+| Preliminary PRD | [SDC2026_CodeQueens_Preliminary.pdf](submission/SDC2026_CodeQueens_Preliminary.pdf) |
+| Technical & Tools Declaration | Final signed PDF pending: `submission/SDC2026_CodeQueens_TechDeclaration.pdf` |
+| Slide deck | Pending final accessible link |
+| YouTube pitch/demo | Pending final link; required duration **5–7 minutes** |
+
+Pending items are not completed submissions. Replace their status with working links when the final files and video are available.
+
 ## Try the Live App
 
 **[Open NextArc](https://sdc-hackathon-code-queens-1.replit.app/)** — no local installation is needed to try the deployed prototype.
@@ -88,35 +117,6 @@ API_TARGET=https://sdc-hackathon-code-queens-1.replit.app npm --prefix frontend 
 
 PowerShell: `$env:API_TARGET = "https://sdc-hackathon-code-queens-1.replit.app"; npm --prefix frontend run dev`. The page runs at `http://localhost:5173`. Use `API_TARGET=http://localhost:3000` for a local backend.
 
-
-## Team Information
-
-| Field | Details |
-|---|---|
-| Team Name | Code Queens |
-| Project | NextArc |
-| Team Domain | Domain 1 — Aiversecity Future-Ready Workforce |
-| SDG Track | **SDG 4 — Quality Education, Target 4.4** |
-| Team Leader | Chew Khai Shuen |
-| University | Sunway University |
-| Number of Members | 4 |
-
-Target 4.4 concerns relevant technical and vocational skills for work. Each supported role and recommended skill explains how its suggested practice can contribute to this target. A learning recommendation is not proof that a user has acquired a skill or improved their employment outcome. [UN Goal 4](https://sdgs.un.org/goals/goal4)
-
-## Links and Submission Materials
-
-| Resource | Link or status |
-|---|---|
-| Source repository | [SDC_Hackathon_CodeQueens](https://github.com/khaishuen819/SDC_Hackathon_CodeQueens) |
-| Live application | [NextArc on Replit](https://sdc-hackathon-code-queens-1.replit.app/) |
-| Replit workspace | [Team project](https://replit.com/t/codequeens/repls/SDCHackathonCodeQueens-1) |
-| Replit proof of use | [SDC2026_CodeQueens_Replit_POU.pdf](submission/SDC2026_CodeQueens_Replit_POU.pdf) |
-| Preliminary PRD | [SDC2026_CodeQueens_Preliminary.pdf](submission/SDC2026_CodeQueens_Preliminary.pdf) |
-| Technical & Tools Declaration | Final signed PDF pending: `submission/SDC2026_CodeQueens_TechDeclaration.pdf` |
-| Slide deck | Pending final accessible link |
-| YouTube pitch/demo | Pending final link; required duration **5–7 minutes** |
-
-Pending items are not completed submissions. Replace their status with working links when the final files and video are available.
 
 ## Problem and Pilot Scope
 
