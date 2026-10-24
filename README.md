@@ -28,8 +28,8 @@ Target 4.4 concerns relevant technical and vocational skills for work. Each supp
 | Replit proof of use | [SDC2026_CodeQueens_Replit_POU.pdf](submission/SDC2026_CodeQueens_Replit_POU.pdf) |
 | Preliminary PRD | [SDC2026_CodeQueens_Preliminary.pdf](submission/SDC2026_CodeQueens_Preliminary.pdf) |
 | Technical & Tools Declaration | Final signed PDF pending: `submission/SDC2026_CodeQueens_TechDeclaration.pdf` |
-| Slide deck | Pending final accessible link |
-| YouTube pitch/demo | Pending final link; required duration **5–7 minutes** |
+| Slide deck | [SDC2026_CodeQueens_Slides.pdf](submission/SDC2026_CodeQueens_Slides.pdf) |
+| YouTube pitch/demo | [NextArc pitch and demo video](https://youtu.be/6mnbyhZJxhc) |
 
 Pending items are not completed submissions. Replace their status with working links when the final files and video are available.
 
@@ -145,7 +145,8 @@ Replit deployment: Express serves the frontend and API
 |   `-- trends/                    # Sources, rules, snapshots, refresh and presentation
 |-- submission/
 |   |-- SDC2026_CodeQueens_Preliminary.pdf
-|   `-- SDC2026_CodeQueens_Replit_POU.pdf
+|   |-- SDC2026_CodeQueens_Replit_POU.pdf
+|   `-- SDC2026_CodeQueens_Slides.pdf
 |-- .env.example
 |-- .replit
 |-- LICENSE
