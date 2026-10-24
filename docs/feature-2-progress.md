@@ -24,13 +24,15 @@ removal is a separate change for Jong to apply; it is not bundled here.
 
 Phase1 is in progress. Later phases have not been implemented.
 
-1. Shared schemas and versioned contracts, with backwards-compatible legacy endpoints.
-2. Source/canonical admission rules, stable identity and one-point/citation-only adapters.
-3. Non-blocking possession reconciliation and integrated offline verification.
+1. Completed: shared schemas/versioned contracts.85 backend checks passed at this checkpoint.
+2. Completed: source/canonical admission rules, stable identity and one-point/citation-only adapters.112 backend checks and type-checking passed.
+3. Next: non-blocking possession reconciliation and integrated offline verification.
 
 The existing weighted engine's score meaning stays accurate. A separate count-coverage
 response/meaning is defined for the versioned integration; Phase5 will select it.
 Publication dates retain their true precision; year/month-only evidence gets no invented day.
+Known-capability updates may use existing ready content without inventing a new lesson
+estimate. Distinct new capabilities still need every source/resource/SDG gate to pass.
 
 ## Verification limits
 

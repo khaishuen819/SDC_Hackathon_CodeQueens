@@ -53,7 +53,7 @@ export function profile(ids: string[] = []): ConfirmedProfile {
   };
 }
 
-export function candidate(): CandidateInterpretation {
+export function candidate(): CandidateInterpretation & { learning: NonNullable<CandidateInterpretation["learning"]> } {
   return {
     sourceId: "fictional-update", roleId: "backend-development", taskId: "B1", referenceTaskId: "fictional-task",
     sourceExcerpt: SOURCE_TEXT, referenceExcerpt: REFERENCE_TEXT, bridgeExplanation: "Synthetic connection to the allowed graduate API task.",

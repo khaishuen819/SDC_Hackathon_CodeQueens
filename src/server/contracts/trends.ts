@@ -146,7 +146,7 @@ export const CandidateInterpretation = z.strictObject({
   learning: z.strictObject({
     resourceLinkIds: z.array(ShortId).max(4), resourceExcerpts: z.array(z.strictObject({ linkId: ShortId, excerpt: Quote })).max(4),
     estimatedHours: z.number().positive(), estimateBasis: z.enum(["provider", "app"]), estimateNote: Text, estimateExcerpt: Quote.optional(),
-  }),
+  }).nullable(),
   sdgTemplateIds: z.array(ShortId).max(4),
 });
 export type CandidateInterpretation = z.infer<typeof CandidateInterpretation>;
