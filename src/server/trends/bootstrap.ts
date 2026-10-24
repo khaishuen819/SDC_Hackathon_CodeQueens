@@ -5,6 +5,7 @@ import type { PilotConfig, RoleReference, SnapshotId, VerifiedContent } from "..
 import { REFERENCE_VERSION } from "./reference.ts";
 import type { CriteriaStore } from "./snapshotStore.ts";
 import { pilotConfig } from "./pilotConfig.ts";
+import { criteriaSnapshotId } from "./identity.ts";
 
 // Reads checked-in public inputs only. It does not connect to storage or
 // automatically create/replace a database head; release bootstrap is explicit.
@@ -21,6 +22,22 @@ export async function loadPilotBaseline(): Promise<{ reference: RoleReference; b
 // existing valid head is never replaced. Returns the current snapshot id.
 export function bootstrapCriteria(store: CriteriaStore, bundle: CriteriaBundle): Promise<SnapshotId> {
   return store.bootstrap(bundle);
+}
+
+export type BaselineBootstrapResult = {
+  action: "would-create" | "created" | "kept-existing"; baselineId: SnapshotId; headId: SnapshotId | null; headMatchesBaseline: boolean;
+};
+
+// Release step: report (apply = false) or store the verified baseline as the first
+// criteria version. A current version is never replaced, even if it differs.
+export async function bootstrapPilotBaseline(store: CriteriaStore, bundle: CriteriaBundle, apply: boolean): Promise<BaselineBootstrapResult> {
+  const baselineId = criteriaSnapshotId(bundle);
+  const current = (await store.readRefreshState()).snapshotId;
+  if (current) return { action: "kept-existing", baselineId, headId: current, headMatchesBaseline: current === baselineId };
+  if (!apply) return { action: "would-create", baselineId, headId: null, headMatchesBaseline: false };
+  const headId = await bootstrapCriteria(store, bundle);
+  if ((await store.readSnapshot())?.id !== headId) throw new Error("Bootstrap check failed: the stored current version does not match.");
+  return { action: headId === baselineId ? "created" : "kept-existing", baselineId, headId, headMatchesBaseline: headId === baselineId };
 }
 
 // Pure construction only.

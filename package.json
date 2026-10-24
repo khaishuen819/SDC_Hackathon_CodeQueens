@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.ts",
     "test": "node --test",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "criteria:bootstrap": "node scripts/bootstrap-criteria.ts"
   },
   "engines": {
     "node": ">=24"

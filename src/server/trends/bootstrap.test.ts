@@ -1,6 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildInitialCriteria, loadPilotBaseline } from "./bootstrap.ts";
+import { bootstrapPilotBaseline, buildInitialCriteria, loadPilotBaseline } from "./bootstrap.ts";
+import { MemoryCriteriaStore } from "./snapshotStore.ts";
+import { criteriaSnapshotId } from "./identity.ts";
 import { bundle, context } from "./testFixtures.ts";
 import { readFile } from "node:fs/promises";
 import { pilotConfig, PILOT_SKILL_IDS } from "./pilotConfig.ts";
@@ -61,4 +63,19 @@ test("runtime baseline loading validates the pinned inputs without populating st
   assert.equal(baseline.capabilities.length, 16);
   assert.deepEqual(baseline.roles.map((r) => r.skills.length), [8, 8]);
   assert.ok(baseline.resources.every((r) => r.cost === "free" && !r.isPlaceholder));
+});
+
+test("release bootstrap reports by default, stores once on apply and never replaces a current version", async () => {
+  const { bundle: baseline } = await loadPilotBaseline();
+  const id = criteriaSnapshotId(baseline);
+  const store = new MemoryCriteriaStore();
+  assert.deepEqual(await bootstrapPilotBaseline(store, baseline, false), { action: "would-create", baselineId: id, headId: null, headMatchesBaseline: false });
+  assert.equal(await store.readSnapshot(), null, "a report never writes");
+  assert.deepEqual(await bootstrapPilotBaseline(store, baseline, true), { action: "created", baselineId: id, headId: id, headMatchesBaseline: true });
+  assert.deepEqual((await store.readSnapshot())?.bundle, baseline);
+  assert.deepEqual(await bootstrapPilotBaseline(store, baseline, true), { action: "kept-existing", baselineId: id, headId: id, headMatchesBaseline: true });
+  const other = new MemoryCriteriaStore();
+  const otherId = await other.bootstrap(bundle());
+  assert.deepEqual(await bootstrapPilotBaseline(other, baseline, true), { action: "kept-existing", baselineId: id, headId: otherId, headMatchesBaseline: false });
+  assert.equal((await other.readSnapshot())?.id, otherId, "a different existing version is kept, not replaced");
 });
