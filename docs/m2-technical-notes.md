@@ -24,6 +24,7 @@ Installed today (from `package.json` / `package-lock.json`):
 | unpdf | 1.9.0 (exact) | 1.9.0 (MIT; bundles Mozilla PDF.js 6.4.299, Apache-2.0; Phase 3) |
 | @google/genai | 2.30.0 (exact) | 2.30.0 (Apache-2.0; official Google Gen AI SDK; Phase 3) |
 | @types/multer (dev) | ^2.3.0 | 2.3.0 (MIT; Phase 3) |
+| fast-xml-parser | 5.11.2 (exact) | 5.11.2 (MIT; Feature 2 Phase 3 RSS feeds; seven MIT dependencies) |
 
 Version rule (from Phase 3): use releases at least about one week old, pinned exactly. On 2026-10-23 the
 newest multer (2.5.0) was 1 day old, @google/genai (2.31.0) a few hours old and unpdf (1.9.1) 4 days old,
@@ -402,6 +403,11 @@ Commands (run by M2, from the project root):
   official SDG icons; that page writes two slightly differently ("Industry, Innovation, and
   Infrastructure"; goal 17 as "Partnerships"). SDG names are not placeholders; the role/skill SDG links are.
 - No real sources, courses, links or statistics are invented. Trend evidence comes from M3/M4.
+- Feature 2 publisher feeds (GitHub Changelog, JetBrains AI Blog): only links, titles, dates
+  and the app's short interpretation are kept as evidence. Bounded article text is held only
+  while waiting for interpretation; publishers keep their copyright. With
+  `TREND_PROVIDER=gemini`, that public article text is sent to Gemini; no CV, profile or
+  possession answer is ever included.
 - Repository licence: Apache 2.0 (`LICENSE`). Third-party library licences are recorded here as libraries are added.
 
 ## AI assistance log
@@ -413,6 +419,11 @@ Commands (run by M2, from the project root):
   checked; time estimates and task/SDG mappings are app interpretations. No production
   database, CV, live model or deployment was used. Record this use in the official tools
   declaration; a Git co-author trailer is a separate choice.
+- Claude Code (Claude Opus 5.5): Feature 2 Phase 3 on 24 October 2026 — date-validation
+  fix, parser dependency, bounded feeds, queue, interpreter, draft builder, tests and these
+  notes. Each change was shown as a diff and approved by the team leader before a local
+  commit; no push without separate approval. Tests use fake fetchers/models and FICTIONAL
+  fixtures; one read-only real-feed check was run. No live Gemini call, database or deployment.
 
 ## Feature 2 V4 — Phase 2 reference/catalogue checkpoint
 
@@ -485,4 +496,21 @@ Deferred minor from review: strengthen malformed-date validation in the referenc
 parser and bundle schema before broadening ingestion. Current stored dates were not
 found invalid; edge cases include normalised impossible calendar dates and mismatched
 original date/declared precision/publication day. Details and boundaries are in
-`docs/feature-2-progress.md`.
+`docs/feature-2-progress.md`. Resolved in Phase 3 (`e6384e0`).
+
+## Feature 2 V4 — Phase 3 sources/interpretation checkpoint
+
+Pure or injected-dependency kernels only: nothing is persisted, published or routed yet.
+Status, verification, plan deviations and limits are in `docs/feature-2-progress.md`.
+
+| File | Purpose / handoff |
+|---|---|
+| `src/server/trends/sources.ts` | `fetchSourceItems` (two RSS feeds, bounds, strict dates, 304, per-feed failure codes) and `fetchResourceCandidates` (publisher-supplied links on free documentation hosts). |
+| `src/server/trends/queue.ts` | Pure queue: enqueue (48/24 bounds), select, `recordDispatch` before the call, record outcome, counts. Phase 4 persists `QueueState`. |
+| `src/server/trends/interpreter.ts` | One bounded Gemini request with JSON schema output and strict reply checks; `interpretToOutcome`; cache fingerprint; `TREND_PROVIDER`/`TREND_GEMINI_MODEL`. |
+| `src/server/trends/refreshDraft.ts` | `buildCriteriaDraft` (A1–A8 reuse/stage/reject/promote, one-point publication validated as a bundle) and in-memory `draftRefresh` (60 s). |
+| `src/server/trends/fixtures/feeds.ts` | FICTIONAL RSS fixtures for tests only; never trend evidence. |
+
+Settings: `TREND_PROVIDER=disabled` (default, no model calls) or `gemini`, which needs the
+existing `GEMINI_API_KEY` plus `TREND_GEMINI_MODEL`. The Gemini response schema has not been
+checked against the live API yet (Task 7).

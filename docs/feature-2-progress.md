@@ -6,7 +6,8 @@ Approved basis: V4 automation/scoring design and implementation plan, reviewed24
 The user authorizes local implementation and small commits on this feature branch,
 superseding CLAUDE.md's earlier M2-only commit restriction for this work.
 Latest instruction (24 October): pause and notify the user before EVERY push.
-No Phase 2 work has been pushed. Keep at least a conservative 15% session-token reserve.
+Phase 2 code was pushed (`ae96541`, `dfe4338`). Phase 3 commits stay local until the
+user approves a push. Keep at least a conservative 15% session-token reserve.
 Main merges and Replit publishing are separate actions. The proficiency picker
 removal is a separate change for Jong to apply; it is not bundled here.
 
@@ -25,7 +26,8 @@ removal is a separate change for Jong to apply; it is not bundled here.
 ## Checkpoints
 
 Phase1's offline foundation is complete. Phase2's reference/catalogue checkpoint
-is implemented locally below; Phases3–7 have not been implemented.
+is below. Phase 3's source/interpretation kernels are implemented locally (see the
+Phase 3 section at the end); Phases 4–7 have not been implemented.
 
 1. Completed: shared schemas/versioned contracts.85 backend checks passed at this checkpoint.
 2. Completed: source/canonical admission rules, stable identity and one-point/citation-only adapters.112 backend checks and type-checking passed.
@@ -115,9 +117,89 @@ Deferred minor: date validation should reject impossible calendar dates such as
 `2025-02-31` and contradictory `originalDate`/precision/day combinations. The reviewer
 reproduced these malformed-input edge cases; the checked-in reference did not contain
 them. Add regressions before broadening ingestion. Do not interpret this as a finding
-that the current stored dates are fabricated.
+that the current stored dates are fabricated. Resolved in Phase 3 (`e6384e0`, below).
 
 The review explicitly deferred later-phase refresh/queue controls, durable publication,
 restart fallback and browser/version integration. Native-import success on the target
 runtime and real database/deployment verification also remain pending. The valid offline
 checkpoint does not establish any of those capabilities.
+
+## Phase 3 — local checkpoint, 24 October 2026
+
+Bounded live sources, Gemini interpretation and draft criteria, as pure or
+injected-dependency kernels. Nothing is persisted, published or wired into routes:
+storage, the shared lease and publication are Phase 4; routes are Phase 5.
+
+Local commits (not pushed), each shown as a diff and approved before committing:
+
+1. `e6384e0` fix: reject impossible and contradictory source dates. `isCalendarDate`
+   replaces `Date.parse` (which rolled 2025-02-31 into March). Evidence original dates
+   must match their precision; day precision must equal the publication day; unknown
+   precision keeps no original date. Both regressions failed before the fix.
+2. `e07eb08` chore: add fast-xml-parser 5.11.2 (exact, MIT, seven MIT dependencies,
+   each at least 14 days old). `npm audit` unchanged: two existing high advisories
+   (multer 2.4.0, body-parser via Express) predate this change; not fixed here.
+3. `362b11b` feat: fetch bounded publisher feeds (`sources.ts`).
+4. `598e248` feat: bounded fair interpretation queue (`queue.ts`).
+5. `edee380` feat: Gemini source interpreter (`interpreter.ts`, `.env.example`).
+6. This commit: validated criteria drafts (`refreshDraft.ts`) and these notes.
+
+Behaviour, all within the approved V4 bounds:
+
+- Feeds: GitHub Changelog and JetBrains AI RSS; HTTPS, at most two same-host
+  redirects, 10 s and 2 MiB per source. DTD/entity declarations are rejected before
+  parsing (CDATA article text excepted); XML is validated first because the parser
+  alone accepts malformed input; nesting is capped at 64. At most six dated items per
+  feed and 4,000 sanitised characters per item. Missing, impossible or more than five
+  minutes future dates are skipped; there is no age cutoff. HTTP 304 reuses validators.
+  A failed feed keeps its previous success time; the other feed still returns items.
+- Resources: only links the publisher included, on configured free documentation
+  hosts, at most six per refresh, fetched only for the items selected for the model.
+- Queue: 48 active items (24 per provider) with an explicit overflow count; two new
+  items or one ready retry per model turn, alternating new/retry work and providers.
+  Input failures wait 5 then 30 minutes and quarantine on the third; a failed pair
+  retries individually. Provider outages back off model work for at least 5 minutes
+  without charging articles. Dispatch is recorded before the call.
+- Interpreter: one request per refresh, at most two sources, four mappings, six
+  resources and 8,192 output tokens, 30 s deadline, temperature 0, JSON schema output,
+  no automatic continuation, no retry. Source text is delimited untrusted data; no
+  URLs or profile data are sent. Truncated, blocked, malformed, incomplete or
+  oversized replies fail the whole batch. `TREND_PROVIDER` defaults to `disabled`.
+- Drafts: each mapping goes through `evaluateCandidate` (A1–A8) against the evolving
+  draft. Reuse attaches dated evidence without changing any denominator. Promotion adds
+  one `cap-` capability with weight 1, decision, evidence, resources, prerequisites and
+  SDG tags, then must pass `CriteriaBundle` validation or stays staged. Ten repeats add
+  at most one criterion. `draftRefresh` composes one in-memory run under a 60 s deadline.
+
+Plan deviations (engineering details only; no approved product decision changed):
+
+- `contracts/trends.ts`: the date-validation fix, and `QueueItem.providerId` for fairness.
+- `fetchSourceItems` takes an optional `options` argument (clock, conditional requests,
+  timeout, resource hosts). Resource fetching is a separate `fetchResourceCandidates`
+  so the model work is selected first.
+- Queue adds `enqueueSourceItems` (capacity bounds) and `recordDispatch` (attempt saved
+  before the call), plus `emptyQueue`/`queueCounts` helpers.
+- `buildCriteriaDraft` takes a fourth context argument (reference, config, clock,
+  interpreter version) that `evaluateCandidate` requires.
+- `draftRefresh` is an in-memory composition added so the one-request bound is testable.
+
+Verification: 176 backend tests, 10 frontend checks and TypeScript checking passed.
+Every new test file was observed failing before its module existed. Deliberate code
+mutations were run for the queue, interpreter and draft builder; each surviving mutant
+led to a stronger test (fairness and repeat-reuse). One read-only run against the real
+feeds returned 12 schema-valid items with real dates and two fetched GitHub Docs pages.
+
+Not verified or not done:
+
+- No live Gemini call. The generated response schema uses `$schema`, `pattern`,
+  `anyOf`, `exclusiveMinimum` and `additionalProperties`; Gemini acceptance is
+  unverified. A rejection would surface as a provider failure (HTTP 400) and keep the
+  last valid criteria. Task 7 includes the real check; simplify the schema if needed.
+- JetBrains AI items currently link to `jetbrains.com`, which is not a configured
+  resource host, so new capabilities from them will usually stage at A7.
+- No retirement: `retiredSkillIds` is always empty until a verified correction or
+  retraction workflow exists.
+- Phase 4 must resupply all cached waiting items when the interpreter context changes
+  (old-context active entries are dropped) and should cap processed/quarantined
+  history when persisting queue state.
+- No database, snapshot, route, frontend or deployment change.
