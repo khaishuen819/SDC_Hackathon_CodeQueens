@@ -24,7 +24,6 @@ Built by **Code Queens** for **SDC Hackathon 2026** (XMUM AI Club).
 | Resource          | Link                                           |
 | ----------------- | ---------------------------------------------- |
 | GitHub Repository | https://github.com/khaishuen819/SDC_Hackathon_CodeQueens |
-| Replit Project    | https://replit.com/t/codequeens/repls/SDCHackathonCodeQueens-1 |
 | Live Demo         | https://sdc-hackathon-code-queens-1.replit.app |
 | RunPod Endpoint   | [PLACEHOLDER: RunPod endpoint] <!-- TODO: waiting for committee answer on whether RunPod is required --> |
 | Slide Deck        | [PLACEHOLDER: slide deck link] <!-- TODO: add the slide deck link. --> |
