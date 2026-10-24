@@ -326,15 +326,12 @@ The project's source code is licensed under the [Apache License 2.0](LICENSE). T
 
 ## Submission Checklist
 
-- [x] Team, Domain 1 and SDG 4 / Target 4.4 identified
-- [x] Public repository and deployed prototype linked
-- [x] Replit proof of use linked in `submission/`
-- [ ] Controlled live Feature 2 update and visible source-to-advice result verified
-- [ ] Current route/source-processing issues resolved and rechecked
-- [ ] Final slide deck link added
-- [ ] Final 5–7 minute YouTube pitch/demo link added
-- [x] Preliminary PRD PDF uploaded as `submission/SDC2026_CodeQueens_Preliminary.pdf`
-- [ ] Completed and signed tools declaration uploaded as `submission/SDC2026_CodeQueens_TechDeclaration.pdf`
-- [ ] Final documents, demo and README describe the same actual build and model configuration
-- [ ] Fresh developer setup verified against a disposable database
-- [ ] Final credentials/secrets review completed
+- [x] Team name, domain (Domain 1 / Domain 2) and SDG track filled in
+- [ ] Slide deck link added
+- [ ] Demo video link added
+- [ ] Replit used, with proof of use in submission
+- [x] Preliminary submission completed (SDC2026_TeamName_Preliminary.pdf)
+- [ ] Technology declaration completed (SDC2026_TeamName_TechDeclaration.pdf)
+- [ ] Submission files renamed with your team name (replace TeamName)
+- [x] "How to Run" steps verified
+- [x] No API keys or secrets committed to the repository
