@@ -266,7 +266,7 @@ cd frontend && npm test         # 10 frontend checks
 | Chew Khai Shuen | Team Leader, Docs, Trend evidence (M4) | [@khaishuen819](https://github.com/khaishuen819) |
 | Jeremy Tey Jie Ming | Backend and Deployment (M2) | [@jeremytey](https://github.com/jeremytey) |
 | Teoh Chia Sin | Frontend, Design, Pitch, Video (M1) | [@chiasinnnnn](https://github.com/chiasinnnnn) |
-| Gan Yi Jong | Trend evidence and Docs (M3) | [PLACEHOLDER: GitHub username] <!-- TODO: add GitHub username. --> |
+| Gan Yi Jong | Trend evidence and Docs (M3) | [@yijong1115](https://github.com/yijong1115) |
 
 ---
 
