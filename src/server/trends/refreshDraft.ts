@@ -93,6 +93,8 @@ export function buildCriteriaDraft(base: CriteriaBundle, batch: SourceBatch, int
 export type RefreshDeps = {
   base: CriteriaBundle; reference: RoleReference; config: PilotConfig; providers: ProviderState[]; queue: QueueState; sources: SourceItem[];
   fetcher: HttpFetcher; interpreter: TrendInterpreter | null; now: () => string; signal?: AbortSignal; deadlineMs?: number;
+  // Called after the attempt is recorded and before the model call, so the caller can persist it first.
+  onDispatch?: (snapshot: { queue: QueueState; sources: SourceItem[]; providers: ProviderState[] }) => Promise<void>;
 };
 export type RefreshRun = {
   interpretation: "disabled" | "idle" | "attempted"; providers: ProviderState[]; queue: QueueState; sources: SourceItem[]; skipped: number;
@@ -126,6 +128,7 @@ export async function draftRefresh(deps: RefreshDeps): Promise<RefreshRun> {
     const resources = await fetchResourceCandidates(selected, deps.fetcher, signal, options);
     const batch: SourceBatch = { items: selected, providers: fetched.providers, resources };
     queue = recordDispatch(queue, work, deps.now());
+    await deps.onDispatch?.({ queue, sources: waiting(), providers: fetched.providers });
     const outcome = await interpretToOutcome(interpreter, { ...context, batch }, signal);
     queue = recordInterpretationOutcome(queue, work, outcome, deps.now());
     const draft = outcome.status === "success" ? buildCriteriaDraft(deps.base, batch, outcome.interpretation,

@@ -20,7 +20,8 @@ export interface CriteriaStore {
   // Lease-guarded; false when the lease was lost. checked = a provider check succeeded.
   saveRefreshState(generation: bigint, state: RefreshPublicState, checked: boolean): Promise<boolean>;
   // Snapshot + head change together, only for the current base, a newer generation and the held lease.
-  publishIfCurrent(baseId: SnapshotId | null, generation: bigint, bundle: CriteriaBundle, state: RefreshPublicState): Promise<PublishResult>;
+  // checked = a provider check succeeded; a version built only from cached sources does not advance it.
+  publishIfCurrent(baseId: SnapshotId | null, generation: bigint, bundle: CriteriaBundle, state: RefreshPublicState, checked: boolean): Promise<PublishResult>;
   // Keeps the last valid snapshot and success time; optionally saves queue/provider state.
   recordFailure(generation: bigint, state: RefreshPublicState | null): Promise<void>;
   // Clears only this generation's lease; the cooldown remains.
@@ -104,16 +105,16 @@ export class MemoryCriteriaStore implements CriteriaStore {
     this.write({ ...head, state: valid, lastSuccessfulCheckAt: checked ? iso(now) : head.lastSuccessfulCheckAt });
     return true;
   }
-  async publishIfCurrent(baseId: SnapshotId | null, generation: bigint, bundle: CriteriaBundle, state: RefreshPublicState): Promise<PublishResult> {
+  async publishIfCurrent(baseId: SnapshotId | null, generation: bigint, bundle: CriteriaBundle, state: RefreshPublicState, checked: boolean): Promise<PublishResult> {
     const valid = RefreshPublicState.parse(state), head = this.head(), now = this.now();
     if (!canPublish(head, baseId, generation, now)) return { status: "conflict", snapshot: await this.readSnapshot() };
-    const id = criteriaSnapshotId(validateCriteriaBundle(bundle));
+    const id = criteriaSnapshotId(validateCriteriaBundle(bundle)), lastSuccessfulCheckAt = checked ? iso(now) : head.lastSuccessfulCheckAt;
     if (id === head.snapshotId) {
-      this.write({ ...head, state: valid, lastSuccessfulCheckAt: iso(now) });
+      this.write({ ...head, state: valid, lastSuccessfulCheckAt });
       return { status: "unchanged", snapshot: await this.readSnapshot(id) };
     }
     this.insert(bundle);
-    this.write({ ...head, snapshotId: id, publishedGeneration: generation, state: valid, lastSuccessfulCheckAt: iso(now) });
+    this.write({ ...head, snapshotId: id, publishedGeneration: generation, state: valid, lastSuccessfulCheckAt });
     return { status: "published", snapshot: await this.readSnapshot(id) };
   }
   async recordFailure(generation: bigint, state: RefreshPublicState | null): Promise<void> {
@@ -196,16 +197,17 @@ export class PrismaCriteriaStore implements CriteriaStore {
       return true;
     });
   }
-  async publishIfCurrent(baseId: SnapshotId | null, generation: bigint, bundle: CriteriaBundle, state: RefreshPublicState): Promise<PublishResult> {
+  async publishIfCurrent(baseId: SnapshotId | null, generation: bigint, bundle: CriteriaBundle, state: RefreshPublicState, checked: boolean): Promise<PublishResult> {
     const valid = RefreshPublicState.parse(state), id = criteriaSnapshotId(validateCriteriaBundle(bundle));
     return this.locked(async (tx, head, now) => {
       if (!canPublish(head, baseId, generation, now)) return { status: "conflict" as const, snapshot: await this.snapshot(tx, head.snapshotId) };
+      const success = checked ? { lastSuccessAt: new Date(now) } : {};
       if (id === head.snapshotId) {
-        await this.update(tx, { state: json(valid), lastSuccessAt: new Date(now) });
+        await this.update(tx, { state: json(valid), ...success });
         return { status: "unchanged" as const, snapshot: await this.snapshot(tx, id) };
       }
       await this.insert(tx, bundle);
-      await this.update(tx, { snapshot: { connect: { id } }, publishedGeneration: generation, state: json(valid), lastSuccessAt: new Date(now) });
+      await this.update(tx, { snapshot: { connect: { id } }, publishedGeneration: generation, state: json(valid), ...success });
       return { status: "published" as const, snapshot: await this.snapshot(tx, id) };
     });
   }

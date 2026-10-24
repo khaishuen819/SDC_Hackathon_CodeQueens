@@ -1,9 +1,16 @@
 import { createHash } from "node:crypto";
 import { CriteriaBundle } from "../contracts/trends.ts";
-import type { PilotConfig, RoleReference, VerifiedContent } from "../contracts/trends.ts";
+import type { PilotConfig, RoleReference, SnapshotId, VerifiedContent } from "../contracts/trends.ts";
 import { REFERENCE_VERSION } from "./reference.ts";
+import type { CriteriaStore } from "./snapshotStore.ts";
 
-// Pure construction only. Durable bootstrap is integrated with the Phase 4 store.
+// Stores the validated baseline only when no current snapshot exists; an
+// existing valid head is never replaced. Returns the current snapshot id.
+export function bootstrapCriteria(store: CriteriaStore, bundle: CriteriaBundle): Promise<SnapshotId> {
+  return store.bootstrap(bundle);
+}
+
+// Pure construction only.
 export function buildInitialCriteria(reference: RoleReference, config: PilotConfig, content: VerifiedContent): CriteriaBundle {
   if (reference.version !== REFERENCE_VERSION || !reference.attribution.trim()) throw new Error("A pinned, attributed role reference is required.");
   const tasks = new Map(config.taskAnchors.map(a => [a.taskId, a]));

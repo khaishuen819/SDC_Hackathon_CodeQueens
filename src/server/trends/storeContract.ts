@@ -61,29 +61,30 @@ export function describeCriteriaStore(name: string, open: () => Promise<StoreHar
     const successor = await b.reserveRefresh();
     assert.equal(successor.status, "acquired");
     if (stalled.status !== "acquired" || successor.status !== "acquired") return;
-    assert.equal((await a.publishIfCurrent(stalled.baseSnapshotId, stalled.generation, changed(1), stateWith("stale"))).status, "conflict");
+    assert.equal((await a.publishIfCurrent(stalled.baseSnapshotId, stalled.generation, changed(1), stateWith("stale"), true)).status, "conflict");
     assert.equal(await a.saveRefreshState(stalled.generation, stateWith("stale"), true), false);
     await a.releaseRefresh(stalled.generation);
     assert.equal((await a.reserveRefresh()).status, "busy", "the successor's lease survives the stale release");
-    assert.equal((await b.publishIfCurrent(successor.baseSnapshotId, successor.generation, changed(2), stateWith("fresh"))).status, "published");
+    assert.equal((await b.publishIfCurrent(successor.baseSnapshotId, successor.generation, changed(2), stateWith("fresh"), true)).status, "published");
   });
 
   it("publication is atomic and immutable; duplicates and older or mismatched bases do not clobber the head", async ({ a, b }) => {
     const baseId = await a.bootstrap(bundle());
     const run = await a.reserveRefresh();
     if (run.status !== "acquired") return assert.fail("expected a reservation");
-    assert.equal((await a.publishIfCurrent("criteria-" + "f".repeat(64), run.generation, changed(1), stateWith("x"))).status, "conflict");
-    const same = await a.publishIfCurrent(baseId, run.generation, bundle(), stateWith("checked"));
+    assert.equal((await a.publishIfCurrent("criteria-" + "f".repeat(64), run.generation, changed(1), stateWith("x"), true)).status, "conflict");
+    const same = await a.publishIfCurrent(baseId, run.generation, bundle(), stateWith("cached only"), false);
     assert.equal(same.status, "unchanged"); assert.equal(same.snapshot?.id, baseId);
-    const published = await a.publishIfCurrent(baseId, run.generation, changed(1), stateWith("published"));
+    assert.equal((await b.readRefreshState()).lastSuccessfulCheckAt, null, "work from cached sources does not invent a successful check");
+    const published = await a.publishIfCurrent(baseId, run.generation, changed(1), stateWith("published"), true);
     assert.equal(published.status, "published");
     assert.equal(published.snapshot?.id, criteriaSnapshotId(changed(1)));
     const head = await b.readRefreshState();
     assert.deepEqual([head.snapshotId, head.publishedGeneration, head.state.notices], [published.snapshot!.id, run.generation, ["published"]]);
     assert.ok(head.lastSuccessfulCheckAt);
     assert.deepEqual((await b.readSnapshot(baseId))?.bundle, bundle(), "earlier snapshots stay readable and unchanged");
-    assert.equal((await a.publishIfCurrent(baseId, run.generation, changed(2), stateWith("old base"))).status, "conflict");
-    assert.equal((await a.publishIfCurrent(published.snapshot!.id, run.generation, changed(3), stateWith("twice"))).status, "conflict",
+    assert.equal((await a.publishIfCurrent(baseId, run.generation, changed(2), stateWith("old base"), true)).status, "conflict");
+    assert.equal((await a.publishIfCurrent(published.snapshot!.id, run.generation, changed(3), stateWith("twice"), true)).status, "conflict",
       "one generation publishes at most once");
     await a.releaseRefresh(run.generation);
   });

@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import type { QueueState, SourceItem, InterpretationOutcome } from "../contracts/trends.ts";
-import { emptyQueue, enqueueSourceItems, selectInterpretationWork, recordDispatch, recordInterpretationOutcome, queueCounts, QUEUE_LIMITS } from "./queue.ts";
+import { emptyQueue, enqueueSourceItems, selectInterpretationWork, recordDispatch, recordInterpretationOutcome, queueCounts, pruneQueueHistory, QUEUE_LIMITS, QUEUE_HISTORY_LIMIT } from "./queue.ts";
 
 // FICTIONAL queue inputs: only identity fields matter here.
 const T0 = "2026-10-24T10:00:00.000Z";
@@ -140,4 +140,14 @@ test("queue state survives a JSON round trip, so restarts and new check times ke
   assert.deepEqual(rechecked, state);
   assert.equal(selectInterpretationWork(rechecked, at(4)).kind, "none");
   assert.throws(() => selectInterpretationWork(state, "not a time"));
+});
+
+test("history is capped to the newest finished records while every active item is kept", () => {
+  assert.equal(QUEUE_HISTORY_LIMIT, 200);
+  let state = enqueueSourceItems(emptyQueue(), [...many("alpha", 5), ...many("beta", 2)], FP, T0).state;
+  state = { ...state, items: state.items.map((i, n) => n < 5 ? { ...i, state: n === 4 ? "quarantined" as const : "processed" as const, lastAttemptAt: at(n) } : i) };
+  const pruned = pruneQueueHistory(state, 3);
+  assert.deepEqual(pruned.items.filter((i) => i.state === "pending").length, 2);
+  assert.deepEqual(pruned.items.filter((i) => i.state !== "pending").map((i) => i.lastAttemptAt), [at(2), at(3), at(4)]);
+  assert.deepEqual(pruneQueueHistory(state), state);
 });

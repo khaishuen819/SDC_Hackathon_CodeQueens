@@ -7,6 +7,7 @@ import type { InterpretationOutcome, QueueItem, QueueState, SourceItem, WorkSele
 // recordDispatch (before the model call), then recordInterpretationOutcome.
 export const QUEUE_LIMITS = { totalActive: 48, perProvider: 24, newPerTurn: 2, retryPerTurn: 1, maxInputFailures: 3,
   retryWaitsMs: [300_000, 1_800_000], modelBackoffMs: 300_000 } as const;
+export const QUEUE_HISTORY_LIMIT = 200;
 
 const active = (item: QueueItem) => item.state === "pending" || item.state === "retry-wait";
 const time = (value: string) => Date.parse(Instant.parse(value));
@@ -117,4 +118,13 @@ export function queueCounts(state: QueueState): { deferredItemCount: number; qua
     if (!seen || Date.parse(item.firstQueuedAt) >= Date.parse(seen.firstQueuedAt)) latest.set(item.sourceId, item);
   }
   return { deferredItemCount: state.items.filter(active).length, quarantinedItemCount: [...latest.values()].filter((i) => i.state === "quarantined").length };
+}
+
+// Keeps every active item and the newest finished/quarantined records, so the
+// persisted state stays bounded. A pruned finished item that reappears in a
+// feed is queued again; its accepted evidence is already in the criteria.
+export function pruneQueueHistory(state: QueueState, limit: number = QUEUE_HISTORY_LIMIT): QueueState {
+  const stamp = (i: QueueItem) => Date.parse(i.lastAttemptAt ?? i.firstQueuedAt);
+  const kept = new Set(state.items.filter((i) => !active(i)).sort((a, b) => stamp(b) - stamp(a)).slice(0, limit).map((i) => i.key));
+  return { ...state, items: state.items.filter((i) => active(i) || kept.has(i.key)) };
 }
