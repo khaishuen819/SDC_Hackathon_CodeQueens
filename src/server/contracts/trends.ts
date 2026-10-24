@@ -3,7 +3,7 @@ import { EvidenceItem } from "./evidence.ts";
 import { LearningResource } from "./pathway.ts";
 import { SdgResponse } from "./sdg.ts";
 import { RoleId, SkillId, SourceId, EvidenceId, SdgId, PILOT_ROLE_IDS } from "./ids.ts";
-import { Instant } from "./criteria.ts";
+import { Instant, ProviderState as ProviderStateSchema } from "./criteria.ts";
 import type { ConfirmedProfile } from "./profile.ts";
 import type { SnapshotId, SkillReview, ProviderState, TrendMeta } from "./criteria.ts";
 export * from "./criteria.ts";
@@ -197,8 +197,24 @@ export type CriteriaSnapshot = { id: SnapshotId; createdAt: string; bundle: Crit
 export type CriteriaContext = { snapshot: CriteriaSnapshot; meta: TrendMeta };
 export type RefreshReservation = { status: "acquired"; generation: bigint; baseSnapshotId: SnapshotId | null; leaseExpiresAt: string } | { status: "busy" | "cooldown"; retryAt: string };
 export type PublishResult = { status: "published" | "unchanged" | "conflict"; snapshot: CriteriaSnapshot | null };
-export type QueueItem = { key: string; sourceId: string; providerId: string; contentHash: string; interpreterFingerprint: string; state: "pending" | "retry-wait" | "quarantined" | "processed"; firstQueuedAt: string; lastAttemptAt: string | null; attemptCount: number; inputFailureCount: number; nextAttemptAt: string | null; lastErrorCode: string | null };
-export type QueueState = { items: QueueItem[]; nextWorkClass: "new" | "retry"; nextProviderId: string; modelRetryAfterAt: string | null };
+export const QueueItem = z.strictObject({
+  key: z.string().regex(/^[a-f0-9]{64}$/), sourceId: SourceId, providerId: SourceId, contentHash: z.string().regex(/^[a-f0-9]{64}$/),
+  interpreterFingerprint: z.string().min(1).max(128), state: z.enum(["pending", "retry-wait", "quarantined", "processed"]),
+  firstQueuedAt: Instant, lastAttemptAt: Instant.nullable(), attemptCount: z.int().nonnegative(), inputFailureCount: z.int().min(0).max(3),
+  nextAttemptAt: Instant.nullable(), lastErrorCode: z.string().max(100).nullable(),
+});
+export type QueueItem = z.infer<typeof QueueItem>;
+export const QueueState = z.strictObject({
+  items: z.array(QueueItem).max(300), nextWorkClass: z.enum(["new", "retry"]), nextProviderId: z.string().max(100), modelRetryAfterAt: Instant.nullable(),
+});
+export type QueueState = z.infer<typeof QueueState>;
+// Public refresh/cache state persisted beside the head. Strict, so no CV,
+// profile or possession data can be stored with it.
+export const RefreshPublicState = z.strictObject({
+  providers: z.array(ProviderStateSchema).max(10), sources: z.array(SourceItem).max(48), queue: QueueState, notices: z.array(z.string().max(500)).max(10),
+});
+export type RefreshPublicState = z.infer<typeof RefreshPublicState>;
 export type WorkSelection = { kind: "new" | "retry" | "none"; keys: string[] };
 export type InterpretationOutcome = { status: "success"; interpretation: InterpretationBatch } | { status: "input-failure"; errorCode: string } | { status: "provider-failure"; errorCode: string; retryAfterAt?: string };
-export type RefreshState = { snapshotId: SnapshotId | null; nextGeneration: bigint; publishedGeneration: bigint; providers: ProviderState[]; sourceCache: SourceBatch; interpretationCache: Record<string, InterpretationBatch>; queue: QueueState; stagedCandidates: CandidateInterpretation[]; leaseGeneration: bigint | null; leaseExpiresAt: string | null; nextAllowedAt: string | null };
+export type RefreshState = { snapshotId: SnapshotId | null; nextGeneration: bigint; publishedGeneration: bigint; leaseGeneration: bigint | null; leaseExpiresAt: string | null;
+  nextAllowedAt: string | null; lastAttemptAt: string | null; lastSuccessfulCheckAt: string | null; state: RefreshPublicState };
