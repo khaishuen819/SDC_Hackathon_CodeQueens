@@ -14,7 +14,7 @@ export const CriteriaReview = z.strictObject({
 }).refine((r) => new Set(r.answers.map((a) => a.skillId)).size === r.answers.length, {
   error: "A skill may have only one possession answer.", path: ["answers"],
 });
-export type CriteriaReview = z.infer<typeof CriteriaReview>;
+export type CriteriaReview = z.input<typeof CriteriaReview>;
 
 export const SkillReview = z.strictObject({
   fromSnapshotId: SnapshotId.optional(), targetSnapshotId: SnapshotId,
