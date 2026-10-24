@@ -579,3 +579,9 @@ No new library or live model/cloud service was added. The team owns review/relea
 Checkpoint:207 backend passed,9 disposable-DB tests skipped, typecheck passed.
 Final results/limits are recorded in docs/feature-2-progress.md. Phase6/7 remain;
 no Neon migration, actual bootstrap, live Gemini check or deployment was performed.
+
+Final Phase5 review: two Important boundary/provenance findings reproduced RED and
+fixed GREEN (sanitized503 trends storage failures; citations/reasons for changed
+admit/retire associations).209 backend passed,9 DB checks skipped,10 frontend passed,
+typecheck passed. No deferred minor findings. Four Phase5 commits remain local
+pending push approval. Phase6/frontend and Phase7 actual release verification are next.

@@ -1,6 +1,6 @@
 # Feature 2 implementation progress
 
-**Latest checkpoint,24 October:** Phase5 backend integration is implemented locally; final review pending. Phase4 was received from GitHub at a3684f2. Later Phase5 commits await per-push approval. Phase6/frontend and Phase7/release remain pending. Earlier checkpoint wording below records its own time.
+**Latest checkpoint,24 October:** Phase5 backend integration is complete locally after independent review and regression fixes;209 backend tests passed,9 DB tests skipped,10 frontend checks and typecheck passed. Phase4 was received from GitHub at a3684f2. Later Phase5 commits await per-push approval. Phase6/frontend and Phase7/release remain pending. Earlier checkpoint wording below records its own time.
 
 Owner: Jong (M3). Working branch: `codex/feature-2-automation`.
 Approved basis: V4 automation/scoring design and implementation plan, reviewed24 October2026.
@@ -309,3 +309,28 @@ mutation failed the composed HTTP regression; restored code passed the whole sui
 No live model call, Neon migration/bootstrap, frontend edit or Replit publication.
 Do not deploy this backend alone: Phase6 and coordinated Phase7 release remain.
 The separate proficiency-dropdown patch is not included. Final review follows.
+
+### Final independent review and regression fixes
+
+A fresh read-only reviewer found no Critical issues, two Important issues and no
+Minor issues. Both Important findings were reproduced failing before fixing:
+
+1. Trends status/refresh storage failures escaped to the generic500/raw-error
+   logger. Both storage read/reservation cases now return sanitized503
+   TRENDS_UNAVAILABLE and never reach that logger. Existing ordinary/context errors
+   retain their contracts.
+2. A changed denominator explanation cited only current admissions, omitting a
+   retirement-only correction. Explanations now inspect changed associations and
+   cite their matching admit/retire reason/evidence. If no reason is recorded,
+   they explicitly say so instead of assigning unrelated evidence to the change.
+
+Final verification:209 backend passed,9 disposable-DB checks skipped,10 frontend
+checks passed, tsc --noEmit passed. Independent review plus one red-green fix pass;
+no second reviewer run was substituted for regression verification.
+
+Reviewer exclusions were assessed and retained as phase boundaries: browser/cache/
+late-response/learning-intent work is Phase6; real database locking/restarts/migration,
+seed execution, live source/model quality and coordinated deployment are Phase7.
+Those checks remain pending, not passes. Phase5 is complete as a local backend
+checkpoint. Four Phase5 commits await push approval; only the earlier review fix
+8a0d4fb has been pushed. Main and Replit remain unchanged.

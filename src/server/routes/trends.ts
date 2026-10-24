@@ -21,13 +21,20 @@ export function createTrendsRouter(deps: TrendsRouteDeps) {
     if (!meta.snapshotId) throw new ApiFailure("TRENDS_UNAVAILABLE", "No valid criteria are available yet. The baseline must be prepared first.");
     return meta;
   };
-  router.get("/api/trends", async (_req, res) => { res.json(current(await deps.loadState())); });
+  const readState = async (operation: () => Promise<TrendMeta>) => {
+    try { return await operation(); }
+    catch (error) {
+      if (error instanceof ApiFailure) throw error;
+      throw new ApiFailure("TRENDS_UNAVAILABLE", "Criteria storage is unavailable. Please try again later.");
+    }
+  };
+  router.get("/api/trends", async (_req, res) => { res.json(current(await readState(deps.loadState))); });
   router.post("/api/trends/refresh", express.json({ limit: "1kb" }), async (req, res) => {
     const sentBody = req.headers["transfer-encoding"] || Number(req.headers["content-length"] ?? 0) > 0;
     if ((sentBody && req.body === undefined) || !z.strictObject({}).safeParse(req.body ?? {}).success) {
       throw new ApiFailure("INVALID_INPUT", "Refresh accepts no profile, URL or other input fields.");
     }
-    res.json(current(await deps.refresh()));
+    res.json(current(await readState(deps.refresh)));
   });
   router.post("/api/trends/reconcile", express.json({ limit: "100kb" }), async (req, res) => {
     const parsed = Request.safeParse(req.body);

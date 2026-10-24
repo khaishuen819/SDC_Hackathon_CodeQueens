@@ -57,3 +57,22 @@ test("pathways expand unconfirmed prerequisites without adding them to the score
   assert.equal(presentMatch(ready.profile, ctx, ready.review).roles[0].gaps.length, 2);
   assert.deepEqual(result.steps.map((s) => s.order), [1, 2, 3]);
 });
+
+test("a shrinking denominator explains and cites the retirement correction, not just remaining admissions", async () => {
+  const h = await criteriaHarness(bundle(3)), before = await h.store.readSnapshot(h.id);
+  const next = bundle(3);
+  next.evidence.push({ ...next.evidence[0], id: "retirement-correction", title: "FICTIONAL correction",
+    supportedClaim: "The fictional criterion duplicates another practice.", linkedSkillIds: ["fixture-skill-2"] });
+  next.capabilities[2].evidenceIds.push("retirement-correction");
+  for (const role of next.roles) role.skills = role.skills.filter((s) => s.skillId !== "fixture-skill-2");
+  for (const d of next.criteriaDecisions) if (d.skillId === "fixture-skill-2") {
+    d.action = "retire"; d.reason = "FICTIONAL correction: this criterion overlaps an existing practice."; d.evidenceIds = ["retirement-correction"];
+  }
+  await h.publish(next);
+  const ctx = await h.loadContext(), ready = reconcileCriteria(profile(["api-basics"]), before!.bundle, ctx.snapshot.bundle, { fromSnapshotId: h.id, targetSnapshotId: ctx.snapshot.id });
+  const response = presentMatch(ready.profile, ctx, ready.review, before);
+  assert.equal(response.roles[0].score, 50);
+  assert.match(response.roles[0].scoreExplanation, /retirement-correction/);
+  assert.match(response.roles[0].scoreExplanation, /overlaps an existing practice/);
+  assert.ok(response.roles[0].evidence?.some((e) => e.evidenceId === "retirement-correction"));
+});

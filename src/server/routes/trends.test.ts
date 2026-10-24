@@ -63,3 +63,22 @@ test("no initial snapshot returns 503 for status and refresh instead of fake cur
   }
   await assert.rejects(createCriteriaContextLoader({ store, disabled: true })(), { code: "TRENDS_UNAVAILABLE" });
 });
+
+test("storage read and reservation failures return sanitized503 without logging private details", async (t) => {
+  const logged: unknown[] = [];
+  t.mock.method(console, "error", (...args: unknown[]) => { logged.push(args); });
+  for (const boundary of ["status", "reservation"] as const) {
+    const h = await criteriaHarness(), fixture = context();
+    if (boundary === "status") h.store.readRefreshState = async () => { throw new Error("FICTIONAL_PRIVATE_DB_DETAIL"); };
+    else h.store.reserveRefresh = async () => { throw new Error("FICTIONAL_PRIVATE_DB_DETAIL"); };
+    const svc = createRefreshService({ store: h.store, reference: fixture.reference, config: fixture.config,
+      fetcher: async () => { throw new Error("must not fetch"); },
+      interpreter: { model: "fictional", interpretBatch: async () => { throw new Error("must not interpret"); } } });
+    const base = await startApp(createTrendsRouter({ ...svc, reconcile: async () => { throw new Error("unused"); } }));
+    const result = boundary === "status" ? await request(base, "/api/trends") : await request(base, "/api/trends/refresh", {});
+    assert.equal(result.status, 503);
+    assert.equal(result.body.error.code, "TRENDS_UNAVAILABLE");
+    assert.doesNotMatch(JSON.stringify(result.body), /FICTIONAL_PRIVATE_DB_DETAIL/);
+  }
+  assert.equal(logged.length, 0, "handled storage outages must not reach the raw unexpected-error logger");
+});

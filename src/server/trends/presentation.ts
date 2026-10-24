@@ -16,15 +16,28 @@ export function presentMatch(profile: ConfirmedProfile, context: CriteriaContext
   const matched = matchRoles(profile, toCountRoleInputs(bundle), []);
   const roles = matched.roles.map((role) => {
     const listed = bundle.roles.find((r) => r.roleId === role.roleId)!;
-    const evidenceIds = [...new Set(bundle.criteriaDecisions.filter((d) => d.roleId === role.roleId && d.action === "admit").flatMap((d) => d.evidenceIds))].sort(order);
+    const evidenceIds = new Set(bundle.criteriaDecisions.filter((d) => d.roleId === role.roleId && d.action === "admit").flatMap((d) => d.evidenceIds));
     const sentences = [`You have confirmed ${role.strengths.length} of ${listed.skills.length} listed skills: ${role.score}% coverage. Each skill counts once.`,
       "Unconfirmed skills are not counted yet and can be added later. Extra skills do not reduce your score."];
     const before = previous?.bundle.roles.find((r) => r.roleId === role.roleId);
     if (before && JSON.stringify(before.skills.map((s) => s.skillId).sort(order)) !== JSON.stringify(listed.skills.map((s) => s.skillId).sort(order))) {
-      sentences.push(`This role's comparison list changed from ${before.skills.length} to ${listed.skills.length} skills. A lower percentage does not mean you lost a skill. Sources: ${evidenceIds.join(", ")}.`);
+      sentences.push(`This role's comparison list changed from ${before.skills.length} to ${listed.skills.length} skills. A lower percentage does not mean you lost a skill.`);
+      const oldIds = new Set(before.skills.map((s) => s.skillId)), newIds = new Set(listed.skills.map((s) => s.skillId));
+      const changed = [...newIds].filter((id) => !oldIds.has(id)).concat([...oldIds].filter((id) => !newIds.has(id))).sort(order);
+      for (const id of changed) {
+        const action = newIds.has(id) ? "admit" : "retire";
+        const decision = bundle.criteriaDecisions.find((d) => d.roleId === role.roleId && d.skillId === id && d.action === action);
+        const name = bundle.capabilities.find((c) => c.skillId === id)?.name ?? id;
+        if (!decision) {
+          sentences.push(`The saved version does not record an explanation for the changed criterion ${name}.`);
+          continue;
+        }
+        for (const evidenceId of decision.evidenceIds) evidenceIds.add(evidenceId);
+        sentences.push(`${action === "admit" ? "Added to" : "Removed from"} this role's list: ${name}. ${decision.reason} Sources: ${decision.evidenceIds.join(", ")}.`);
+      }
     }
     if (role.preferredRouteKept) sentences.push("This remains your chosen route, even if another route ranks higher.");
-    return { ...role, scoreExplanation: sentences.join(" "), evidence: evidenceIds.map((evidenceId) => ({ evidenceId })) };
+    return { ...role, scoreExplanation: sentences.join(" "), evidence: [...evidenceIds].sort(order).map((evidenceId) => ({ evidenceId })) };
   });
   return VersionedMatchResponse.parse({ ...matched, roles, scoreMeaning: COUNT_SCORE_MEANING, criteria: context.meta, review });
 }
