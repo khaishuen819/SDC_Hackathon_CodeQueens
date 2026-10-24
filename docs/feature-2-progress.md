@@ -334,3 +334,185 @@ seed execution, live source/model quality and coordinated deployment are Phase7.
 Those checks remain pending, not passes. Phase5 is complete as a local backend
 checkpoint. Four Phase5 commits await push approval; only the earlier review fix
 8a0d4fb has been pushed. Main and Replit remain unchanged.
+
+## Feature 2 Phase 6 — frontend integration, 24 October 2026 MYT
+
+**Local frontend scope complete; production release remains a separate gate.**
+M4/leader authorized Codex to continue from the published Phase 5 checkpoint,
+make one local commit at a time and stop for review after each. No Phase 6
+commit was pushed, merged or deployed. The earlier Phase 5 pending-push wording
+above is historical: the received feature checkpoint was `f578bd9`.
+
+The intended audience remains fresh graduates. Backend Development and QA
+Automation are the current CS fresh-graduate testing/validation pilot.
+
+### What now works locally
+
+- Versioned client transport, intact HTTP/context errors and one validated
+  context reload/resubmission. Recovery never repeats CV extraction or refresh.
+- Initial confirmation refreshes once, reads the complete recognition registry,
+  reconciles and matches. All accepted readers use one saved snapshot. Late
+  responses cannot overwrite a newer journey, edit or restart.
+- Historical canonical skills stay recognisable without becoming scored criteria.
+  Only confirmed listed capabilities count once; proficiency and learning
+  choices add no points. The preferred route remains available.
+- Have / Not yet / Not sure are optional after initial profile confirmation.
+  Unanswered skills never block results or pathways. Accepted answers and
+  learning goals survive ordinary review, route, level and unrelated skill edits.
+  Explicit form possession edits replace only that skill's answer; a new CV or
+  Start over clears the session.
+- Learning Add / Not now stays separate from possession. Goals are in page
+  memory only. Scores/profile are updated only after required server replies
+  succeed; failures preserve the previous coherent view.
+- Ordered pathways show named prerequisite-only stations, inspectable details,
+  app/provider estimate labels, actual source/check dates and SDG rationales.
+  Prerequisites outside the scored role never increase its denominator.
+- Manual Check for updates is single-flight and respects cooldown/busy metadata;
+  there is no timer polling. Partial/deferred/quarantined status does not imply
+  skill decline, expiry or deletion. A cold/empty store shows unavailable.
+- The optional proficiency picker remains, with a self-report/no-score-effect
+  explanation. Its separately flagged removal option was not applied.
+
+### Reproduce the fictional integration environment
+
+Use Node 24+ and the root lockfile dependencies. From the application repository:
+
+```text
+npm --prefix frontend run dev:criteria-fixture
+```
+
+The default address is `http://127.0.0.1:5174`. Stop it with Ctrl+C.
+`CQ_FIXTURE_PORT` can select another local port. A positional scenario can set
+the default page, for example `npm --prefix frontend run dev:criteria-fixture -- empty`.
+
+| Path | Purpose |
+|---|---|
+| `/fixtures/coverage/` | QA A/B versus Backend A; A confirmed gives QA 50%, then Have B gives 100%. |
+| `/fixtures/historical/` | A remains recognised but is no longer associated with either scored role. |
+| `/fixtures/prerequisite/` | Unscored prerequisite before B; year-only source date and synthetic partial/cooldown/deferred/quarantined metadata. |
+| `/fixtures/empty/` | No criteria head; actual API returns sanitized unavailable errors. |
+
+This is a **development-only composition of actual API routes and a memory
+store**, not a deployment or a replacement backend. It never imports production
+startup/database clients. It binds only 127.0.0.1 and starts only when explicitly
+launched. The fixture banner sits outside the app's rerendered area, reads
+**FICTIONAL / NOT LIVE EVIDENCE**, and remains visible in every scenario.
+
+The synthetic bundles/reference come from `src/server/trends/testFixtures.ts`,
+with explicit scenario changes in `frontend/fixtures/criteria-server.mjs`.
+Snapshot readiness flags follow the tested schema; they are not evidence that
+this fictional content has been reviewed or is usable as occupational data.
+Extraction is fixed and labelled synthetic; samples must begin with FICTIONAL.
+Publisher/model requests are blocked. Google font links are removed only from
+the served fixture HTML; production HTML is unchanged. Fictional resource URLs
+are shown as placeholders, not clickable verified courses.
+
+The prerequisite scenario uses a frozen synthetic clock at
+2026-10-24T10:00:00Z with a success 26 hours earlier. Its provider failure,
+deferred/quarantined counts and cooldown are test inputs, not observed live events.
+
+### Fresh verification
+
+| Check | Actual result |
+|---|---|
+| `npm --prefix frontend test` | **60 passed, 0 failed**, including six real-route HTTP fixture checks. |
+| `npm test` | **209 passed, 0 failed, 9 skipped**; the skipped disposable-PostgreSQL checks remain pending. |
+| `npm run typecheck` | Passed. |
+| `git diff --check` | Passed. |
+| Browser acceptance | Passed the cases below using the local fictional server. |
+| Cleanup | Browser tab closed, temporary viewport reset, fixture server stopped; no listener remained on 5174. |
+
+Browser checks used the actual frontend and real local routes, not the fake DOM
+action harness. Recorded observations:
+
+- Jordan sample, preferred QA: A confirmed/B omitted immediately showed QA 50%,
+  with Backend higher and QA still the selected route.
+- Add to learning plan and Not now did not change coverage. Not sure and Not yet
+  retained usable 50% results. Have B changed QA to 100% without a new CV.
+- Returning to review and reconfirming retained Not yet and its learning goal
+  after the review fix. A tied score no longer claimed another route was higher.
+- Sam sample, explorer: QA 50%/Backend 0%; the user could choose the QA roadmap.
+- Historical scenario: extracted A was recognised, not labelled unknown, but
+  contributed zero coverage when absent from both current role lists.
+- Prerequisite scenario: C appeared before B with a working detail drawer and an
+  explicit no-extra-coverage note. App/provider estimates, year-only publication
+  and actual check times were visible. Partial/cooldown status and both queue
+  counts were inspectable. Fictional courses were not clickable verified links.
+- Empty store: sample extraction showed TRENDS_UNAVAILABLE; no recommendation was
+  fabricated. Start over returned to an empty upload screen.
+- At 390 x 844, the roadmap/controls remained usable without horizontal document
+  overflow. Opening details focused Close; Escape dismissed the drawer.
+- No browser console errors were recorded in the final tab. Screenshot evidence
+  was captured locally; this is not Replit/live-model evidence.
+
+### Final read-only review and fixes
+
+A fresh reviewer inspected the full Phase 6 range from `f578bd9`, including the
+uncommitted fixture files. They reported no Critical issues, one Important
+answer-preservation defect, and no additional actionable Minor findings.
+
+The Important defect was reproduced RED before fixing: unchanged reconfirmation
+discarded an explicit Not yet; unrelated edits also erased answers/goals. New
+actual-app checks now cover unchanged reconfirmation, route/level/other-skill edits
+and deliberate Have/Not sure/Leave replacements. The browser also verified the fix.
+
+Browser acceptance exposed an additional incorrect tied-score sentence. A RED
+regression reproduced it; the message now checks actual scores, not ordinal rank.
+The final full suites above passed after both fixes. There was one review/fix
+pass, not a second review presented as regression proof.
+
+Review exclusions were assessed explicitly:
+
+- Modal Tab containment/background inertness is a pre-existing accessibility
+  follow-up. Escape/opening focus were checked; this is not a WCAG audit.
+- Duplicate background/drawer `data-key` values had no reproduced wrong-skill
+  dispatch; clicked-element actions retain the correct skill. Full focus auditing
+  remains a follow-up rather than a claim of complete accessibility.
+- The backend validates response schemas; no redundant browser copy of every
+  deep schema was added beyond registry/version/required-view checks.
+- Browser acceptance and documentation were completed by the receiving
+  implementer after the read-only review; the reviewer did not perform them.
+- Real PostgreSQL locking, live Gemini interpretation, target imports/bootstrap
+  and coordinated deployment are Phase 7 gates, not passes from these fixtures.
+
+### Next gate — not performed
+
+Run the nine tests with disposable PostgreSQL and verify independent-connection
+locking. Verify one real configured source-to-Gemini-to-advice flow and record the
+actual model/version. Confirm target-runtime imports, authorized additive
+migration/backup/bootstrap, then release compatible backend/frontend together with
+interpretation initially disabled. Do not reset shared storage or reverse the
+criteria head. Reconcile actual tools/data/licences/platform evidence and the
+submission drafts with the version demonstrated. Main's README link removal must
+be preserved in any later approved merge. The leader must confirm current
+organizer timing and any repository freeze before publication.
+
+Phase 6 does not implement Domain 1 Feature 6 (multiple future scenarios); its
+delivery still belongs in the preliminary proposal. No measured career accuracy,
+hiring demand, impact improvement, live model success, GPU use or deployed
+readiness is established by this local verification.
+
+### Execution decisions and tradeoffs (recorded at each step)
+
+These are engineering decisions, not additional organizer rules. Later verification above supersedes interim status wording.
+
+- Ruling: Use the feature checkout just synchronized at the user's request; no new worktree/branch — maintains the reviewed branch workflow and avoids a new workspace without consent. Cost: no isolation from concurrent edits; recheck status/staging before committing.
+- Ruling: Current explicit user authorization overrides CLAUDE.md's staging/commit prohibition, but not the push prohibition. Stop after every local commit for user review. Cost: incomplete Phase 6 remains local until resumed.
+- Ruling: Adapt shell-only task workspace/brief scripts to PowerShell — Git Bash fails before script execution with NtCreateDirectoryObject access denied. Preserve the same ledger/brief/log structure. Cost: manually verify task extraction and completion records.
+- Ruling: Keep legacy unversioned role-only catalogue compatibility while requiring complete, valid recognisedSkills whenever criteria or recognition metadata is present — prevents breaking the existing frontend before Task 3 without weakening versioned validation. Cost: the legacy path remains until paired integration; never use it as fallback for malformed versioned data.
+- Ruling: Add recordSkillAnswer(session, skillId, answer) for the plan's snapshot-keyed answer ledger; its only data effect is the immutable confirmed-profile/answer update. Ledger values are SkillAnswer arrays; learningChoicesBySkillId is separate. Cost: Tasks 3/4 must consume these explicitly recorded field shapes.
+- Ruling: Use request-local results rather than a second persistent cache inside the coordinator. Every accepted reference assignment is guarded in app.js; every confirmation and pathway load reads pinned data anew, including unchanged semantic IDs with changed check metadata. Cost: additional inexpensive reader requests, avoiding stale-cache complexity.
+- Ruling: Read the current registry after extraction completes; do not rerun extraction for context repairs. Preserve existing form corrections and default newly recognised entries to unconfirmed/leave until explicitly selected. Cost: sequential extraction/reference latency instead of the former parallel call.
+- Ruling: Use a small fake DOM/event boundary in Node checks to exercise actual app actions and stale cache behaviour; browser/layout acceptance remains Task 5. Cost: these checks cannot establish rendered browser accessibility/layout.
+- Ruling: Retain the optional proficiency picker because its removal was a separately flagged review option without direct confirmation here. Explicitly explain that it is self-reported and does not affect count coverage. Cost: an extra optional input remains visible; no scoring behaviour changes.
+- Ruling: Add a pure stationDetails resolver in roadmap.js and require the full catalogue in buildStations, so prerequisite detail names/data are available without adding role criteria. Cost: all callers/checks must pass the catalogue.
+- Ruling: Store possession answers and learning choices separately; commit a possession change only after matching (and the currently open roadmap if applicable) succeeds. Preserve the previous coherent view on failure. Cost: possession actions wait for the required API calls rather than showing optimistic scores.
+- Ruling: Check for updates is manual and duplicate-guarded. Busy/cooldown shows actual retry metadata; a premature click announces the limit without a network request. There is no retry timer/polling. Cost: the user must explicitly check again when eligible.
+- Ruling: Serve all four explicitly named scenarios on separate /fixtures/<scenario>/ API bases within one local server, with a selected default at /. Asset <base> points to / and a persistent fixture banner sits outside #app. Cost: dev-only HTML is adjusted at response time; production HTML/routes are unchanged.
+- Ruling: The prerequisite scenario preloads synthetic failed-provider/deferred/quarantined metadata at a labelled frozen fixture clock. All network/model adapters are blocked or synthetic; no live trends are claimed. Cost: status checks establish display/recovery behaviour only.
+- Ruling: Honor the explicit no-push/review-stop instruction over the finishing skill's generic integration menu. Keep this branch and checkout intact; do not propose a merge as if release gates passed.
+- Final: Ruling: Keep pre-existing modal Tab containment/background inertness as an explicit accessibility follow-up — opening focus and Escape work, but Phase 6 is not a full accessibility audit. Cost: keyboard focus is not yet confined to the modal.
+- Final: Ruling: Duplicate background/drawer data-key values had no reproduced wrong-state dispatch; retain clicked-element actions and record full focus auditing as follow-up. Cost: some focus restoration may remain ambiguous.
+- Final: Ruling: Do not mirror every backend response schema in the browser; checked backend output contracts plus registry/version/view guards remain the boundary. Cost: deep response validation relies on the paired backend.
+- Final: Ruling: Parent completed browser/layout acceptance and documentation, which the reviewer explicitly excluded from their read-only work. Cost: these observations are implementation-author acceptance, not an independent browser audit.
+- Final: Ruling: Leave real PostgreSQL/model/import/bootstrap/deployment to the separate Phase 7 gate; fixtures cannot establish those properties. Cost: this phase is not production release approval.

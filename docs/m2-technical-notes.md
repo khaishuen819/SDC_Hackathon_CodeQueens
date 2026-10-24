@@ -585,3 +585,51 @@ fixed GREEN (sanitized503 trends storage failures; citations/reasons for changed
 admit/retire associations).209 backend passed,9 DB checks skipped,10 frontend passed,
 typecheck passed. No deferred minor findings. Four Phase5 commits remain local
 pending push approval. Phase6/frontend and Phase7 actual release verification are next.
+
+## Feature 2 Phase 6 — local frontend verification, 24 October 2026 MYT
+
+Receiving implementation: Codex under M4/leader's explicit authorization for local
+commits, one review stop after each. No push, main merge, deployment, migration,
+real baseline bootstrap or live model call was performed. Previous Phase 5
+pending-push statements are historical; the received feature base was `f578bd9`.
+
+Frontend changes: injectable version-aware API client; full historical recognition;
+immutable possession/learning helpers; request-generation coordinator with one
+context retry; pinned matching/pathway/evidence/SDG reads; optional possession
+controls, separate session goals, manual update status, honest source/estimate
+labels and working unscored prerequisite details. Profile review preserves
+existing explicit answers/goals and changes only the edited possession entry.
+Scores remain one-point confirmed coverage; optional proficiency is retained and
+does not contribute to scoring. No new package was added.
+
+Local verification server: `frontend/fixtures/criteria-server.mjs`, launched with
+`npm --prefix frontend run dev:criteria-fixture`. Four named paths share actual
+injected API code and independent memory stores. Loopback only; persistent
+FICTIONAL / NOT LIVE EVIDENCE banner; fixed synthetic extraction; blocked external
+source/model adapters; no production entry import. `CQ_FIXTURE_PORT` defaults to
+5174. The ordinary dev-server's legacy Replit proxy was not used.
+
+Fresh final results: **60 frontend checks passed; 209 backend passed; 9
+disposable-PostgreSQL checks skipped; typecheck and diff check passed**. Six frontend
+checks use actual HTTP routes, client and coordinator; separate browser acceptance
+covered both samples/entry paths, 50-to-100, learning neutrality, uncertainty,
+historical recognition, prerequisites, dates/status, empty store, restart and a
+390px viewport. The local server/tab were stopped/closed afterward.
+
+A read-only reviewer found one Important answer-loss issue and no Critical or
+additional actionable Minor issues. It and a browser-observed tied-score message
+were reproduced RED, fixed and rechecked GREEN with the full suites. Baseline
+modal Tab containment remains an explicit accessibility follow-up; no complete
+accessibility or production-readiness claim is made.
+
+AI-assistance log: Codex implemented/tested the Phase 6 integration and used one
+fresh read-only code reviewer. The app's Gemini service was not called during
+these checks. Fixture source/reference/resources are synthetic test content, not
+new production datasets or market evidence. All new/changed files and detailed
+acceptance/limits are recorded in `docs/feature-2-progress.md`.
+
+Keep all Phase 6 commits local until the leader authorizes publication. Next work
+requires its own reviewed release go-ahead: real PostgreSQL/model/runtime checks,
+safe migration/bootstrap and a paired release, followed by accurate documents,
+platform evidence and submission link/timing checks. No production credential or
+contact detail is included in these notes.

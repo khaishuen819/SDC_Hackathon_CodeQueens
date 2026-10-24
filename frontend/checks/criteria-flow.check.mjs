@@ -390,6 +390,7 @@ async function mountUi(h, label) {
     html: () => nodes.app.innerHTML,
     settle: async () => { await new Promise(setImmediate); await new Promise(setImmediate); },
     click: (action, rest = {}) => handlers.get("click")({ target: { closest: () => ({ dataset: { action, ...rest }, disabled: false }) } }),
+    change: target => handlers.get("change")({ target }),
     close() {
       Object.assign(browserApi, originalApi);
       for (const [key, value] of Object.entries(saved)) { if (value === undefined) delete globalThis[key]; else globalThis[key] = value; }
@@ -425,6 +426,7 @@ test("skill_controls_keep_learning_separate_and_update_coverage_without_another_
     assert.match(ui.html(), /class="score">50</);
     ui.click("possession", { skill: "test-design", value: "have" }); await ui.settle();
     assert.match(ui.html(), /class="score">100</);
+    assert.doesNotMatch(ui.html(), /Another route scored higher/, "equal scores must not be described as a higher-scoring alternative");
     const matches = h.calls.filter(c => c.name === "match");
     assert.deepEqual(matches.at(-1).args[1].criteriaReview.answers, [{ skillId: "test-design", answer: "have" }]);
     assert.ok(matches.every(c => c.args[1].snapshotId === S));
@@ -518,4 +520,60 @@ test("a_saved_version_without_the_open_station_closes_details_and_restores_scrol
     assert.equal(h.calls.filter(c => c.name === "match").at(-1).args[1].snapshotId, T);
     assert.match(ui.html(), /QA Automation line/);
   } finally { ui.close(); }
+});
+
+test("reconfirming_an_unchanged_profile_preserves_explicit_answers_and_learning_goals", async () => {
+  const h = uiHarness(), ui = await mountUi(h, "reconfirm-ledger");
+  try {
+    ui.click("confirm"); await ui.settle();
+    ui.click("possession", { skill: "test-design", value: "not-yet" }); await ui.settle();
+    ui.click("learning", { skill: "test-design", value: "add" });
+    ui.click("go", { screen: "review" }); ui.click("confirm"); await ui.settle();
+    assert.deepEqual(h.calls.filter(c => c.name === "match").at(-1).args[1].criteriaReview.answers,
+      [{ skillId: "test-design", answer: "not-yet" }]);
+    assert.match(ui.html(), /You marked this Not yet/);
+    assert.match(ui.html(), /Added to your learning plan/);
+  } finally { ui.close(); }
+});
+
+test("unrelated_route_level_and_skill_edits_preserve_answers_and_session_goals", async () => {
+  for (const edit of ["route", "level", "other-skill"]) {
+    const h = uiHarness(), ui = await mountUi(h, `preserve-${edit}`);
+    try {
+      ui.click("confirm"); await ui.settle();
+      ui.click("possession", { skill: "test-design", value: "not-yet" }); await ui.settle();
+      ui.click("learning", { skill: "test-design", value: "add" });
+      ui.click("go", { screen: "review" });
+      if (edit === "route") ui.click("route", { value: "explore" });
+      if (edit === "level") ui.change({ dataset: { level: "api-basics" }, value: "advanced" });
+      if (edit === "other-skill") ui.click("choice", { skill: "historical-skill", value: "have" });
+      ui.click("confirm"); await ui.settle();
+      const request = h.calls.filter(c => c.name === "match").at(-1).args;
+      assert.equal(request[1].criteriaReview.answers.find(answer => answer.skillId === "test-design")?.answer, "not-yet", edit);
+      assert.match(ui.html(), /Added to your learning plan/, edit);
+      if (edit === "route") assert.equal(request[0].entryPath, "exploring");
+      if (edit === "level") assert.equal(request[0].confirmedSkills.find(skill => skill.skillId === "api-basics").level, "advanced");
+      if (edit === "other-skill") assert.ok(request[0].confirmedSkills.some(skill => skill.skillId === "historical-skill"));
+    } finally { ui.close(); }
+  }
+});
+
+test("an_explicit_form_possession_choice_replaces_only_that_answer_and_keeps_learning_intent", async () => {
+  for (const value of ["have", "notsure", "leave"]) {
+    const h = uiHarness(), ui = await mountUi(h, `replace-${value}`);
+    try {
+      ui.click("confirm"); await ui.settle();
+      ui.click("possession", { skill: "test-design", value: "not-yet" }); await ui.settle();
+      ui.click("learning", { skill: "test-design", value: "add" });
+      ui.click("go", { screen: "review" });
+      ui.click("choice", { skill: "test-design", value });
+      ui.click("confirm"); await ui.settle();
+      const answers = h.calls.filter(c => c.name === "match").at(-1).args[1].criteriaReview.answers;
+      assert.equal(answers.find(answer => answer.skillId === "test-design")?.answer,
+        value === "have" ? "have" : value === "notsure" ? "not-sure" : undefined);
+      assert.match(ui.html(), /Your learning plan — this session only/);
+      assert.ok(ui.html().includes('<li>Test design</li>'), "the learning goal survives a deliberate possession correction");
+      assert.match(ui.html(), value === "have" ? /class="score">100</ : /class="score">50</);
+    } finally { ui.close(); }
+  }
 });

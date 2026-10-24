@@ -125,11 +125,19 @@ function goTo(screen, patch = {}) {
 }
 
 // Any change on the profile makes old results out of date: clear them.
-function profileChanged(patch) {
+function profileChanged(patch, editedSkillId) {
   invalidateRequests();
+  let answersBySnapshotId = state.answersBySnapshotId;
+  if (editedSkillId && state.acceptedSnapshotId) {
+    const answers = (answersBySnapshotId[state.acceptedSnapshotId] ?? []).filter(answer => answer.skillId !== editedSkillId);
+    const choice = patch.choices[editedSkillId];
+    if (choice === "have" || choice === "notsure") answers.push({ skillId: editedSkillId, answer: choice === "have" ? "have" : "not-sure" });
+    answersBySnapshotId = { ...answersBySnapshotId, [state.acceptedSnapshotId]: answers };
+  }
   Object.assign(ref, { sdg: null, evidence: null, sdgFailed: false, evidenceFailed: false });
-  update({ ...patch, profile: null, match: null, pathway: null, chosen: null, acceptedSnapshotId: null,
-    criteria: null, skillReview: null, answersBySnapshotId: {}, learningChoicesBySkillId: {}, panelErrors: {},
+  // The catalogue version and personal choices survive ordinary review edits.
+  // Results are invalidated; a new CV or Start over still clears the whole session.
+  update({ ...patch, profile: null, match: null, pathway: null, chosen: null, answersBySnapshotId, panelErrors: {},
     pending: null, maxStep: Math.min(state.maxStep, 2), error: null });
 }
 
@@ -240,10 +248,11 @@ async function confirmProfile() {
   });
   const id = ++requestId;
   const fromSnapshotId = ref.roles?.criteria?.snapshotId;
+  const answers = state.answersBySnapshotId[state.acceptedSnapshotId] ?? [];
   goTo("matching", { pending: "confirm" });
   try {
-    const view = await criteriaFlow.confirm(profile, { fromSnapshotId });
-    const accepted = acceptReady(view, id);
+    const view = await criteriaFlow.confirm(profile, { fromSnapshotId, answers });
+    const accepted = acceptReady(view, id, answers);
     if (!accepted) return;
     goTo("results", { ...accepted, compareOpen: false, pathway: null, chosen: null, pending: null, maxStep: 3 });
   } catch (err) {
@@ -345,7 +354,7 @@ const actions = {
   sample: (el) => useSample(el.dataset.file),
   "clear-file": () => { invalidateRequests(); update({ file: null, uploadError: null, pending: null }); },
   read: readCv,
-  choice: (el) => profileChanged({ choices: { ...state.choices, [el.dataset.skill]: el.dataset.value } }),
+  choice: (el) => profileChanged({ choices: { ...state.choices, [el.dataset.skill]: el.dataset.value } }, el.dataset.skill),
   route: (el) => profileChanged({ route: el.dataset.value }),
   confirm: confirmProfile,
   "toggle-compare": () => update({ compareOpen: !state.compareOpen }),
@@ -638,7 +647,7 @@ function routeCard(m, { mine, closest, secondary }) {
     <div class="route-body">
       <div class="row" style="align-items:flex-end;gap:6px 16px"><span class="score">${esc(m.score)}</span><span class="small muted" style="padding-bottom:6px">/ 100 confirmed coverage · rank ${esc(m.rank)} of ${state.match.roles.length}</span></div>
       <p class="meaning">${esc(state.match.scoreMeaning)}</p>
-      ${m.preferredRouteKept && m.rank > 1 ? `<p>Another route scored higher, but this stays <strong>your</strong> route. You decide.</p>` : ""}
+      ${m.preferredRouteKept && state.match.roles.some(other => other.score > m.score) ? `<p>Another route scored higher, but this stays <strong>your</strong> route. You decide.</p>` : ""}
       <details><summary>How was this calculated?</summary><p class="mono small" style="margin-top:8px;color:var(--ink-2)">${esc(m.scoreExplanation)}</p></details>
       ${mine ? gapsBlock + haveBlock : haveBlock + gapsBlock}
       ${unsureBlock}
