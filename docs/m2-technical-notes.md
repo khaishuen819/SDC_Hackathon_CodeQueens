@@ -24,6 +24,7 @@ Installed today (from `package.json` / `package-lock.json`):
 | unpdf | 1.9.0 (exact) | 1.9.0 (MIT; bundles Mozilla PDF.js 6.4.299, Apache-2.0; Phase 3) |
 | @google/genai | 2.30.0 (exact) | 2.30.0 (Apache-2.0; official Google Gen AI SDK; Phase 3) |
 | @types/multer (dev) | ^2.3.0 | 2.3.0 (MIT; Phase 3) |
+| fast-xml-parser | 5.11.2 (exact) | 5.11.2 (MIT; Feature 2 Phase 3 RSS feeds; seven MIT dependencies) |
 
 Version rule (from Phase 3): use releases at least about one week old, pinned exactly. On 2026-10-23 the
 newest multer (2.5.0) was 1 day old, @google/genai (2.31.0) a few hours old and unpdf (1.9.1) 4 days old,
@@ -312,6 +313,12 @@ The contract is still PROPOSED, to agree with M3/M4.
 
 ## Open items
 
+Historical M2 integration notes below describe the existing application's legacy
+weighted matching. Approved Feature 2 V4 supersedes numerical trend adjustments
+with one point per admitted capability; new versioned route integration is Phase5,
+not part of this Phase2 catalogue checkpoint. Do not apply these older weight proposals
+to the new baseline.
+
 - **Prerequisites (for M3):** there is no prerequisite data, so every pathway step has
   `prerequisites: []`. M3 (or the content owner) to supply reviewed "skill A before skill B" pairs; we
   will need a small table for them. Nothing is invented meanwhile.
@@ -337,6 +344,8 @@ The database holds reference content only. **No user profiles and no CVs are sto
 | SkillSdg | Links a skill to an SDG, with a plain-text reason. |
 | Source | A dated publication that trend evidence comes from (M3/M4 fill it). |
 | TrendEvidence | One claim from one source about one skill: direction (rising/declining), summary, limitation, and optional `priorityAdjustment` + `adjustmentExplanation`. Starts empty. `POST /api/match` reads rows with a `priorityAdjustment` (see the evidence hook). |
+| CriteriaSnapshot | Feature 2: one immutable, content-addressed version of the public role criteria (JSON). Triggers reject UPDATE, DELETE and TRUNCATE. No personal data. |
+| CriteriaHead | Feature 2: the single `pilot` row pointing at the current snapshot, with generations, the shared refresh lease, cooldown, check times and public queue/cache state. No personal data. |
 
 Mapping to the proposed evidence contract: one `TrendEvidence` row = one `EvidenceItem`. It has one
 `skillId`, so `linkedSkillIds` has one entry; `title`, `publisher`, `url` and the dates come from its `Source`.
@@ -396,9 +405,231 @@ Commands (run by M2, from the project root):
   official SDG icons; that page writes two slightly differently ("Industry, Innovation, and
   Infrastructure"; goal 17 as "Partnerships"). SDG names are not placeholders; the role/skill SDG links are.
 - No real sources, courses, links or statistics are invented. Trend evidence comes from M3/M4.
+- Feature 2 publisher feeds (GitHub Changelog, JetBrains AI Blog): only links, titles, dates
+  and the app's short interpretation are kept as evidence. Bounded article text is held only
+  while waiting for interpretation; publishers keep their copyright. With
+  `TREND_PROVIDER=gemini`, that public article text is sent to Gemini; no CV, profile or
+  possession answer is ever included.
 - Repository licence: Apache 2.0 (`LICENSE`). Third-party library licences are recorded here as libraries are added.
 
 ## AI assistance log
 
 - Replit Agent: scaffolded minimal Express + TypeScript server with GET /health and Replit config (commits ca8551b, 9671391).
 - Claude Code: used for M2 backend development, phase by phase; all code reviewed and committed by M2.
+- Codex: Phase 2 reference retrieval/parser, pilot configuration, pure baseline construction,
+  seed protection, tests and technical notes on 24 October 2026. Public resources were
+  checked; time estimates and task/SDG mappings are app interpretations. No production
+  database, CV, live model or deployment was used. Record this use in the official tools
+  declaration; a Git co-author trailer is a separate choice.
+- Claude Code (Claude Opus 5.5): Feature 2 Phase 3 on 24 October 2026 — date-validation
+  fix, parser dependency, bounded feeds, queue, interpreter, draft builder, tests and these
+  notes. Each change was shown as a diff and approved by the team leader before a local
+  commit; no push without separate approval. Tests use fake fetchers/models and FICTIONAL
+  fixtures; one read-only real-feed check was run. No live Gemini call, database or deployment.
+- Claude Code (Claude Opus 5.5): Feature 2 Phase 4 on 24 October 2026 — store contract,
+  snapshot tables and migration, PostgreSQL store, refresh service, tests and these notes,
+  with the same diff-and-approve workflow. Database code was checked on a throwaway
+  in-memory PGlite database only; Neon was not touched.
+
+## Feature 2 V4 — Phase 2 reference/catalogue checkpoint
+
+This checkpoint provides offline input for later versioned matching, not a changed
+live app. `buildInitialCriteria(reference, pilotConfig, verifiedContent)` is pure and
+rejects incomplete resources, placeholder content, missing/unsupported task bridges
+and invalid Phase1 catalogue relationships. Storage/bootstrap is deferred to Phase4's
+real store; routes/frontend remain for Phases5/6. No database command was run.
+
+Files and ownership for the next implementer:
+
+| File | Purpose / handoff |
+|---|---|
+| `src/server/trends/http.ts` | Shared bounded fetch for Phase3: exact HTTPS hosts, same-host redirects, stream bytes, deadline and cancellation. |
+| `src/server/trends/reference.ts` | O*NET 31.0 parser/fetcher for the two pilot occupation IDs; no weights inferred from software flags. |
+| `scripts/import-role-reference.ts` | Explicit import command, writes only filtered `role-reference-31.0.json`; does not touch PostgreSQL. |
+| `src/server/trends/pilotConfig.ts` | B/Q task bridges, allowed source/resource hosts, foundational IDs and permitted SDG rationale templates. |
+| `src/server/trends/data/pilot-baseline.json` | 16 defined/recognised skill IDs; eight assessed capabilities per role with weight1, explicit admission evidence, prerequisites, 16 resources and role/skill SDG4 rationales. |
+| `src/server/trends/data/baseline-provenance.json` | Actual retrieval/check times, public source links, raw-table/resource hashes, verification method and limits. |
+| `prisma/seed.ts` | Inserts missing legacy demo rows without overwriting any existing content; never calls snapshot/head models. Importing it does not connect to PostgreSQL. |
+
+Reference source: [O*NET 31.0 Database](https://www.onetcenter.org/database.html),
+U.S. Department of Labor, Employment and Training Administration. Used under
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), with
+[the publisher's attribution guidance](https://www.onetcenter.org/license_db.html).
+The saved tables are filtered to two occupations; B/Q mappings, capability definitions,
+learning selection and SDG reasoning are Code Queens adaptations, not USDOL/ETA endorsement.
+Supervisory rows may remain as reference context, but no pilot bridge/requirement uses them.
+No source text or course is copied into the app as a teaching product. Apache-2.0
+covers project source code, not a relicensing of O*NET data or linked provider content.
+
+The catalogue intentionally separates broad occupational scope from chosen junior
+tasks. Each current association points to occupational task evidence and a capability
+resource. Languages/frameworks remain identifiable alternatives; the pilot does not
+require learning Python, JavaScript, TypeScript, Node.js and Docker together. Match
+coverage describes only our assessed subset. Real AI-trend interpretations are Phase3,
+so this baseline alone must not be described as live AI growth or local hiring demand.
+
+Every resource page is publicly readable without purchase at the recorded check time.
+These are introductory documentation destinations, not complete training courses.
+Estimated hours are app estimates for selected reading plus suggested practice, not
+provider duration, mastery time or observed learner results. Some examples use a
+particular language/tool; the graduate can use an equivalent stack. The Python tutorial
+assumes existing programming knowledge. No video playback or paid platform was tested.
+
+SDG mappings refer to [target 4.4](https://sdgs.un.org/goals/goal4), relevant technical
+skills for work. The role/skill explanations describe possible contributions through
+accessible practice, not measured attainment of an SDG or guaranteed employment.
+
+Verification: 143 backend tests, 10 frontend checks and TypeScript checking passed.
+Real O*NET data contained null task classifications, which
+are preserved as `Unknown`, not silently given a Core/Supplemental classification.
+All 16 resource links returned HTTP200. Public page topics were checked; no complete
+learning course or learner outcome was evaluated.
+
+Native Node live-import command timed out twice within the enforced 30-second limit.
+Public tables were retrieved with PowerShell HTTPS and passed through the same parser;
+provenance identifies this explicitly. The native fetch command needs a successful
+target-runtime check before operational reliance. No automatic source/model refresh,
+durable head, database migration or production readiness is implied by this checkpoint.
+
+Independent review correction: use ISTQB CTFL v4.0.1 sections4.1–4.2.2 (printed
+pages39–40) for test-case design and Mozilla Bug Writing Guidelines for reproducible
+reports. The previous tool-operation links were too narrow for those promised outcomes.
+Replacement instruction and HTTP200 responses were checked; evidence and provenance
+identify the corrected sources. Only links/short original summaries are stored;
+ISTQB/Mozilla retain their copyright. No paid exam, course or bug submission is required.
+
+Deferred minor from review: strengthen malformed-date validation in the reference
+parser and bundle schema before broadening ingestion. Current stored dates were not
+found invalid; edge cases include normalised impossible calendar dates and mismatched
+original date/declared precision/publication day. Details and boundaries are in
+`docs/feature-2-progress.md`. Resolved in Phase 3 (`e6384e0`).
+
+## Feature 2 V4 — Phase 3 sources/interpretation checkpoint
+
+Pure or injected-dependency kernels only: nothing is persisted, published or routed yet.
+Status, verification, plan deviations and limits are in `docs/feature-2-progress.md`.
+
+| File | Purpose / handoff |
+|---|---|
+| `src/server/trends/sources.ts` | `fetchSourceItems` (two RSS feeds, bounds, strict dates, 304, per-feed failure codes) and `fetchResourceCandidates` (publisher-supplied links on free documentation hosts). |
+| `src/server/trends/queue.ts` | Pure queue: enqueue (48/24 bounds), select, `recordDispatch` before the call, record outcome, counts. Phase 4 persists `QueueState`. |
+| `src/server/trends/interpreter.ts` | One bounded Gemini request with JSON schema output and strict reply checks; `interpretToOutcome`; cache fingerprint; `TREND_PROVIDER`/`TREND_GEMINI_MODEL`. |
+| `src/server/trends/refreshDraft.ts` | `buildCriteriaDraft` (A1–A8 reuse/stage/reject/promote, one-point publication validated as a bundle) and in-memory `draftRefresh` (60 s). |
+| `src/server/trends/fixtures/feeds.ts` | FICTIONAL RSS fixtures for tests only; never trend evidence. |
+
+Settings: `TREND_PROVIDER=disabled` (default, no model calls) or `gemini`, which needs the
+existing `GEMINI_API_KEY` plus `TREND_GEMINI_MODEL`. The Gemini response schema has not been
+checked against the live API yet (Task 7).
+
+## Feature 2 V4 — Phase 4 durable criteria checkpoint
+
+Restart-safe criteria versions with a shared refresh lease. Not wired into routes yet
+(Phase 5). Status, verification and limits are in `docs/feature-2-progress.md`.
+
+| File | Purpose / handoff |
+|---|---|
+| `src/server/trends/snapshotStore.ts` | `CriteriaStore` interface; shared reservation/lease/publish rules; `MemoryCriteriaStore` (tests, local) and `PrismaCriteriaStore` (row lock + database clock). |
+| `src/server/trends/refreshService.ts` | `createRefreshService(...)` with `refresh()` and `loadState()` returning `TrendMeta`; `trendMeta(...)` status rules. Phase 5 routes call these. |
+| `src/server/trends/bootstrap.ts` | `bootstrapCriteria(store, bundle)` stores the validated baseline only when no current snapshot exists. |
+| `prisma/migrations/20261024130000_dynamic_criteria_snapshots/` | Additive tables, single-row check, snapshot immutability triggers. |
+| `src/server/trends/storeContract.ts` | Shared behaviour suite every store must pass. |
+| `src/server/trends/testDatabase.ts`, `*.db.test.ts` | PostgreSQL tests; run only with a disposable `TEST_DATABASE_URL`. |
+
+Running the PostgreSQL tests (disposable database only; never the team database):
+
+```sh
+DATABASE_URL="$TEST_DATABASE_URL" npx prisma migrate deploy
+node --test --test-concurrency=1 src/server/trends/*.db.test.ts
+```
+
+They reset the database between tests (briefly disabling the snapshot trigger, which needs
+table ownership) and refuse to run if `TEST_DATABASE_URL` equals `DATABASE_URL`. Run the
+files one at a time because they share the database. `TEST_DATABASE_CONCURRENCY=1` adds
+the multi-connection reservation test. Without `TEST_DATABASE_URL` they are skipped.
+
+Deploying (Phase 7, with a backup first): apply only this additive migration, bootstrap
+the verified baseline once with `bootstrapCriteria`, and keep `TREND_PROVIDER=disabled`
+until the routes and frontend that read snapshots are released together.
+
+## Feature 2 Phase 5 — 24 October 2026
+
+The API now reads one immutable criteria version per request. GET roles/evidence/sdg
+accept optional snapshotId and return criteria; roles adds full recognisedSkills.
+Match keeps its direct confirmed-profile body; pathway keeps {profile,roleId}.
+Both add snapshotId and/or criteriaReview; a target version is required and the two
+fields must agree. Missing/mismatched context gives409 with validated review;
+unanswered skills do not. Unknown versions give CRITERIA_UNAVAILABLE; unavailable
+storage/no initial baseline gives TRENDS_UNAVAILABLE. Historical versions stay dated.
+
+GET /api/trends returns TrendMeta; POST /api/trends/refresh accepts no fields and
+obeys shared controls; POST /api/trends/reconcile takes {profile,review:{targetSnapshotId,
+fromSnapshotId?,answers?}} and returns {status:"ready",profile,snapshotId,review,criteria}.
+All personal state remains ephemeral. Startup validates baseline files but never
+migrates or populates a DB head. Real bootstrap is an explicit release operation.
+
+One-point confirmed coverage excludes legacy adjustments/proficiency. Pathways retain
+citations, prerequisites, estimates and source dates. Retired skills stay recognised.
+New criteriaApi.ts permits injected end-to-end HTTP testing; production index.ts uses
+one Prisma store and refresh service. Shared DatedEvidenceItem avoids schema cycles
+without changing public snapshot fields. Pure matching/pathway engines are unchanged.
+
+AI assistance log: Codex reviewed the peer Phase2–4 handoff/code, reproduced/fixed
+persistent timeout status, and implemented Phase5 with fictional-data regressions.
+No new library or live model/cloud service was added. The team owns review/release.
+Checkpoint:207 backend passed,9 disposable-DB tests skipped, typecheck passed.
+Final results/limits are recorded in docs/feature-2-progress.md. Phase6/7 remain;
+no Neon migration, actual bootstrap, live Gemini check or deployment was performed.
+
+Final Phase5 review: two Important boundary/provenance findings reproduced RED and
+fixed GREEN (sanitized503 trends storage failures; citations/reasons for changed
+admit/retire associations).209 backend passed,9 DB checks skipped,10 frontend passed,
+typecheck passed. No deferred minor findings. Four Phase5 commits remain local
+pending push approval. Phase6/frontend and Phase7 actual release verification are next.
+
+## Feature 2 Phase 6 — local frontend verification, 24 October 2026 MYT
+
+Receiving implementation: Codex under M4/leader's explicit authorization for local
+commits, one review stop after each. No push, main merge, deployment, migration,
+real baseline bootstrap or live model call was performed. Previous Phase 5
+pending-push statements are historical; the received feature base was `f578bd9`.
+
+Frontend changes: injectable version-aware API client; full historical recognition;
+immutable possession/learning helpers; request-generation coordinator with one
+context retry; pinned matching/pathway/evidence/SDG reads; optional possession
+controls, separate session goals, manual update status, honest source/estimate
+labels and working unscored prerequisite details. Profile review preserves
+existing explicit answers/goals and changes only the edited possession entry.
+Scores remain one-point confirmed coverage; optional proficiency is retained and
+does not contribute to scoring. No new package was added.
+
+Local verification server: `frontend/fixtures/criteria-server.mjs`, launched with
+`npm --prefix frontend run dev:criteria-fixture`. Four named paths share actual
+injected API code and independent memory stores. Loopback only; persistent
+FICTIONAL / NOT LIVE EVIDENCE banner; fixed synthetic extraction; blocked external
+source/model adapters; no production entry import. `CQ_FIXTURE_PORT` defaults to
+5174. The ordinary dev-server's legacy Replit proxy was not used.
+
+Fresh final results: **60 frontend checks passed; 209 backend passed; 9
+disposable-PostgreSQL checks skipped; typecheck and diff check passed**. Six frontend
+checks use actual HTTP routes, client and coordinator; separate browser acceptance
+covered both samples/entry paths, 50-to-100, learning neutrality, uncertainty,
+historical recognition, prerequisites, dates/status, empty store, restart and a
+390px viewport. The local server/tab were stopped/closed afterward.
+
+A read-only reviewer found one Important answer-loss issue and no Critical or
+additional actionable Minor issues. It and a browser-observed tied-score message
+were reproduced RED, fixed and rechecked GREEN with the full suites. Baseline
+modal Tab containment remains an explicit accessibility follow-up; no complete
+accessibility or production-readiness claim is made.
+
+AI-assistance log: Codex implemented/tested the Phase 6 integration and used one
+fresh read-only code reviewer. The app's Gemini service was not called during
+these checks. Fixture source/reference/resources are synthetic test content, not
+new production datasets or market evidence. All new/changed files and detailed
+acceptance/limits are recorded in `docs/feature-2-progress.md`.
+
+Keep all Phase 6 commits local until the leader authorizes publication. Next work
+requires its own reviewed release go-ahead: real PostgreSQL/model/runtime checks,
+safe migration/bootstrap and a paired release, followed by accurate documents,
+platform evidence and submission link/timing checks. No production credential or
+contact detail is included in these notes.

@@ -1,5 +1,6 @@
 import * as z from "zod";
 import { RoleId, SkillId } from "./ids.ts";
+import { RecognisedSkill, TrendMeta } from "./criteria.ts";
 
 // GET /api/roles: the pilot roles with their skills and weights.
 
@@ -28,3 +29,9 @@ export const RolesResponse = z.object({
   roles: z.array(RoleInfo),
 });
 export type RolesResponse = z.infer<typeof RolesResponse>;
+
+export const VersionedRolesResponse = RolesResponse.extend({ criteria: TrendMeta, recognisedSkills: z.array(RecognisedSkill).min(1) })
+  .refine((r) => r.criteria.snapshotId !== null && new Set(r.recognisedSkills.map((s) => s.skillId)).size === r.recognisedSkills.length &&
+    r.roles.every((role) => role.skills.every((skill) => skill.weight === 1 && r.recognisedSkills.some((s) => s.skillId === skill.skillId))),
+  { error: "Versioned roles require a pinned complete recognised-skills registry and one-point associations." });
+export type VersionedRolesResponse = z.infer<typeof VersionedRolesResponse>;

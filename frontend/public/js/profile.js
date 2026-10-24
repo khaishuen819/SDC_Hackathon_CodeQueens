@@ -11,9 +11,28 @@ export function checkFile(file) {
   return null;
 }
 
-// All skills from GET /api/roles: skillId -> name, in first-seen order.
+// Versioned responses retain historical skills independently of current role lists.
 export function skillCatalogue(rolesResponse) {
   const names = new Map();
+  if (Object.hasOwn(rolesResponse, "criteria") || Object.hasOwn(rolesResponse, "recognisedSkills")) {
+    const invalid = () => { throw new Error("The skills catalogue is invalid or incomplete. Reload it before continuing."); };
+    const slug = value => typeof value === "string" && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value);
+    const registry = rolesResponse.recognisedSkills;
+    if (!/^criteria-[a-f0-9]{64}$/.test(rolesResponse.criteria?.snapshotId ?? "")
+      || !Array.isArray(registry) || !registry.length || !Array.isArray(rolesResponse.roles)) invalid();
+    for (const skill of registry) {
+      if (!skill || !slug(skill.skillId) || typeof skill.name !== "string" || !skill.name.length
+        || Object.keys(skill).some(key => key !== "skillId" && key !== "name") || names.has(skill.skillId)) invalid();
+      names.set(skill.skillId, skill.name);
+    }
+    for (const role of rolesResponse.roles) {
+      if (!role || !slug(role.roleId) || !Array.isArray(role.skills)
+        || role.skills.some(skill => !skill || skill.weight !== 1 || !names.has(skill.skillId))
+        || new Set(role.skills.map(skill => skill.skillId)).size !== role.skills.length) invalid();
+    }
+    return names;
+  }
+  // Keep existing unversioned callers working during the paired UI integration.
   for (const role of rolesResponse.roles) {
     for (const s of role.skills) {
       if (!names.has(s.skillId)) names.set(s.skillId, s.name);

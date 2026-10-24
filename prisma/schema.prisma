@@ -144,3 +144,31 @@ model TrendEvidence {
   source                Source         @relation(fields: [sourceId], references: [id], onDelete: Cascade)
   skill                 Skill          @relation(fields: [skillId], references: [id], onDelete: Cascade)
 }
+
+// Feature 2: one immutable, content-addressed version of the public role
+// criteria (roles, skills, evidence, resources, SDG links). Never updated or
+// deleted: a database trigger rejects that. No personal data.
+model CriteriaSnapshot {
+  id            String         @id // "criteria-" + SHA-256 of the semantic bundle
+  schemaVersion Int
+  policyVersion String
+  createdAt     DateTime       @default(now()) @db.Timestamptz(3)
+  payload       Json // the validated CriteriaBundle
+  heads         CriteriaHead[]
+}
+
+// Feature 2: the single "pilot" pointer to the current snapshot, with the
+// shared refresh lease, cooldown and public queue/cache state. No personal data.
+model CriteriaHead {
+  key                 String            @id @default("pilot")
+  snapshotId          String?
+  nextGeneration      BigInt            @default(0)
+  publishedGeneration BigInt            @default(0)
+  leaseGeneration     BigInt?
+  leaseExpiresAt      DateTime?         @db.Timestamptz(3)
+  nextAllowedAt       DateTime?         @db.Timestamptz(3)
+  lastAttemptAt       DateTime?         @db.Timestamptz(3)
+  lastSuccessAt       DateTime?         @db.Timestamptz(3)
+  state               Json // RefreshPublicState
+  snapshot            CriteriaSnapshot? @relation(fields: [snapshotId], references: [id], onDelete: Restrict)
+}

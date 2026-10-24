@@ -1,0 +1,181 @@
+{
+  "assembledAt": "2026-10-24T04:31:08.117Z",
+  "status": "offline reference/catalogue only; durable publication and live AI updates are later phases",
+  "reference": {
+    "version": "31.0",
+    "urls": [
+      "https://www.onetcenter.org/dl_files/database/db_31_0_json/task_statements.json",
+      "https://www.onetcenter.org/dl_files/database/db_31_0_json/software_skills.json"
+    ],
+    "attribution": "O*NET 31.0 Database, U.S. Department of Labor, Employment and Training Administration; CC BY 4.0 https://creativecommons.org/licenses/by/4.0/. Filtered to two occupations; pilot mappings are Code Queens adaptations, not endorsed by USDOL/ETA. https://www.onetcenter.org/license_db.html",
+    "retrievalMethod": "Invoke-WebRequest HTTPS downloads; native Node live importer timed out twice in this environment. Cached original public tables parsed with the same tested parser; not a successful native-fetch run.",
+    "tables": [
+      {
+        "name": "task_statements.json",
+        "sha256": "d48d985c2bcf39a8760c9ffac599cd12309d597d564856e4bb3e9759ee948545",
+        "retrievedAt": "2026-10-24T04:15:49.405Z"
+      },
+      {
+        "name": "software_skills.json",
+        "sha256": "bf4eb584f40e8139763babc50e3b9539b07e59a1df971d812293b307cbad84d1",
+        "retrievedAt": "2026-10-24T04:16:27.302Z"
+      }
+    ]
+  },
+  "resourceChecks": [
+    {
+      "skillId": "git",
+      "url": "https://git-scm.com/docs/gittutorial",
+      "status": 200,
+      "checkedAt": "2026-10-24T04:28:52.8671610Z",
+      "contentSha256": "1eae971aaeb321c8931d6d6c5f053138bff53c6be9efc88f083fbaa78b16dd29",
+      "failure": null
+    },
+    {
+      "skillId": "testing-basics",
+      "url": "https://nodejs.org/learn/test-runner/introduction",
+      "status": 200,
+      "checkedAt": "2026-10-24T04:28:52.8671962Z",
+      "contentSha256": "cf20caedd645263a4fe7f2256eeadf1aa7181ddf7117c1235eab8e5b09f30624",
+      "failure": null
+    },
+    {
+      "skillId": "javascript",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide",
+      "status": 200,
+      "checkedAt": "2026-10-24T04:28:53.0102287Z",
+      "contentSha256": "aa1e16d5d1402f09f7aa24d89e31ec5b0c96dc10f4068993cf535a8d92f5c0dd",
+      "failure": null
+    },
+    {
+      "skillId": "api-basics",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview",
+      "status": 200,
+      "checkedAt": "2026-10-24T04:28:53.0102286Z",
+      "contentSha256": "3ad04b38fd965936c1670d590e4c3826f6600747e31bb0d19b967e6f1e2e2e89",
+      "failure": null
+    },
+    {
+      "skillId": "nodejs",
+      "url": "https://nodejs.org/learn/getting-started/introduction-to-nodejs",
+      "status": 200,
+      "checkedAt": "2026-10-24T04:28:53.3596170Z",
+      "contentSha256": "8ff214c2ca8c679bb9d14dbbee0a87c385d8263dd44ae843ddbcd16728597f68",
+      "failure": null
+    },
+    {
+      "skillId": "docker",
+      "url": "https://docs.docker.com/get-started/tutorials/run-an-app/",
+      "status": 200,
+      "checkedAt": "2026-10-24T04:28:53.4608521Z",
+      "contentSha256": "22ff53403be702f37007246db0e991fbe9cc987f36b9c14481554cb1840bb005",
+      "failure": null
+    },
+    {
+      "skillId": "sql",
+      "url": "https://www.postgresql.org/docs/18/tutorial.html",
+      "status": 200,
+      "checkedAt": "2026-10-24T04:28:53.5236532Z",
+      "contentSha256": "692fb5b8190798f89f9537a7aae3265c27b3a32dd5b9b63d4a665f009928bb3c",
+      "failure": null
+    },
+    {
+      "skillId": "typescript",
+      "url": "https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html",
+      "status": 200,
+      "checkedAt": "2026-10-24T04:28:53.5589063Z",
+      "contentSha256": "6cd5f0ac3d564d0bef868f7594c9a54e8cc63500231fd062948bd62a193a3071",
+      "failure": null
+    },
+    {
+      "skillId": "linux-basics",
+      "url": "https://ubuntu.com/tutorials/command-line-for-beginners",
+      "status": 200,
+      "checkedAt": "2026-10-24T04:28:53.6479912Z",
+      "contentSha256": "bdb4a303b1b1858415e8d38e188be46f1d02e3da38170d1a1b141c2fc9c302c1",
+      "failure": null
+    },
+    {
+      "skillId": "ci-cd-basics",
+      "url": "https://docs.github.com/en/actions/tutorials/build-and-test-code/nodejs",
+      "status": 200,
+      "checkedAt": "2026-10-24T04:28:53.6587518Z",
+      "contentSha256": "3b3e607c497104eb3a79af52658338cca6d4bf3bcc027186d7ad1c99b3239a7f",
+      "failure": null
+    },
+    {
+      "skillId": "authentication",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Authentication",
+      "status": 200,
+      "checkedAt": "2026-10-24T04:28:53.7081062Z",
+      "contentSha256": "2a1171d56b21b68d7f0e4c2e8b6ed6ee54a80e729885ba262127e4866c4d5ff0",
+      "failure": null
+    },
+    {
+      "skillId": "python",
+      "url": "https://docs.python.org/3/tutorial/",
+      "status": 200,
+      "checkedAt": "2026-10-24T04:28:53.7919057Z",
+      "contentSha256": "c4ae61dea83d86201d49b63b2dae89f254833fe1e7659c66b9677e126656b17e",
+      "failure": null
+    },
+    {
+      "skillId": "test-automation",
+      "url": "https://playwright.dev/docs/writing-tests",
+      "status": 200,
+      "checkedAt": "2026-10-24T04:28:53.9903165Z",
+      "contentSha256": "cb860772a46c9e7f95ad1d8517f6936a92b9b100fc7965dd45462c1b8d4e197c",
+      "failure": null
+    },
+    {
+      "skillId": "database-design",
+      "url": "https://www.postgresql.org/docs/18/tutorial-fk.html",
+      "status": 200,
+      "checkedAt": "2026-10-24T04:28:54.2121977Z",
+      "contentSha256": "b25d05512f4a0aad18dac4c34814b998a5ca0cad1d7cd3d308ae2ba83c266b38",
+      "failure": null
+    },
+    {
+      "skillId": "test-design",
+      "url": "https://istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf",
+      "status": 200,
+      "checkedAt": "2026-10-24T04:38:57.3168358Z",
+      "contentSha256": "3b072f81db5c7671aadacc42553e726faa93913a969cc7a89e9dc28c2318d1f1",
+      "failure": null
+    },
+    {
+      "skillId": "bug-reporting",
+      "url": "https://bugzilla.mozilla.org/page.cgi?id=bug-writing.html",
+      "status": 200,
+      "checkedAt": "2026-10-24T04:38:58.1525880Z",
+      "contentSha256": "0b6379415ebb1acf779fdfe06e597166db3ff660243c62483704f836e5e99c79",
+      "failure": null
+    }
+  ],
+  "review": {
+    "method": "Public provider pages opened, topic suitability checked; HTTP 200 responses separately checked with Invoke-WebRequest. No complete course, account flow, video playback or learning outcome was tested.",
+    "estimates": "Code Queens introductory reading/practice estimates; not provider durations or research findings. Python guide assumes existing programming knowledge.",
+    "sdgSource": "https://sdgs.un.org/goals/goal4#targets_and_indicators",
+    "sdgClaim": "Target 4.4 concerns relevant technical skills for work. Our mappings describe possible contributions, not achieved impact.",
+    "scoreScope": "Eight distinct pilot capabilities per role. All 16 legacy IDs remain recognised; JavaScript/Python/Node.js/TypeScript/Docker are learning/stack options, not co-required points. Sources do not establish AI growth; Phase 3 supplies live interpretation.",
+    "corrections": {
+      "checkedAt": "2026-10-24T04:39:53.402Z",
+      "reason": "Independent review found tool-operation guides did not teach two promised outcomes. Replaced them with instructional primary sources; no capability boundary or role denominator changed.",
+      "coverage": [
+        {
+          "skillId": "test-design",
+          "resourceId": "baseline-test-design-1",
+          "url": "https://istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf",
+          "reviewedInstruction": "Printed pages 39-40 explain specification-based test cases, valid/invalid partitions and testing boundary values and their neighbours."
+        },
+        {
+          "skillId": "bug-reporting",
+          "resourceId": "baseline-bug-reporting-1",
+          "url": "https://bugzilla.mozilla.org/page.cgi?id=bug-writing.html",
+          "reviewedInstruction": "Writing precise steps to reproduce gives a worked expected/actual report; Providing additional information explains appropriate diagnostics and reduced test cases."
+        }
+      ],
+      "rights": "Only links and brief original summaries of ISTQB/Mozilla instruction are stored. Copyright remains with the publishers; no PDF content or logo is redistributed."
+    }
+  }
+}

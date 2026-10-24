@@ -105,3 +105,71 @@ test("buildConfirmedProfile: every skill is in at most one list (backend rule)",
   assert.equal(new Set(all).size, all.length);
   for (const id of p.addedSkillIds) assert.ok(p.confirmedSkills.some((s) => s.skillId === id));
 });
+
+function versionedRoles() {
+  return {
+    ...structuredClone(roles),
+    roles: roles.roles.map(role => ({ ...role, skills: role.skills.map(skill => ({ ...skill, weight: 1 })) })),
+    recognisedSkills: [
+      { skillId: "nodejs", name: "Canonical Node.js" }, { skillId: "sql", name: "SQL" },
+      { skillId: "docker", name: "Docker" }, { skillId: "testing-basics", name: "Testing basics" },
+      { skillId: "retained-skill", name: "Retained historical skill" },
+    ],
+    criteria: {
+      snapshotId: "criteria-" + "a".repeat(64), policyVersion: "count-coverage-v1", status: "disabled",
+      lastSuccessfulCheckAt: null, lastAttemptAt: null, providers: [], notices: [],
+      deferredItemCount: 0, quarantinedItemCount: 0, refreshControl: { state: "ready", retryAt: null },
+    },
+  };
+}
+
+test("versioned recognition retains historical CV skills without adding role requirements", () => {
+  const response = versionedRoles();
+  const catalogue = skillCatalogue(response);
+  assert.equal(catalogue.get("retained-skill"), "Retained historical skill");
+  assert.equal(catalogue.get("nodejs"), "Canonical Node.js");
+  const historicalDraft = {
+    status: "draft", projects: [], experience: [], warnings: [], extractedSkills: [
+      { skillId: "retained-skill", rawName: "Historical practice", evidence: "Fictional project", confidence: 1 },
+      { skillId: "outside-catalogue", rawName: "Unknown practice", evidence: "Fictional claim", confidence: 1 },
+    ],
+  };
+  const review = reviewModel(historicalDraft, catalogue);
+  assert.deepEqual(review.found.map(s => s.skillId), ["retained-skill"]);
+  assert.deepEqual(review.unknown, [{ rawName: "Unknown practice", evidence: "Fictional claim" }]);
+  const profile = buildConfirmedProfile({ choices: review.choices, levels: {}, foundIds: ["retained-skill"], route: "qa-automation" });
+  assert.deepEqual(profile.confirmedSkills, [{ skillId: "retained-skill" }]);
+  assert.equal(profile.preferredRouteId, "qa-automation");
+  assert.ok(response.roles.every(role => !role.skills.some(s => s.skillId === "retained-skill")));
+});
+
+test("versioned catalogues reject incomplete or malformed recognition instead of falling back", () => {
+  const missing = versionedRoles();
+  delete missing.recognisedSkills;
+  const noCriteria = versionedRoles();
+  delete noCriteria.criteria;
+  const badInputs = [missing, noCriteria];
+  for (const registry of [null, [], {},
+    [{ skillId: "nodejs", name: "Node" }, { skillId: "nodejs", name: "Duplicate" }],
+    [{ skillId: "BAD ID", name: "Invalid" }], [{ skillId: "nodejs", name: "" }],
+    [{ skillId: "nodejs", name: "Node", extra: true }],
+  ]) badInputs.push({ ...versionedRoles(), recognisedSkills: registry });
+  badInputs.push({ ...versionedRoles(), criteria: null });
+  badInputs.push({ ...versionedRoles(), criteria: { snapshotId: null } });
+  badInputs.push({ ...versionedRoles(), criteria: { snapshotId: "criteria-invalid" } });
+  for (const input of badInputs) assert.throws(() => skillCatalogue(input), /catalogue/i);
+});
+
+test("versioned role associations must resolve in the registry and count once", () => {
+  for (const change of [{ skillId: "unrecognised" }, { weight: 2 }, { weight: 0 }]) {
+    const response = versionedRoles();
+    Object.assign(response.roles[0].skills[0], change);
+    assert.throws(() => skillCatalogue(response), /catalogue/i);
+  }
+  const malformed = versionedRoles();
+  malformed.roles[0].skills = null;
+  assert.throws(() => skillCatalogue(malformed), /catalogue/i);
+  const duplicated = versionedRoles();
+  duplicated.roles[0].skills.push({ ...duplicated.roles[0].skills[0] });
+  assert.throws(() => skillCatalogue(duplicated), /catalogue/i, "one capability cannot occupy two scored entries in a role");
+});

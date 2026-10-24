@@ -405,7 +405,9 @@ export const ModelName = {
   RoleSdg: 'RoleSdg',
   SkillSdg: 'SkillSdg',
   Source: 'Source',
-  TrendEvidence: 'TrendEvidence'
+  TrendEvidence: 'TrendEvidence',
+  CriteriaSnapshot: 'CriteriaSnapshot',
+  CriteriaHead: 'CriteriaHead'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -421,7 +423,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "role" | "skill" | "roleSkill" | "resource" | "sdgGoal" | "roleSdg" | "skillSdg" | "source" | "trendEvidence"
+    modelProps: "role" | "skill" | "roleSkill" | "resource" | "sdgGoal" | "roleSdg" | "skillSdg" | "source" | "trendEvidence" | "criteriaSnapshot" | "criteriaHead"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1091,6 +1093,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CriteriaSnapshot: {
+      payload: Prisma.$CriteriaSnapshotPayload<ExtArgs>
+      fields: Prisma.CriteriaSnapshotFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CriteriaSnapshotFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CriteriaSnapshotPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CriteriaSnapshotFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CriteriaSnapshotPayload>
+        }
+        findFirst: {
+          args: Prisma.CriteriaSnapshotFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CriteriaSnapshotPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CriteriaSnapshotFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CriteriaSnapshotPayload>
+        }
+        findMany: {
+          args: Prisma.CriteriaSnapshotFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CriteriaSnapshotPayload>[]
+        }
+        create: {
+          args: Prisma.CriteriaSnapshotCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CriteriaSnapshotPayload>
+        }
+        createMany: {
+          args: Prisma.CriteriaSnapshotCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CriteriaSnapshotCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CriteriaSnapshotPayload>[]
+        }
+        delete: {
+          args: Prisma.CriteriaSnapshotDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CriteriaSnapshotPayload>
+        }
+        update: {
+          args: Prisma.CriteriaSnapshotUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CriteriaSnapshotPayload>
+        }
+        deleteMany: {
+          args: Prisma.CriteriaSnapshotDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CriteriaSnapshotUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CriteriaSnapshotUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CriteriaSnapshotPayload>[]
+        }
+        upsert: {
+          args: Prisma.CriteriaSnapshotUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CriteriaSnapshotPayload>
+        }
+        aggregate: {
+          args: Prisma.CriteriaSnapshotAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCriteriaSnapshot>
+        }
+        groupBy: {
+          args: Prisma.CriteriaSnapshotGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CriteriaSnapshotGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CriteriaSnapshotCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CriteriaSnapshotCountAggregateOutputType> | number
+        }
+      }
+    }
+    CriteriaHead: {
+      payload: Prisma.$CriteriaHeadPayload<ExtArgs>
+      fields: Prisma.CriteriaHeadFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CriteriaHeadFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CriteriaHeadPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CriteriaHeadFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CriteriaHeadPayload>
+        }
+        findFirst: {
+          args: Prisma.CriteriaHeadFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CriteriaHeadPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CriteriaHeadFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CriteriaHeadPayload>
+        }
+        findMany: {
+          args: Prisma.CriteriaHeadFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CriteriaHeadPayload>[]
+        }
+        create: {
+          args: Prisma.CriteriaHeadCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CriteriaHeadPayload>
+        }
+        createMany: {
+          args: Prisma.CriteriaHeadCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CriteriaHeadCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CriteriaHeadPayload>[]
+        }
+        delete: {
+          args: Prisma.CriteriaHeadDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CriteriaHeadPayload>
+        }
+        update: {
+          args: Prisma.CriteriaHeadUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CriteriaHeadPayload>
+        }
+        deleteMany: {
+          args: Prisma.CriteriaHeadDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CriteriaHeadUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CriteriaHeadUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CriteriaHeadPayload>[]
+        }
+        upsert: {
+          args: Prisma.CriteriaHeadUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CriteriaHeadPayload>
+        }
+        aggregate: {
+          args: Prisma.CriteriaHeadAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCriteriaHead>
+        }
+        groupBy: {
+          args: Prisma.CriteriaHeadGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CriteriaHeadGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CriteriaHeadCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CriteriaHeadCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1234,12 +1384,46 @@ export const TrendEvidenceScalarFieldEnum = {
 export type TrendEvidenceScalarFieldEnum = (typeof TrendEvidenceScalarFieldEnum)[keyof typeof TrendEvidenceScalarFieldEnum]
 
 
+export const CriteriaSnapshotScalarFieldEnum = {
+  id: 'id',
+  schemaVersion: 'schemaVersion',
+  policyVersion: 'policyVersion',
+  createdAt: 'createdAt',
+  payload: 'payload'
+} as const
+
+export type CriteriaSnapshotScalarFieldEnum = (typeof CriteriaSnapshotScalarFieldEnum)[keyof typeof CriteriaSnapshotScalarFieldEnum]
+
+
+export const CriteriaHeadScalarFieldEnum = {
+  key: 'key',
+  snapshotId: 'snapshotId',
+  nextGeneration: 'nextGeneration',
+  publishedGeneration: 'publishedGeneration',
+  leaseGeneration: 'leaseGeneration',
+  leaseExpiresAt: 'leaseExpiresAt',
+  nextAllowedAt: 'nextAllowedAt',
+  lastAttemptAt: 'lastAttemptAt',
+  lastSuccessAt: 'lastSuccessAt',
+  state: 'state'
+} as const
+
+export type CriteriaHeadScalarFieldEnum = (typeof CriteriaHeadScalarFieldEnum)[keyof typeof CriteriaHeadScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {
@@ -1256,6 +1440,15 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -1352,6 +1545,34 @@ export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, '
  * Reference to a field of type 'Float[]'
  */
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'BigInt'
+ */
+export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt'>
+    
+
+
+/**
+ * Reference to a field of type 'BigInt[]'
+ */
+export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>
     
 
 /**
@@ -1514,6 +1735,8 @@ export type GlobalOmitConfig = {
   skillSdg?: Prisma.SkillSdgOmit
   source?: Prisma.SourceOmit
   trendEvidence?: Prisma.TrendEvidenceOmit
+  criteriaSnapshot?: Prisma.CriteriaSnapshotOmit
+  criteriaHead?: Prisma.CriteriaHeadOmit
 }
 
 /* Types for Logging */

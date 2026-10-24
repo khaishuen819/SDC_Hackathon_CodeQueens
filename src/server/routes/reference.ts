@@ -1,25 +1,19 @@
 import { Router } from "express";
-import { EvidenceListResponse, SdgResponse } from "../contracts/index.ts";
+import { VersionedEvidenceListResponse } from "../contracts/evidence.ts";
+import { VersionedSdgResponse } from "../contracts/sdg.ts";
+import { readSnapshotQuery } from "../trends/context.ts";
+import type { CriteriaContextLoader } from "../trends/context.ts";
 
-// What these routes need. Passed in (not imported) so tests run with no database.
-export type ReferenceRouteDeps = {
-  loadSdg: () => Promise<SdgResponse>;
-  loadEvidenceList: () => Promise<EvidenceListResponse>;
-};
-
+export type ReferenceRouteDeps = { loadContext: CriteriaContextLoader };
 export function createReferenceRouter(deps: ReferenceRouteDeps) {
   const router = Router();
-
-  // GET /api/sdg: the 17 UN goals, plus role and skill SDG tags (each with isPlaceholder).
-  router.get("/api/sdg", async (_req, res) => {
-    // Check our own output against the contract before sending it.
-    res.json(SdgResponse.parse(await deps.loadSdg()));
+  router.get("/api/sdg", async (req, res) => {
+    const { snapshot, meta } = await deps.loadContext(readSnapshotQuery(req.query));
+    res.json(VersionedSdgResponse.parse({ ...snapshot.bundle.sdg, criteria: meta }));
   });
-
-  // GET /api/evidence: reviewed trend evidence only. Empty items when there is none yet.
-  router.get("/api/evidence", async (_req, res) => {
-    res.json(EvidenceListResponse.parse(await deps.loadEvidenceList()));
+  router.get("/api/evidence", async (req, res) => {
+    const { snapshot, meta } = await deps.loadContext(readSnapshotQuery(req.query));
+    res.json(VersionedEvidenceListResponse.parse({ items: snapshot.bundle.evidence, criteria: meta }));
   });
-
   return router;
 }

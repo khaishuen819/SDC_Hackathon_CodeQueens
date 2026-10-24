@@ -1,13 +1,15 @@
 // Seed the database with the two pilot roles, their skills, and the 17 UN SDGs.
 // Run with: npx prisma db seed   (runs `node prisma/seed.ts`, see prisma.config.ts)
-// Safe to run again: every row is an upsert (insert or update), nothing is deleted.
+// Reruns insert missing demo content only; existing reviewed content stays intact.
 //
 // Placeholder data. M3 or the content owner replaces this with reviewed data. Do not present as real.
 // That covers roles, skills, weights, resources and SDG rationales: every row has isPlaceholder = true.
 // Resource links use example.com (a reserved example domain), not real courses.
 // The SDG numbers and names are the official UN ones (see docs/m2-technical-notes.md for the source).
 
-import { prisma } from "../src/server/db/client.ts";
+import type { PrismaClient } from "../src/server/db/generated/prisma/client.ts";
+import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 // ---- Placeholder content -------------------------------------------------
 
@@ -115,15 +117,17 @@ const sdgNames = [
 
 // ---- Write to the database -------------------------------------------------
 
-async function main() {
+type SeedDatabase = Pick<PrismaClient, "role" | "skill" | "resource" | "roleSkill" | "sdgGoal" | "roleSdg" | "skillSdg">;
+
+export async function seedDemoData(prisma: SeedDatabase) {
   for (const r of roles) {
     const data = { name: r.name, description: r.description, isPlaceholder: true };
-    await prisma.role.upsert({ where: { id: r.id }, update: data, create: { id: r.id, ...data } });
+    await prisma.role.upsert({ where: { id: r.id }, update: {}, create: { id: r.id, ...data } });
   }
 
   for (const s of skills) {
     const data = { name: s.name, description: s.description, isPlaceholder: true };
-    await prisma.skill.upsert({ where: { id: s.id }, update: data, create: { id: s.id, ...data } });
+    await prisma.skill.upsert({ where: { id: s.id }, update: {}, create: { id: s.id, ...data } });
 
     // One placeholder resource per skill, so pathways have something to show.
     const resource = {
@@ -139,7 +143,7 @@ async function main() {
     const resourceId = `placeholder-${s.id}-1`;
     await prisma.resource.upsert({
       where: { id: resourceId },
-      update: resource,
+      update: {},
       create: { id: resourceId, ...resource },
     });
   }
@@ -149,7 +153,7 @@ async function main() {
       const data = { weight, isRequired, isPlaceholder: true };
       await prisma.roleSkill.upsert({
         where: { roleId_skillId: { roleId, skillId } },
-        update: data,
+        update: {},
         create: { roleId, skillId, ...data },
       });
     }
@@ -158,14 +162,14 @@ async function main() {
   for (const [index, name] of sdgNames.entries()) {
     const number = index + 1;
     const id = `sdg-${number}`;
-    await prisma.sdgGoal.upsert({ where: { id }, update: { number, name }, create: { id, number, name } });
+    await prisma.sdgGoal.upsert({ where: { id }, update: {}, create: { id, number, name } });
   }
 
   for (const [roleId, sdgId, rationale] of roleSdgs) {
     const data = { rationale, isPlaceholder: true };
     await prisma.roleSdg.upsert({
       where: { roleId_sdgId: { roleId, sdgId } },
-      update: data,
+      update: {},
       create: { roleId, sdgId, ...data },
     });
   }
@@ -174,22 +178,22 @@ async function main() {
     const data = { rationale, isPlaceholder: true };
     await prisma.skillSdg.upsert({
       where: { skillId_sdgId: { skillId, sdgId } },
-      update: data,
+      update: {},
       create: { skillId, sdgId, ...data },
     });
   }
 
   // Source and TrendEvidence stay empty: feature 2 (M3/M4) fills them.
 
-  console.log(
-    `Seeded ${roles.length} roles, ${skills.length} skills, ${skills.length} resources, ` +
-      `${Object.values(roleSkills).flat().length} role-skill weights, ${sdgNames.length} SDGs, ` +
-      `${roleSdgs.length + skillSdgs.length} SDG links (all content marked isPlaceholder, except SDG names).`,
-  );
 }
 
-try {
-  await main();
-} finally {
-  await prisma.$disconnect();
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  // Importing this module for tests must never connect to a database.
+  const { prisma } = await import("../src/server/db/client.ts");
+  try {
+    await seedDemoData(prisma);
+    console.log("Seed finished: missing demo rows inserted; existing content and criteria snapshots preserved.");
+  } finally {
+    await prisma.$disconnect();
+  }
 }
