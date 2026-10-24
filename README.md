@@ -1,4 +1,4 @@
-# [PLACEHOLDER: project name]
+# [NextArc]
 <!-- TODO: add the project name agreed by the team. -->
 
 > Helps fresh CS graduates find source-backed skills to learn for a backend or QA career, by linking their current skills and interests to AI developments.
@@ -25,7 +25,6 @@ Built by **Code Queens** for **SDC Hackathon 2026** (XMUM AI Club).
 | ----------------- | ---------------------------------------------- |
 | GitHub Repository | https://github.com/khaishuen819/SDC_Hackathon_CodeQueens |
 | Live Demo         | https://sdc-hackathon-code-queens-1.replit.app |
-| RunPod Endpoint   | [PLACEHOLDER: RunPod endpoint] <!-- TODO: waiting for committee answer on whether RunPod is required --> |
 | Slide Deck        | [PLACEHOLDER: slide deck link] <!-- TODO: add the slide deck link. --> |
 | Demo Video        | [PLACEHOLDER: demo video link] <!-- TODO: add the demo video link. --> |
 
