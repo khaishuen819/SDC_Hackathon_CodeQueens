@@ -1,8 +1,21 @@
 import { createHash } from "node:crypto";
+import { readFile } from "node:fs/promises";
 import { CriteriaBundle } from "../contracts/trends.ts";
 import type { PilotConfig, RoleReference, SnapshotId, VerifiedContent } from "../contracts/trends.ts";
 import { REFERENCE_VERSION } from "./reference.ts";
 import type { CriteriaStore } from "./snapshotStore.ts";
+import { pilotConfig } from "./pilotConfig.ts";
+
+// Reads checked-in public inputs only. It does not connect to storage or
+// automatically create/replace a database head; release bootstrap is explicit.
+export async function loadPilotBaseline(): Promise<{ reference: RoleReference; bundle: CriteriaBundle }> {
+  const [referenceText, contentText] = await Promise.all([
+    readFile(new URL("./data/role-reference-31.0.json", import.meta.url), "utf8"),
+    readFile(new URL("./data/pilot-baseline.json", import.meta.url), "utf8"),
+  ]);
+  const reference: RoleReference = JSON.parse(referenceText);
+  return { reference, bundle: buildInitialCriteria(reference, pilotConfig, JSON.parse(contentText)) };
+}
 
 // Stores the validated baseline only when no current snapshot exists; an
 // existing valid head is never replaced. Returns the current snapshot id.

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildInitialCriteria } from "./bootstrap.ts";
+import { buildInitialCriteria, loadPilotBaseline } from "./bootstrap.ts";
 import { bundle, context } from "./testFixtures.ts";
 import { readFile } from "node:fs/promises";
 import { pilotConfig, PILOT_SKILL_IDS } from "./pilotConfig.ts";
@@ -53,4 +53,12 @@ test("checked-in pilot baseline is complete, reference-scoped and does not requi
   assert.ok(result.evidence.every(e => !/fictional|placeholder|example\.com/i.test(JSON.stringify(e))));
   assert.ok(result.evidence.every(e => e.datePrecision === "unknown" ? e.originalDate === null : !!e.originalDate));
   assert.ok(result.sdg.roleTags.every(t => t.rationale.includes("possible")));
+});
+
+test("runtime baseline loading validates the pinned inputs without populating storage", async () => {
+  const { reference, bundle: baseline } = await loadPilotBaseline();
+  assert.equal(reference.version, "31.0");
+  assert.equal(baseline.capabilities.length, 16);
+  assert.deepEqual(baseline.roles.map((r) => r.skills.length), [8, 8]);
+  assert.ok(baseline.resources.every((r) => r.cost === "free" && !r.isPlaceholder));
 });
