@@ -1,0 +1,5543 @@
+{
+  "version": "31.0",
+  "urls": [
+    "https://www.onetcenter.org/dl_files/database/db_31_0_json/task_statements.json",
+    "https://www.onetcenter.org/dl_files/database/db_31_0_json/software_skills.json"
+  ],
+  "attribution": "O*NET 31.0 Database, U.S. Department of Labor, Employment and Training Administration; CC BY 4.0 https://creativecommons.org/licenses/by/4.0/. Filtered to two occupations; pilot mappings are Code Queens adaptations, not endorsed by USDOL/ETA. https://www.onetcenter.org/license_db.html",
+  "retrievedAt": "2026-10-24T04:16:27.302Z",
+  "tasks": [
+    {
+      "occupationId": "15-1252.00",
+      "taskId": "21662",
+      "text": "Analyze user needs and software requirements to determine feasibility of design within time and cost constraints.",
+      "taskType": "Core",
+      "originalDate": "2025-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1252.00",
+      "taskId": "21669",
+      "text": "Develop or direct software system testing or validation procedures, programming, or documentation.",
+      "taskType": "Core",
+      "originalDate": "2025-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1252.00",
+      "taskId": "21664",
+      "text": "Confer with systems analysts, engineers, programmers and others to design systems and to obtain information on project limitations and capabilities, performance requirements and interfaces.",
+      "taskType": "Core",
+      "originalDate": "2025-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1252.00",
+      "taskId": "21670",
+      "text": "Modify existing software to correct errors, adapt it to new hardware, or upgrade interfaces and improve performance.",
+      "taskType": "Core",
+      "originalDate": "2025-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1252.00",
+      "taskId": "21673",
+      "text": "Prepare reports or correspondence concerning project specifications, activities, or status.",
+      "taskType": "Core",
+      "originalDate": "2025-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1252.00",
+      "taskId": "21661",
+      "text": "Analyze information to determine, recommend, and plan installation of a new system or modification of an existing system.",
+      "taskType": "Core",
+      "originalDate": "2025-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1252.00",
+      "taskId": "21676",
+      "text": "Store, retrieve, and manipulate data for analysis of system capabilities and requirements.",
+      "taskType": "Core",
+      "originalDate": "2025-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1252.00",
+      "taskId": "21667",
+      "text": "Design, develop and modify software systems, using scientific analysis and mathematical models to predict and measure outcomes and consequences of design.",
+      "taskType": "Core",
+      "originalDate": "2025-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1252.00",
+      "taskId": "21668",
+      "text": "Determine system performance standards.",
+      "taskType": "Core",
+      "originalDate": "2025-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1252.00",
+      "taskId": "21665",
+      "text": "Consult with customers or other departments on project status, proposals, or technical issues, such as software system design or maintenance.",
+      "taskType": "Core",
+      "originalDate": "2025-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1252.00",
+      "taskId": "21663",
+      "text": "Confer with data processing or project managers to obtain information on limitations or capabilities for data processing projects.",
+      "taskType": "Core",
+      "originalDate": "2025-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1252.00",
+      "taskId": "21671",
+      "text": "Monitor functioning of equipment to ensure system operates in conformance with specifications.",
+      "taskType": "Supplemental",
+      "originalDate": "2025-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1252.00",
+      "taskId": "21666",
+      "text": "Coordinate installation of software system.",
+      "taskType": "Supplemental",
+      "originalDate": "2025-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1252.00",
+      "taskId": "21678",
+      "text": "Supervise the work of programmers, technologists and technicians and other engineering and scientific personnel.",
+      "taskType": "Supplemental",
+      "originalDate": "2025-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1252.00",
+      "taskId": "21677",
+      "text": "Supervise and assign work to programmers, designers, technologists, technicians, or other engineering or scientific personnel.",
+      "taskType": "Supplemental",
+      "originalDate": "2025-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1252.00",
+      "taskId": "21672",
+      "text": "Obtain and evaluate information on factors such as reporting formats required, costs, or security needs to determine hardware configuration.",
+      "taskType": "Supplemental",
+      "originalDate": "2025-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1252.00",
+      "taskId": "21679",
+      "text": "Train users to use new or modified equipment.",
+      "taskType": "Supplemental",
+      "originalDate": "2025-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14642",
+      "text": "Identify, analyze, and document problems with program function, output, online screen, or content.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14641",
+      "text": "Document software defects, using a bug tracking system, and report defects to software developers.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14640",
+      "text": "Develop testing programs that address areas such as database impacts, software scenarios, regression testing, negative testing, error or bug retests, or usability.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14638",
+      "text": "Design test plans, scenarios, scripts, or procedures.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14648",
+      "text": "Document test procedures to ensure replicability and compliance with standards.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14653",
+      "text": "Provide feedback and recommendations to developers on software usability and functionality.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14652",
+      "text": "Install, maintain, or use software testing programs.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14639",
+      "text": "Test system modifications to prepare for implementation.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14644",
+      "text": "Create or maintain databases of known test defects.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14649",
+      "text": "Develop or specify standards, methods, or procedures to determine product quality or release readiness.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14643",
+      "text": "Monitor bug resolution efforts and track successes.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14650",
+      "text": "Update automated test scripts to ensure currency.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14646",
+      "text": "Participate in product design reviews to provide input on functional requirements, product designs, schedules, or potential problems.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14645",
+      "text": "Plan test schedules or strategies in accordance with project scope or delivery dates.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14654",
+      "text": "Monitor program performance to ensure efficient and problem-free operations.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14655",
+      "text": "Conduct software compatibility tests with programs, hardware, operating systems, or network environments.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14651",
+      "text": "Investigate customer problems referred by technical support.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14647",
+      "text": "Review software documentation to ensure technical accuracy, compliance, or completeness, or to mitigate risks.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14658",
+      "text": "Identify program deviance from standards, and suggest modifications to ensure compliance.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14661",
+      "text": "Perform initial debugging procedures by reviewing configuration files, logs, or code pieces to determine breakdown source.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14659",
+      "text": "Design or develop automated testing tools.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14656",
+      "text": "Install and configure recreations of software production environments to allow testing of software performance.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14657",
+      "text": "Collaborate with field staff or customers to evaluate or diagnose problems and recommend possible solutions.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14660",
+      "text": "Coordinate user or third-party testing.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14662",
+      "text": "Visit beta testing sites to evaluate software performance.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14664",
+      "text": "Conduct historical analyses of test results.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "14663",
+      "text": "Evaluate or recommend software for testing or bug tracking.",
+      "taskType": "Core",
+      "originalDate": "2022-08-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "21680",
+      "text": "Modify existing software to correct errors, allow it to adapt to new hardware, or to improve its performance.",
+      "taskType": "Unknown",
+      "originalDate": "2020-11-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "21681",
+      "text": "Recommend purchase of equipment to control dust, temperature, or humidity in area of system installation.",
+      "taskType": "Unknown",
+      "originalDate": "2020-11-01",
+      "datePrecision": "day"
+    },
+    {
+      "occupationId": "15-1253.00",
+      "taskId": "21682",
+      "text": "Store, retrieve, and manipulate data for analysis of system capabilities and requirements.",
+      "taskType": "Unknown",
+      "originalDate": "2020-11-01",
+      "datePrecision": "day"
+    }
+  ],
+  "software": [
+    {
+      "occupationId": "15-1252.00",
+      "name": "3M Post-it App",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "A programming language APL",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "ABC Compiler",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "ABC: the AspectBench Compiler for AspectJ",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Ada",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "ADO.NET",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Adobe Acrobat",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Adobe ActionScript",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Adobe After Effects",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Adobe Creative Cloud software",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Adobe Dreamweaver",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Adobe Flex",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Adobe Illustrator",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Adobe InDesign",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Adobe Photoshop",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Advanced business application programming ABAP",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Airtable",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "AJAX",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Algorithmic language ALGOL",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Allaire ColdFusion",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Alteryx software",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Amazon DynamoDB",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Amazon Elastic Compute Cloud EC2",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Amazon Kinesis",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Amazon Redshift",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Amazon Simple Storage Service S3",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Amazon Web Services AWS CloudFormation",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Amazon Web Services AWS software",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "American National Standards Institute ANSI C",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Ansible software",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Apache Airflow",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Apache Ant",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Apache Avro",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Apache Cassandra",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Apache Flume",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Apache Groovy",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Apache Hadoop",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Apache HBase",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Apache Hive",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Apache HTTP Server",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Apache Kafka",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Apache Maven",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Apache Oozie",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Apache Pig",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Apache Solr",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Apache Spark",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Apache Struts",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Apache Subversion SVN",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Apache Tomcat",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Apple iOS",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Apple macOS",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Atlassian Bamboo",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Atlassian Bitbucket",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Atlassian Confluence",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Atlassian JIRA",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Automated installation software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "AWK",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "B-Method",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Backbone.js",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Backup and archival software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Bash",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Beginner's all-purpose symbolic instruction code BASIC",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Bigloo Scheme",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Blackbaud The Raiser's Edge",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Blackboard software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Blink",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Bootstrap",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Border Gateway Protocol BGP",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "C",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "C#",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "C++",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Call-processing language CPL",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Canu",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Cascading style sheets CSS",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Chef",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Cisco IOS",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Cisco Webex",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Citrix cloud computing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Collaborative Application Markup Language CAML",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Common business oriented language COBOL",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Common Lisp Object System CLOS",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Component object model COM software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Component-based Scalable Logical Architecture CSLA",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Computer Associates integrated data management system CA-IDMS",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Computer On-line Real-time Applications Language CORAL 66",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Customer information control system CICS",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Data analysis software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Data definition language DDL",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Data manipulation language DML",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "DataVision",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Defect tracking software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Delphi Technology",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Deployment software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Disk operating system DOS",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Distributed component object model DCOM software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Distributed database management software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Django",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Docker",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Document management system software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Document Object Model DOM Scripting",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Dropbox",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Drupal",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Dynamic analysis software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Dynamic hypertext markup language DHTML",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Dynamic modeling software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "E++ pattern language",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Eclipse IDE",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Eclipse Jersey",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Eiffel",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Elasticsearch",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Embarcadero Delphi",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Embarcadero JBuilder",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Embedded systems development software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Emerald Software Group Emerald Green Office",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Encryption software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Enterprise application integration EAI software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Enterprise JavaBeans",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "ESRI ArcGIS software",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Event-driven State-machines Programming",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Evernote",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Ext JS",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Extensible hypertext markup language XHTML",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Extensible markup language XML",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Extensible stylesheet language transformations XSLT",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "FaceTime",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Fault testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Figma",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "File server software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "FileMaker Pro",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Firewall software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Flipgrid",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Formula translation/translator FORTRAN",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Forth",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Functional testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Gambit Scheme",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Git",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "GitHub",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "GitLab",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "GNU Image Manipulation Program GIMP",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Go",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Google Analytics",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Google Android",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Google Angular",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Google Cloud software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Google Docs",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Google Drive",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Google Gmail",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Google Looker Analytics",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Google Meet",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Google Sheets",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Google Sites",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Google Slides",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Gradle",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Grafana Labs Grafana Cloud",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Graphical user interface GUI builder software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Graphical user interface GUI design software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "GraphQL",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "GroupMe",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Haskell",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Hewlett Packard HP-UX",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Hewlett Packard LoadRunner",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Hibernate ORM",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Hypertext markup language HTML",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "IBM AIX",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "IBM Cognos Impromptu",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "IBM DB2",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "IBM Domino",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "IBM InfoSphere DataStage",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "IBM Middleware",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "IBM Notes",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "IBM Power Systems software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "IBM Rational ClearCase",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "IBM Rational ClearQuest",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "IBM Rational PurifyPlus",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "IBM Rational RequisitePro",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "IBM Rational Rose XDE",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "IBM SPSS Statistics",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "IBM Terraform",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "IBM WebSphere",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "IBM WebSphere MQ",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "IBM z/OS operating systems",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "ICON programming language",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "IEA Software Emerald",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Informatica software",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Integrated development environment IDE software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Integration testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Interface definition language IDL",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Interoperability testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Interstate connection ICON",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "J",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "JamBoard",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "JavaScript",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "JavaScript framework software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "JavaScript Object Notation JSON",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Jenkins CI",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "JFrog Artifactory",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Job control language JCL",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "jQuery",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "JUnit",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Jupyter Notebook",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "KornShell",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Kotlin",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Kubernetes",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "LAMP Stack",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "LexisNexis",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "LibreOffice",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "LinkedIn",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Linux",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "List processing language LISP",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Load testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "LogMeIn GoToMeeting",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "LogMeIn GoToWebinar",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Loom",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Magellan Firmware",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Management information systems MIS",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Marketo Marketing Automation",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "MathWorks Simulink",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "McAfee",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microservices Architecture",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft .NET Framework",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Access",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Active Directory",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Active Server Pages ASP",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft ActiveX",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft ASP.NET",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft ASP.NET Core MVC",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Azure DevOps Services",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Azure software",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft DirectX",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Dynamics",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Dynamics GP",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft ESP SDK",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Excel",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Exchange",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Internet Information Services (IIS)",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Office software",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft OneNote",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Outlook",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Power Automate",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Power BI",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Power Platform software",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft PowerPoint",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft PowerShell",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Project",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Publisher",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft SharePoint",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft SQL Server",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft SQL Server Integration Services SSIS",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft SQL Server Reporting Services SSRS",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Team Foundation Server",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Teams",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft transact-structural query language T-SQL",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Visio",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Visual Basic",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Visual Basic for Applications VBA",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Visual Basic Scripting Edition VBScript",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Visual Basic.NET",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Visual C# .NET",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Visual Studio",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Windows",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Windows Server",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Microsoft Word",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "MicroStrategy",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Migration software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Migration testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Minitab",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Modula",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "MongoDB",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Moodle",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "MuleSoft software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "MUMPS M",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Mutation testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "MySQL",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Nagios",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "National Instruments LabVIEW",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "NetSuite ERP",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Node.js",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "NortonLifeLock cybersecurity software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "NoSQL",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oberon",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Object Management Group Object Request Broker",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Objective C",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Objective Caml",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Open Graphics Library OpenGL",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "OpenAI ChatGPT",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Operating system shells",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle Application Server",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle Business Intelligence Discoverer",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle Business Intelligence Enterprise Edition",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle Business Intelligence Suite",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle Cloud software",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle Database",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle E-Business Suite Financials",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle Eloqua",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle Fusion Applications",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle Fusion Middleware",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle Hyperion",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle Java",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle Java 2 Platform Enterprise Edition J2EE",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle Java Message Service JMS",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle JavaServer Pages JSP",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle JD Edwards EnterpriseOne",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle JDBC",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle PeopleSoft",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle PeopleSoft Financials",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle PL/SQL",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle Primavera Enterprise Project Portfolio Management",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle Reports",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle Solaris",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle SQL Developer",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Oracle WebLogic Server",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Pascal",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Patch management software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Perforce Helix software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Perl",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "PHP",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Platform as a service PaaS",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "PostgreSQL",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Programming language one PL/I",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Prolog",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Prometheus",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Puppet",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "PuTTY",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Python",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "PyTorch",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Qlik Tech QlikView",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "QNX",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Quest Erwin Data Modeler",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "R",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "RabbitMQ",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "React",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "React Native",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "React Redux",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Real time operating system RTOS software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Recovery testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Red Hat Ansible Engine",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Red Hat Enterprise Linux",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Red Hat OpenShift",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Red Hat WildFly",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Redis",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Regression testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Relational database management software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Requirements management software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "RESTful API",
+      "hotTechnology": false,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Restructured extended executor REXX",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Ruby",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Ruby on Rails",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Salesforce software",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Salesforce Visualforce",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "SAP Adaptive Server Enterprise",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "SAP Business Intelligence",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "SAP Business Objects",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "SAP Crystal Reports",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "SAP ERP",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "SAP NetWeaver",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "SAP PowerBuilder",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "SAP software",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "SAS",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Scala",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Scheme",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Screencastify",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Security testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Selenium",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "ServiceNow",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Shell script",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Simple API for XML SAX",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Simulation program with integrated circuit emphasis SPICE",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Single sign-on SSO",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Skype",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Slack",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Smalltalk",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "SmugMug Flickr",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Snowflake",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Social media sites",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Software development tools",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Software distribution management software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Software libraries",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "SonarQube",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Source code editor software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Splunk Enterprise",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Spring Boot",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Spring Framework",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "StataCorp Stata",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Static analysis software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Storage area network SAN software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Stress testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "String oriented symbolic language SNOBOL",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Structured query language SQL",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Structured Query Report SQR",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Sun Microsystems Java Persistence API",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Swift",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Symantec Visual Cafe",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "System testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Tableau",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Talend Big Data Integration",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Talend Data Fabric",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "TensorFlow",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Teradata Database",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Test design software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Test implementation software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "The MathWorks MATLAB",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Transact-SQL",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Trimble SketchUp Pro",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "TypeScript",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Ubuntu",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Unified modeling language UML",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Unit testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "UNIX",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "UNIX Shell",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Usability testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Verilog",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Veritas NetBackup",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Version control software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Virtual private networking VPN software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Visible Razor",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "VMware",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Voice over internet protocol VoIP system software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Vue.js",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Web application software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Web server software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Web service definition language WDSL",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Win CE",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Wind River VxWorks",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Wireshark",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "WordPress",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Workday software",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Xcode",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "XML Path Language XPATH",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "YouTube",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1252.00",
+      "name": "Zoom",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "3M Post-it App",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "A programming language APL",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "ABC Compiler",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "ABC: the AspectBench Compiler for AspectJ",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Acresso InstallAnywhere",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Ada",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "ADO.NET",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Adobe Acrobat",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Adobe ActionScript",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Adobe After Effects",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Adobe Creative Cloud software",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Adobe Dreamweaver",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Adobe Flex",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Adobe Illustrator",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Adobe InDesign",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Adobe Photoshop",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Advanced business application programming ABAP",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Airtable",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "AJAX",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Algorithmic language ALGOL",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Allaire ColdFusion",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Amazon Data Pipeline",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Amazon DynamoDB",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Amazon Elastic Compute Cloud EC2",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Amazon Kinesis",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Amazon Redshift",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Amazon Simple Storage Service S3",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Amazon Web Services AWS CloudFormation",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Amazon Web Services AWS software",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "American National Standards Institute ANSI C",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Ansible software",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Anti-spyware software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Antivirus software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Apache Ant",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Apache Avro",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Apache Cassandra",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Apache Flume",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Apache Groovy",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Apache Hadoop",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Apache HBase",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Apache Hive",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Apache HTTP Server",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Apache JMeter",
+      "hotTechnology": false,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Apache Kafka",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Apache Maven",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Apache Oozie",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Apache Pig",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Apache Solr",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Apache Spark",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Apache Sqoop",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Apache Struts",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Apache Subversion SVN",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Apache Tomcat",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Appium",
+      "hotTechnology": false,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Apple Cocoa",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Apple macOS",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Apple Safari",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Atlassian Bamboo",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Atlassian Bitbucket",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Atlassian Confluence",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Atlassian JIRA",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Autodesk AutoCAD",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Automated installation software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "AWK",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "B-Method",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Backbone.js",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Backup and archival software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Bash",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Beginner's all-purpose symbolic instruction code BASIC",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Bentley MicroStation",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Bigloo Scheme",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Blackbaud The Raiser's Edge",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Blackboard software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Blink",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Borland SilkTest",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Bugzilla",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "C",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "C#",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "C++",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Call-processing language CPL",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Canu",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Cascading style sheets CSS",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Chef",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Cisco IOS",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Cisco Webex",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Citrix cloud computing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Collaborative Application Markup Language CAML",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Common business oriented language COBOL",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Common Lisp Object System CLOS",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Component object model COM software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Component-based Scalable Logical Architecture CSLA",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Computer Associates integrated data management system CA-IDMS",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Computer On-line Real-time Applications Language CORAL 66",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "CruiseControl",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Customer information control system CICS",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Dassault Systemes CATIA",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Data analysis software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Data definition language DDL",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Data manipulation language DML",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "DataVision",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Debugview",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Defect tracking software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Delphi Technology",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Deployment software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Disk operating system DOS",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Distributed component object model DCOM software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Distributed database management software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Django",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Docker",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Document management system software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Document Object Model DOM Scripting",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Dropbox",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Drupal",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Dynamic analysis software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Dynamic hypertext markup language DHTML",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Dynamic modeling software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "E++ pattern language",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Eclipse IDE",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Eiffel",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "ej-technologies JProfiler",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Elasticsearch",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Embarcadero Delphi",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Embarcadero JBuilder",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Embedded systems development software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Emerald Software Group Emerald Green Office",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Encryption software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Enterprise application integration EAI software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Enterprise JavaBeans",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Epic Systems",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "ESRI ArcGIS software",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Event-driven State-machines Programming",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Evernote",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Ext JS",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Extensible hypertext markup language XHTML",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Extensible markup language XML",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Extensible stylesheet language transformations XSLT",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "FaceTime",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Fault testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "File server software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "FileMaker Pro",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "FileMon",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Firewall software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "FitNesse",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Flipgrid",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Formula translation/translator FORTRAN",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Forth",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Functional testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Gambit Scheme",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Geographic information system GIS software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Git",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "GitHub",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "GitLab",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "GNU Image Manipulation Program GIMP",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Go",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Google Analytics",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Google Android",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Google Angular",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Google Docs",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Google Drive",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Google Gmail",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Google Meet",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Google Sheets",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Google Sites",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Google Slides",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Graphical user interface GUI builder software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Graphical user interface GUI design software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "GroupMe",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Haskell",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Hewlett Packard HP-UX",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Hewlett Packard LoadRunner",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Hewlett-Packard HP QuickTest Professional",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Hewlett-Packard HP TestDirector for Quality Center",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Hewlett-Packard HP WinRunner",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Hibernate ORM",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Human resource management software HRMS",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Hypertext markup language HTML",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "IBM AIX",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "IBM Cognos Impromptu",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "IBM DB2",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "IBM Domino",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "IBM InfoSphere DataStage",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "IBM Middleware",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "IBM Notes",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "IBM Power Systems software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "IBM Rational ClearCase",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "IBM Rational ClearQuest",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "IBM Rational PurifyPlus",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "IBM Rational RequisitePro",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "IBM Rational Robot",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "IBM Rational Rose XDE",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "IBM SPSS Statistics",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "IBM WebSphere",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "IBM z/OS operating systems",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "ICON programming language",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "IEA Software Emerald",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Integrated development environment IDE software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Integration testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Interface definition language IDL",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Interoperability testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Interstate connection ICON",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "J",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "JamBoard",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "JavaScript",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "JavaScript Object Notation JSON",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Jenkins CI",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "JetBrains IntelliJ IDEA",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Job control language JCL",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "jQuery",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "JUnit",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Jupyter Notebook",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "KornShell",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "LAMP Stack",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "LexisNexis",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "LibreOffice",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "LinkedIn",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Linux",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "List processing language LISP",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Load testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "LogMeIn GoToMeeting",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "LogMeIn GoToWebinar",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Loom",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Magellan Firmware",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "MathWorks Simulink",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "McAfee",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft .NET Framework",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Access",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Active Server Pages ASP",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft ActiveX",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft ASP.NET",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft ASP.NET Core MVC",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Azure DevOps Services",
+      "hotTechnology": false,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Azure software",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft DirectX",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Dynamics",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Dynamics GP",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft ESP SDK",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Excel",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Exchange",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Internet Explorer",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Internet Information Services (IIS)",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Office software",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft OneNote",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Outlook",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Playwright",
+      "hotTechnology": false,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft PowerPoint",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft PowerShell",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Project",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Publisher",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft SharePoint",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft SQL Server",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft SQL Server Integration Services SSIS",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft SQL Server Reporting Services SSRS",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Team Foundation Server",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Teams",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft transact-structural query language T-SQL",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Visio",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Visual Basic",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Visual Basic for Applications VBA",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Visual Basic Scripting Edition VBScript",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Visual Basic.NET",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Visual C# .NET",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Visual SourceSafe",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Visual Studio",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Windows",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Windows SDK",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Windows Server",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Microsoft Word",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "MicroStrategy",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Migration software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Migration testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Minitab",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Modula",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "MongoDB",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Moodle",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Mozilla Firefox",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "MUMPS M",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Mutation testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "MySQL",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Nagios",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "National Instruments LabVIEW",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "NetSuite ERP",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Network intrusion detection software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Node.js",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "NortonLifeLock cybersecurity software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "NoSQL",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "NUnit",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Oberon",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Object Management Group Object Request Broker",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Objective C",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Objective Caml",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Open Graphics Library OpenGL",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Operating system shells",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Oracle Application Server",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Oracle Business Intelligence Discoverer",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Oracle Business Intelligence Enterprise Edition",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Oracle Business Intelligence Suite",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Oracle Database",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Oracle E-Business Suite Financials",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Oracle Eloqua",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Oracle Fusion Applications",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Oracle Fusion Middleware",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Oracle Hyperion",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Oracle Java",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Oracle Java 2 Platform Enterprise Edition J2EE",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Oracle JavaServer Pages JSP",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Oracle JD Edwards EnterpriseOne",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Oracle JDBC",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Oracle PeopleSoft",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Oracle PeopleSoft Financials",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Oracle PL/SQL",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Oracle Primavera Enterprise Project Portfolio Management",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Oracle Reports",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Oracle Solaris",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Oracle WebLogic Server",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Pascal",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Patch management software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Perforce Helix software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Perl",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "PHP",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "PostgreSQL",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Postman",
+      "hotTechnology": false,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Programming language one PL/I",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Prolog",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Puppet",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "PuTTY",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Python",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Qlik Tech QlikView",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "QNX",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Quest Erwin Data Modeler",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "R",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "React",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Real time operating system RTOS software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Recovery testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Red Hat Ansible Engine",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Red Hat Enterprise Linux",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Red Hat OpenShift",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Red Hat WildFly",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "RegMon",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Regression testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Relational database management software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Requirements management software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "REST Assured",
+      "hotTechnology": false,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "RESTful API",
+      "hotTechnology": false,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Restructured extended executor REXX",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Revision control software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Ruby",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Ruby on Rails",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Salesforce software",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Salesforce Visualforce",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "SAP Adaptive Server Enterprise",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "SAP Business Intelligence",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "SAP Business Objects",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "SAP Crystal Reports",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "SAP NetWeaver",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "SAP PowerBuilder",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "SAP software",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "SAS",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Scala",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Scheme",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Screencastify",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Security testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Selenium",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Shell script",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Simple API for XML SAX",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Simulation program with integrated circuit emphasis SPICE",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Skype",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Slack",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Smalltalk",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "SmartBear Software AutomatedQA TestComplete",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "SmugMug Flickr",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Social media sites",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Software distribution management software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Source code editor software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Splunk Enterprise",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Spring Boot",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Spring Framework",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "StataCorp Stata",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Static analysis software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Storage area network SAN software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Stress testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "String oriented symbolic language SNOBOL",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Structured query language SQL",
+      "hotTechnology": true,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Structured Query Report SQR",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Supervisory control and data acquisition SCADA software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Swift",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Symantec Visual Cafe",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "System testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Tableau",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Talend Big Data Integration",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Talend Data Fabric",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Tax software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Teradata Database",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Test design software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Test implementation software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "TestNG",
+      "hotTechnology": false,
+      "inDemand": true
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "The MathWorks MATLAB",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Transact-SQL",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Trimble SketchUp Pro",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Twiki",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Ubuntu",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Unified modeling language UML",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Unit testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "UNIX",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "UNIX Shell",
+      "hotTechnology": true,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Usability testing software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Verilog",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Veritas NetBackup",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Version control software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Virtual private networking VPN software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Visible Razor",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "VMware",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "VMWare ESX Server",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "VMWare Workstation",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Voice over internet protocol VoIP system software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Watir",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Web application software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Web browser software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Web server software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Web service definition language WDSL",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Win CE",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Wind River Systems VxWorks",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Wind River VxWorks",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Wireshark",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Workflow software",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Xcode",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "XML Path Language XPATH",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "YourKit Java Profiler",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "YouTube",
+      "hotTechnology": false,
+      "inDemand": false
+    },
+    {
+      "occupationId": "15-1253.00",
+      "name": "Zoom",
+      "hotTechnology": true,
+      "inDemand": false
+    }
+  ]
+}

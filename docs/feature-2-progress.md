@@ -3,8 +3,10 @@
 Owner: Jong (M3). Working branch: `codex/feature-2-automation`.
 Approved basis: V4 automation/scoring design and implementation plan, reviewed24 October2026.
 
-The user authorizes small commits and publication to this feature branch,
+The user authorizes local implementation and small commits on this feature branch,
 superseding CLAUDE.md's earlier M2-only commit restriction for this work.
+Latest instruction (24 October): pause and notify the user before EVERY push.
+No Phase 2 work has been pushed. Keep at least a conservative 15% session-token reserve.
 Main merges and Replit publishing are separate actions. The proficiency picker
 removal is a separate change for Jong to apply; it is not bundled here.
 
@@ -22,7 +24,8 @@ removal is a separate change for Jong to apply; it is not bundled here.
 
 ## Checkpoints
 
-Phase1's offline foundation is complete. Later phases have not been implemented.
+Phase1's offline foundation is complete. Phase2's reference/catalogue checkpoint
+is implemented locally below; Phases3–7 have not been implemented.
 
 1. Completed: shared schemas/versioned contracts.85 backend checks passed at this checkpoint.
 2. Completed: source/canonical admission rules, stable identity and one-point/citation-only adapters.112 backend checks and type-checking passed.
@@ -52,3 +55,45 @@ The public app still uses its current integration; these new kernels are wired i
 
 After Phase1: scoped role-reference/baseline work, live interpretation, durable snapshots,
 API/frontend integration, then actual deployment/demo checks, each in its own phase.
+
+## Phase 2 — local checkpoint, 24 October 2026
+
+- Added bounded HTTPS retrieval: allowed hosts, same-host redirects, actual streamed
+  byte limits, request deadlines/cancellation, real HTTP status and conditional headers.
+- Added the pinned O*NET 31.0 importer and actual `row` parser. The saved reference
+  contains 47 tasks and 859 software examples for occupations 15-1252.00/15-1253.00.
+  Dates retain their original precision; an unclassified task stays `Unknown`.
+  Software popularity flags and management tasks never automatically become requirements.
+- Configured B1–B4/Q1–Q4, existing canonical IDs and permitted hosts/SDG templates.
+- Added `pilot-baseline.json`: 16 recognised capabilities, 16 public free learning
+  resources, prerequisites, app-estimated practice hours, SDG explanations and 16
+  source-linked admission decisions. Eight distinct capabilities are assessed per role.
+  JavaScript, Python, TypeScript, Node.js and Docker remain recognised learning/stack
+  options; knowing every alternative is not required to score 100% of this pilot subset.
+  The scope/mappings are explicit product interpretations, not an occupational exam,
+  complete employability measure, hiring probability or AI-growth claim.
+- Added pure `buildInitialCriteria` readiness validation. No database bootstrap or
+  application-route connection is claimed: durable storage arrives in Phase4.
+- Seed reruns insert missing demo rows only and preserve existing catalogue rows.
+  A database-free regression checks reviewed content and prohibits snapshot access.
+
+Verification before independent review: **143 backend tests, 10 frontend checks and
+TypeScript checking passed**, using the lockfile. Sixteen public resource URLs returned
+HTTP 200; public page topics were checked. We have not completed the learning courses,
+tested learning outcomes, called Gemini, migrated a database or deployed this change.
+
+### Import verification limitation
+
+`node scripts/import-role-reference.ts` timed out twice at its 30-second bound here.
+Both pinned public tables were successfully retrieved with PowerShell HTTPS requests
+and parsed with the same tested parser to produce the checked-in reference. Raw table
+hashes, actual retrieval times, resource checks and review limits are recorded in
+`src/server/trends/data/baseline-provenance.json`. This fallback is not a successful
+native Node live-import test. Recheck the default importer from the target runtime
+before relying on it there; do not increase limits or claim live AI updates to hide it.
+
+O*NET data uses CC BY 4.0, independently of Apache-2.0 source code. Exact attribution
+and adaptations are in the reference/provenance files and the technical notes.
+
+Next approved phase: Phase3 live retrieval/interpretation. Do not start it as part of
+this Phase2 checkpoint. Publication still awaits the user's review before any push.

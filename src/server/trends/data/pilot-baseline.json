@@ -1,0 +1,1303 @@
+{
+  "roles": [
+    {
+      "roleId": "backend-development",
+      "name": "Backend Development",
+      "description": "Pilot subset: HTTP services, application data, behaviour checks and basic code delivery. Stack alternatives are guidance, not cumulative requirements.",
+      "isPlaceholder": false,
+      "skills": [
+        {
+          "skillId": "api-basics",
+          "name": "HTTP API basics",
+          "weight": 1,
+          "isRequired": true
+        },
+        {
+          "skillId": "sql",
+          "name": "SQL",
+          "weight": 1,
+          "isRequired": true
+        },
+        {
+          "skillId": "database-design",
+          "name": "Relational data modelling",
+          "weight": 1,
+          "isRequired": true
+        },
+        {
+          "skillId": "authentication",
+          "name": "HTTP authentication and access checks",
+          "weight": 1,
+          "isRequired": true
+        },
+        {
+          "skillId": "testing-basics",
+          "name": "Testing basics",
+          "weight": 1,
+          "isRequired": true
+        },
+        {
+          "skillId": "git",
+          "name": "Git",
+          "weight": 1,
+          "isRequired": true
+        },
+        {
+          "skillId": "linux-basics",
+          "name": "Linux command line",
+          "weight": 1,
+          "isRequired": true
+        },
+        {
+          "skillId": "ci-cd-basics",
+          "name": "CI workflow basics",
+          "weight": 1,
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "roleId": "qa-automation",
+      "name": "QA Automation",
+      "description": "Pilot subset: test-case design, functional checks, reproducible defects and basic check delivery. This is not an exhaustive job specification.",
+      "isPlaceholder": false,
+      "skills": [
+        {
+          "skillId": "testing-basics",
+          "name": "Testing basics",
+          "weight": 1,
+          "isRequired": true
+        },
+        {
+          "skillId": "test-design",
+          "name": "Test-case design",
+          "weight": 1,
+          "isRequired": true
+        },
+        {
+          "skillId": "test-automation",
+          "name": "Functional test automation",
+          "weight": 1,
+          "isRequired": true
+        },
+        {
+          "skillId": "api-basics",
+          "name": "HTTP API basics",
+          "weight": 1,
+          "isRequired": true
+        },
+        {
+          "skillId": "bug-reporting",
+          "name": "Reproducible defect reporting",
+          "weight": 1,
+          "isRequired": true
+        },
+        {
+          "skillId": "git",
+          "name": "Git",
+          "weight": 1,
+          "isRequired": true
+        },
+        {
+          "skillId": "ci-cd-basics",
+          "name": "CI workflow basics",
+          "weight": 1,
+          "isRequired": true
+        },
+        {
+          "skillId": "sql",
+          "name": "SQL",
+          "weight": 1,
+          "isRequired": true
+        }
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "skillId": "git",
+      "name": "Git",
+      "aliases": [
+        "Git version control"
+      ],
+      "definition": "Track and combine source-code changes using commits, branches and merges.",
+      "observableOutcome": "Create a branch, commit a change and resolve a simple merge conflict.",
+      "taskIds": [
+        "B4",
+        "Q4"
+      ],
+      "prerequisiteSkillIds": [],
+      "evidenceIds": [
+        "baseline-doc-git"
+      ]
+    },
+    {
+      "skillId": "sql",
+      "name": "SQL",
+      "aliases": [
+        "SQL queries"
+      ],
+      "definition": "Read and modify relational data using SQL statements, filters and joins.",
+      "observableOutcome": "Query two related tables with a join and explain the result.",
+      "taskIds": [
+        "B2",
+        "Q2"
+      ],
+      "prerequisiteSkillIds": [],
+      "evidenceIds": [
+        "baseline-doc-sql"
+      ]
+    },
+    {
+      "skillId": "javascript",
+      "name": "JavaScript",
+      "aliases": [
+        "JS",
+        "ECMAScript"
+      ],
+      "definition": "Write JavaScript functions and asynchronous operations in a small program.",
+      "observableOutcome": "Implement a function and handle success and failure of an asynchronous operation.",
+      "taskIds": [
+        "B1",
+        "Q2"
+      ],
+      "prerequisiteSkillIds": [],
+      "evidenceIds": [
+        "baseline-doc-javascript"
+      ]
+    },
+    {
+      "skillId": "api-basics",
+      "name": "HTTP API basics",
+      "aliases": [
+        "API basics",
+        "HTTP API basics"
+      ],
+      "definition": "Use HTTP methods, status codes, headers and structured request/response bodies.",
+      "observableOutcome": "Send a request, inspect its response and explain a successful and an error status.",
+      "taskIds": [
+        "B1",
+        "Q2"
+      ],
+      "prerequisiteSkillIds": [],
+      "evidenceIds": [
+        "baseline-doc-api-basics"
+      ]
+    },
+    {
+      "skillId": "testing-basics",
+      "name": "Testing basics",
+      "aliases": [
+        "unit testing",
+        "basic assertions"
+      ],
+      "definition": "Check one isolated software behaviour with a repeatable assertion.",
+      "observableOutcome": "Write and run a small passing assertion and a deliberately failing one.",
+      "taskIds": [
+        "B3",
+        "Q1"
+      ],
+      "prerequisiteSkillIds": [],
+      "evidenceIds": [
+        "baseline-doc-testing-basics"
+      ]
+    },
+    {
+      "skillId": "linux-basics",
+      "name": "Linux command line",
+      "aliases": [
+        "Linux basics",
+        "shell basics"
+      ],
+      "definition": "Navigate files, inspect output and run commands in a Linux shell.",
+      "observableOutcome": "Navigate a project directory and use a command and output redirection safely.",
+      "taskIds": [
+        "B4",
+        "Q4"
+      ],
+      "prerequisiteSkillIds": [],
+      "evidenceIds": [
+        "baseline-doc-linux-basics"
+      ]
+    },
+    {
+      "skillId": "ci-cd-basics",
+      "name": "CI workflow basics",
+      "aliases": [
+        "CI/CD basics",
+        "continuous integration"
+      ],
+      "definition": "Configure a delivery workflow that automatically runs project checks on a code change.",
+      "observableOutcome": "Configure a check job and explain a passing and a failing run.",
+      "taskIds": [
+        "B4",
+        "Q4"
+      ],
+      "prerequisiteSkillIds": [
+        "git",
+        "testing-basics"
+      ],
+      "evidenceIds": [
+        "baseline-doc-ci-cd-basics"
+      ]
+    },
+    {
+      "skillId": "docker",
+      "name": "Container basics with Docker",
+      "aliases": [
+        "Docker basics"
+      ],
+      "definition": "Build and run an application image with explicitly declared runtime dependencies.",
+      "observableOutcome": "Build a small image and run it with a documented port mapping.",
+      "taskIds": [
+        "B4",
+        "Q4"
+      ],
+      "prerequisiteSkillIds": [
+        "linux-basics"
+      ],
+      "evidenceIds": [
+        "baseline-doc-docker"
+      ]
+    },
+    {
+      "skillId": "nodejs",
+      "name": "Node.js runtime basics",
+      "aliases": [
+        "Node.js",
+        "NodeJS"
+      ],
+      "definition": "Run a server-side JavaScript program and handle an HTTP request with Node.js.",
+      "observableOutcome": "Start a small HTTP server and explain its request handler and response.",
+      "taskIds": [
+        "B1"
+      ],
+      "prerequisiteSkillIds": [
+        "javascript"
+      ],
+      "evidenceIds": [
+        "baseline-doc-nodejs"
+      ]
+    },
+    {
+      "skillId": "typescript",
+      "name": "TypeScript basics",
+      "aliases": [
+        "TS"
+      ],
+      "definition": "Use static type annotations and type checking to catch incompatible values.",
+      "observableOutcome": "Type-check a small program and explain a caught type mismatch.",
+      "taskIds": [
+        "B1",
+        "Q2"
+      ],
+      "prerequisiteSkillIds": [
+        "javascript"
+      ],
+      "evidenceIds": [
+        "baseline-doc-typescript"
+      ]
+    },
+    {
+      "skillId": "database-design",
+      "name": "Relational data modelling",
+      "aliases": [
+        "database design",
+        "relational schema design"
+      ],
+      "definition": "Choose tables, keys and referential constraints for a small relational model.",
+      "observableOutcome": "Model two related entities and demonstrate a foreign-key constraint.",
+      "taskIds": [
+        "B2"
+      ],
+      "prerequisiteSkillIds": [
+        "sql"
+      ],
+      "evidenceIds": [
+        "baseline-doc-database-design"
+      ]
+    },
+    {
+      "skillId": "authentication",
+      "name": "HTTP authentication and access checks",
+      "aliases": [
+        "authentication basics",
+        "HTTP authentication"
+      ],
+      "definition": "Explain HTTP credential challenges and distinguish failed authentication from denied access.",
+      "observableOutcome": "Explain a 401 and a 403 response and why Basic credentials require HTTPS.",
+      "taskIds": [
+        "B2"
+      ],
+      "prerequisiteSkillIds": [
+        "api-basics"
+      ],
+      "evidenceIds": [
+        "baseline-doc-authentication"
+      ]
+    },
+    {
+      "skillId": "test-automation",
+      "name": "Functional test automation",
+      "aliases": [
+        "automated functional testing"
+      ],
+      "definition": "Maintain a repeatable functional check against an application and diagnose a failed run.",
+      "observableOutcome": "Run an isolated browser/API check and inspect a failure without masking it.",
+      "taskIds": [
+        "Q2"
+      ],
+      "prerequisiteSkillIds": [
+        "testing-basics",
+        "api-basics"
+      ],
+      "evidenceIds": [
+        "baseline-doc-test-automation"
+      ]
+    },
+    {
+      "skillId": "test-design",
+      "name": "Test-case design",
+      "aliases": [
+        "test design",
+        "test case design"
+      ],
+      "definition": "Choose meaningful test cases and expected outcomes from user-visible requirements.",
+      "observableOutcome": "Describe normal, boundary and failure cases and the requirement each checks.",
+      "taskIds": [
+        "Q1"
+      ],
+      "prerequisiteSkillIds": [
+        "testing-basics"
+      ],
+      "evidenceIds": [
+        "baseline-doc-test-design"
+      ]
+    },
+    {
+      "skillId": "python",
+      "name": "Python",
+      "aliases": [
+        "Python programming"
+      ],
+      "definition": "Write Python functions and use core data structures in a small program.",
+      "observableOutcome": "Transform a small dataset with functions and handle an invalid input.",
+      "taskIds": [
+        "B1",
+        "Q2"
+      ],
+      "prerequisiteSkillIds": [],
+      "evidenceIds": [
+        "baseline-doc-python"
+      ]
+    },
+    {
+      "skillId": "bug-reporting",
+      "name": "Reproducible defect reporting",
+      "aliases": [
+        "bug reporting",
+        "defect reporting"
+      ],
+      "definition": "Describe an observed defect with reproduction steps, expected/actual results and relevant evidence.",
+      "observableOutcome": "Prepare a fictional defect report that another person can reproduce.",
+      "taskIds": [
+        "Q3"
+      ],
+      "prerequisiteSkillIds": [],
+      "evidenceIds": [
+        "baseline-doc-bug-reporting"
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "resourceId": "baseline-git-1",
+      "skillId": "git",
+      "title": "Git tutorial",
+      "url": "https://git-scm.com/docs/gittutorial",
+      "provider": "Git",
+      "cost": "free",
+      "isPlaceholder": false,
+      "sourceNote": "Public provider documentation checked on 2026-10-24. Suggested practice: Complete the basic repository/branch examples and practise a small merge.",
+      "estimatedHours": 3,
+      "estimateBasis": "app",
+      "estimateNote": "App estimate for selected reading and introductory practice: Complete the basic repository/branch examples and practise a small merge. Not provider duration, mastery time or user-tested completion time.",
+      "checkedAt": "2026-10-24T04:28:52.8671610Z"
+    },
+    {
+      "resourceId": "baseline-sql-1",
+      "skillId": "sql",
+      "title": "PostgreSQL tutorial",
+      "url": "https://www.postgresql.org/docs/18/tutorial.html",
+      "provider": "PostgreSQL",
+      "cost": "free",
+      "isPlaceholder": false,
+      "sourceNote": "Public provider documentation checked on 2026-10-24. Suggested practice: Practise selected query, join and update sections with a small local dataset.",
+      "estimatedHours": 5,
+      "estimateBasis": "app",
+      "estimateNote": "App estimate for selected reading and introductory practice: Practise selected query, join and update sections with a small local dataset. Not provider duration, mastery time or user-tested completion time.",
+      "checkedAt": "2026-10-24T04:28:53.5236532Z"
+    },
+    {
+      "resourceId": "baseline-javascript-1",
+      "skillId": "javascript",
+      "title": "JavaScript Guide",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide",
+      "provider": "MDN",
+      "cost": "free",
+      "isPlaceholder": false,
+      "sourceNote": "Public provider documentation checked on 2026-10-24. Suggested practice: Read selected functions, objects and promises sections and practise small programs.",
+      "estimatedHours": 8,
+      "estimateBasis": "app",
+      "estimateNote": "App estimate for selected reading and introductory practice: Read selected functions, objects and promises sections and practise small programs. Not provider duration, mastery time or user-tested completion time.",
+      "checkedAt": "2026-10-24T04:28:53.0102287Z"
+    },
+    {
+      "resourceId": "baseline-api-basics-1",
+      "skillId": "api-basics",
+      "title": "Overview of HTTP",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview",
+      "provider": "MDN",
+      "cost": "free",
+      "isPlaceholder": false,
+      "sourceNote": "Public provider documentation checked on 2026-10-24. Suggested practice: Read the HTTP overview and inspect successful and failing requests in developer tools.",
+      "estimatedHours": 3,
+      "estimateBasis": "app",
+      "estimateNote": "App estimate for selected reading and introductory practice: Read the HTTP overview and inspect successful and failing requests in developer tools. Not provider duration, mastery time or user-tested completion time.",
+      "checkedAt": "2026-10-24T04:28:53.0102286Z"
+    },
+    {
+      "resourceId": "baseline-testing-basics-1",
+      "skillId": "testing-basics",
+      "title": "Discovering the Node.js test runner",
+      "url": "https://nodejs.org/learn/test-runner/introduction",
+      "provider": "Node.js",
+      "cost": "free",
+      "isPlaceholder": false,
+      "sourceNote": "Public provider documentation checked on 2026-10-24. Suggested practice: Read the introduction and practise small assertions with the built-in test runner.",
+      "estimatedHours": 3,
+      "estimateBasis": "app",
+      "estimateNote": "App estimate for selected reading and introductory practice: Read the introduction and practise small assertions with the built-in test runner. Not provider duration, mastery time or user-tested completion time.",
+      "checkedAt": "2026-10-24T04:28:52.8671962Z"
+    },
+    {
+      "resourceId": "baseline-linux-basics-1",
+      "skillId": "linux-basics",
+      "title": "The Linux command line for beginners",
+      "url": "https://ubuntu.com/tutorials/command-line-for-beginners",
+      "provider": "Ubuntu",
+      "cost": "free",
+      "isPlaceholder": false,
+      "sourceNote": "Public provider documentation checked on 2026-10-24. Suggested practice: Complete the beginner command-line walkthrough with a disposable directory.",
+      "estimatedHours": 3,
+      "estimateBasis": "app",
+      "estimateNote": "App estimate for selected reading and introductory practice: Complete the beginner command-line walkthrough with a disposable directory. Not provider duration, mastery time or user-tested completion time.",
+      "checkedAt": "2026-10-24T04:28:53.6479912Z"
+    },
+    {
+      "resourceId": "baseline-ci-cd-basics-1",
+      "skillId": "ci-cd-basics",
+      "title": "Building and testing Node.js",
+      "url": "https://docs.github.com/en/actions/tutorials/build-and-test-code/nodejs",
+      "provider": "GitHub Docs",
+      "cost": "free",
+      "isPlaceholder": false,
+      "sourceNote": "Public provider documentation checked on 2026-10-24. Suggested practice: Follow the sample workflow and inspect successful/failing runs on fictional code.",
+      "estimatedHours": 4,
+      "estimateBasis": "app",
+      "estimateNote": "App estimate for selected reading and introductory practice: Follow the sample workflow and inspect successful/failing runs on fictional code. Not provider duration, mastery time or user-tested completion time.",
+      "checkedAt": "2026-10-24T04:28:53.6587518Z"
+    },
+    {
+      "resourceId": "baseline-docker-1",
+      "skillId": "docker",
+      "title": "Build and share a containerized application",
+      "url": "https://docs.docker.com/get-started/tutorials/run-an-app/",
+      "provider": "Docker",
+      "cost": "free",
+      "isPlaceholder": false,
+      "sourceNote": "Public provider documentation checked on 2026-10-24. Suggested practice: Follow local build/run sections; publishing images or buying services is unnecessary.",
+      "estimatedHours": 4,
+      "estimateBasis": "app",
+      "estimateNote": "App estimate for selected reading and introductory practice: Follow local build/run sections; publishing images or buying services is unnecessary. Not provider duration, mastery time or user-tested completion time.",
+      "checkedAt": "2026-10-24T04:28:53.4608521Z"
+    },
+    {
+      "resourceId": "baseline-nodejs-1",
+      "skillId": "nodejs",
+      "title": "Introduction to Node.js",
+      "url": "https://nodejs.org/learn/getting-started/introduction-to-nodejs",
+      "provider": "Node.js",
+      "cost": "free",
+      "isPlaceholder": false,
+      "sourceNote": "Public provider documentation checked on 2026-10-24. Suggested practice: Read the introduction and adapt the local server example with an error response.",
+      "estimatedHours": 4,
+      "estimateBasis": "app",
+      "estimateNote": "App estimate for selected reading and introductory practice: Read the introduction and adapt the local server example with an error response. Not provider duration, mastery time or user-tested completion time.",
+      "checkedAt": "2026-10-24T04:28:53.3596170Z"
+    },
+    {
+      "resourceId": "baseline-typescript-1",
+      "skillId": "typescript",
+      "title": "TypeScript for JavaScript Programmers",
+      "url": "https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html",
+      "provider": "TypeScript",
+      "cost": "free",
+      "isPlaceholder": false,
+      "sourceNote": "Public provider documentation checked on 2026-10-24. Suggested practice: Read the guide and practise checking types in a small JavaScript-derived example.",
+      "estimatedHours": 4,
+      "estimateBasis": "app",
+      "estimateNote": "App estimate for selected reading and introductory practice: Read the guide and practise checking types in a small JavaScript-derived example. Not provider duration, mastery time or user-tested completion time.",
+      "checkedAt": "2026-10-24T04:28:53.5589063Z"
+    },
+    {
+      "resourceId": "baseline-database-design-1",
+      "skillId": "database-design",
+      "title": "PostgreSQL tutorial: Foreign keys",
+      "url": "https://www.postgresql.org/docs/18/tutorial-fk.html",
+      "provider": "PostgreSQL",
+      "cost": "free",
+      "isPlaceholder": false,
+      "sourceNote": "Public provider documentation checked on 2026-10-24. Suggested practice: Read the foreign-key section and design/test two small related tables.",
+      "estimatedHours": 4,
+      "estimateBasis": "app",
+      "estimateNote": "App estimate for selected reading and introductory practice: Read the foreign-key section and design/test two small related tables. Not provider duration, mastery time or user-tested completion time.",
+      "checkedAt": "2026-10-24T04:28:54.2121977Z"
+    },
+    {
+      "resourceId": "baseline-authentication-1",
+      "skillId": "authentication",
+      "title": "HTTP authentication",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Authentication",
+      "provider": "MDN",
+      "cost": "free",
+      "isPlaceholder": false,
+      "sourceNote": "Public provider documentation checked on 2026-10-24. Suggested practice: Read the framework and security sections and inspect fictional request/response cases.",
+      "estimatedHours": 3,
+      "estimateBasis": "app",
+      "estimateNote": "App estimate for selected reading and introductory practice: Read the framework and security sections and inspect fictional request/response cases. Not provider duration, mastery time or user-tested completion time.",
+      "checkedAt": "2026-10-24T04:28:53.7081062Z"
+    },
+    {
+      "resourceId": "baseline-test-automation-1",
+      "skillId": "test-automation",
+      "title": "Writing tests",
+      "url": "https://playwright.dev/docs/writing-tests",
+      "provider": "Playwright",
+      "cost": "free",
+      "isPlaceholder": false,
+      "sourceNote": "Public provider documentation checked on 2026-10-24. Suggested practice: Read the guide and maintain a small isolated test against a fictional local application.",
+      "estimatedHours": 6,
+      "estimateBasis": "app",
+      "estimateNote": "App estimate for selected reading and introductory practice: Read the guide and maintain a small isolated test against a fictional local application. Not provider duration, mastery time or user-tested completion time.",
+      "checkedAt": "2026-10-24T04:28:53.9903165Z"
+    },
+    {
+      "resourceId": "baseline-test-design-1",
+      "skillId": "test-design",
+      "title": "Best Practices",
+      "url": "https://playwright.dev/docs/best-practices",
+      "provider": "Playwright",
+      "cost": "free",
+      "isPlaceholder": false,
+      "sourceNote": "Public provider documentation checked on 2026-10-24. Suggested practice: Read user-visible behaviour and isolation guidance and design cases for a fictional form.",
+      "estimatedHours": 4,
+      "estimateBasis": "app",
+      "estimateNote": "App estimate for selected reading and introductory practice: Read user-visible behaviour and isolation guidance and design cases for a fictional form. Not provider duration, mastery time or user-tested completion time.",
+      "checkedAt": "2026-10-24T04:28:53.7414703Z"
+    },
+    {
+      "resourceId": "baseline-python-1",
+      "skillId": "python",
+      "title": "The Python Tutorial",
+      "url": "https://docs.python.org/3/tutorial/",
+      "provider": "Python Software Foundation",
+      "cost": "free",
+      "isPlaceholder": false,
+      "sourceNote": "Public provider documentation checked on 2026-10-24. Suggested practice: Practise selected control-flow, data-structure and error-handling sections; assumes basic programming.",
+      "estimatedHours": 8,
+      "estimateBasis": "app",
+      "estimateNote": "App estimate for selected reading and introductory practice: Practise selected control-flow, data-structure and error-handling sections; assumes basic programming. Not provider duration, mastery time or user-tested completion time.",
+      "checkedAt": "2026-10-24T04:28:53.7919057Z"
+    },
+    {
+      "resourceId": "baseline-bug-reporting-1",
+      "skillId": "bug-reporting",
+      "title": "Creating an issue",
+      "url": "https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/creating-an-issue",
+      "provider": "GitHub Docs",
+      "cost": "free",
+      "isPlaceholder": false,
+      "sourceNote": "Public provider documentation checked on 2026-10-24. Suggested practice: Read how issue title/body fields work; practise steps, expected/actual results and evidence on fictional data.",
+      "estimatedHours": 2,
+      "estimateBasis": "app",
+      "estimateNote": "App estimate for selected reading and introductory practice: Read how issue title/body fields work; practise steps, expected/actual results and evidence on fictional data. Not provider duration, mastery time or user-tested completion time.",
+      "checkedAt": "2026-10-24T04:28:54.3563989Z"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "baseline-doc-git",
+      "title": "Git tutorial",
+      "publisher": "Git",
+      "url": "https://git-scm.com/docs/gittutorial",
+      "publishedDate": null,
+      "publishedAt": null,
+      "originalDate": null,
+      "datePrecision": "unknown",
+      "dateBasis": "updated",
+      "retrievedAt": "2026-10-24",
+      "checkedAt": "2026-10-24T04:28:52.8671610Z",
+      "supportedClaim": "The linked public documentation provides introductory material for git.",
+      "limitation": "Documents a capability, not graduate hiring demand or an AI growth forecast. Pilot boundary: Version-control workflow; separate from automated CI checks.",
+      "linkedSkillIds": [
+        "git"
+      ]
+    },
+    {
+      "id": "baseline-doc-sql",
+      "title": "PostgreSQL tutorial",
+      "publisher": "PostgreSQL",
+      "url": "https://www.postgresql.org/docs/18/tutorial.html",
+      "publishedDate": null,
+      "publishedAt": null,
+      "originalDate": null,
+      "datePrecision": "unknown",
+      "dateBasis": "updated",
+      "retrievedAt": "2026-10-24",
+      "checkedAt": "2026-10-24T04:28:53.5236532Z",
+      "supportedClaim": "The linked public documentation provides introductory material for sql.",
+      "limitation": "Documents a capability, not graduate hiring demand or an AI growth forecast. Pilot boundary: Query execution; separate from choosing schema keys and constraints.",
+      "linkedSkillIds": [
+        "sql"
+      ]
+    },
+    {
+      "id": "baseline-doc-javascript",
+      "title": "JavaScript Guide",
+      "publisher": "MDN",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide",
+      "publishedDate": null,
+      "publishedAt": null,
+      "originalDate": null,
+      "datePrecision": "unknown",
+      "dateBasis": "updated",
+      "retrievedAt": "2026-10-24",
+      "checkedAt": "2026-10-24T04:28:53.0102287Z",
+      "supportedClaim": "The linked public documentation provides introductory material for javascript.",
+      "limitation": "Documents a capability, not graduate hiring demand or an AI growth forecast. Pilot boundary: Language option; Python and JavaScript are not cumulative requirements.",
+      "linkedSkillIds": [
+        "javascript"
+      ]
+    },
+    {
+      "id": "baseline-doc-api-basics",
+      "title": "Overview of HTTP",
+      "publisher": "MDN",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview",
+      "publishedDate": null,
+      "publishedAt": null,
+      "originalDate": null,
+      "datePrecision": "unknown",
+      "dateBasis": "updated",
+      "retrievedAt": "2026-10-24",
+      "checkedAt": "2026-10-24T04:28:53.0102286Z",
+      "supportedClaim": "The linked public documentation provides introductory material for api-basics.",
+      "limitation": "Documents a capability, not graduate hiring demand or an AI growth forecast. Pilot boundary: Protocol behaviour; separate from automated test-suite maintenance.",
+      "linkedSkillIds": [
+        "api-basics"
+      ]
+    },
+    {
+      "id": "baseline-doc-testing-basics",
+      "title": "Discovering the Node.js test runner",
+      "publisher": "Node.js",
+      "url": "https://nodejs.org/learn/test-runner/introduction",
+      "publishedDate": null,
+      "publishedAt": null,
+      "originalDate": null,
+      "datePrecision": "unknown",
+      "dateBasis": "updated",
+      "retrievedAt": "2026-10-24",
+      "checkedAt": "2026-10-24T04:28:52.8671962Z",
+      "supportedClaim": "The linked public documentation provides introductory material for testing-basics.",
+      "limitation": "Documents a capability, not graduate hiring demand or an AI growth forecast. Pilot boundary: An isolated assertion; separate from deriving coverage or maintaining end-to-end suites.",
+      "linkedSkillIds": [
+        "testing-basics"
+      ]
+    },
+    {
+      "id": "baseline-doc-linux-basics",
+      "title": "The Linux command line for beginners",
+      "publisher": "Ubuntu",
+      "url": "https://ubuntu.com/tutorials/command-line-for-beginners",
+      "publishedDate": null,
+      "publishedAt": null,
+      "originalDate": null,
+      "datePrecision": "unknown",
+      "dateBasis": "updated",
+      "retrievedAt": "2026-10-24",
+      "checkedAt": "2026-10-24T04:28:53.6479912Z",
+      "supportedClaim": "The linked public documentation provides introductory material for linux-basics.",
+      "limitation": "Documents a capability, not graduate hiring demand or an AI growth forecast. Pilot boundary: Shell operation; separate from source control and container packaging.",
+      "linkedSkillIds": [
+        "linux-basics"
+      ]
+    },
+    {
+      "id": "baseline-doc-ci-cd-basics",
+      "title": "Building and testing Node.js",
+      "publisher": "GitHub Docs",
+      "url": "https://docs.github.com/en/actions/tutorials/build-and-test-code/nodejs",
+      "publishedDate": null,
+      "publishedAt": null,
+      "originalDate": null,
+      "datePrecision": "unknown",
+      "dateBasis": "updated",
+      "retrievedAt": "2026-10-24",
+      "checkedAt": "2026-10-24T04:28:53.6587518Z",
+      "supportedClaim": "The linked public documentation provides introductory material for ci-cd-basics.",
+      "limitation": "Documents a capability, not graduate hiring demand or an AI growth forecast. Pilot boundary: Pipeline execution; not writing the underlying tests. No paid runner is required for reading.",
+      "linkedSkillIds": [
+        "ci-cd-basics"
+      ]
+    },
+    {
+      "id": "baseline-doc-docker",
+      "title": "Build and share a containerized application",
+      "publisher": "Docker",
+      "url": "https://docs.docker.com/get-started/tutorials/run-an-app/",
+      "publishedDate": null,
+      "publishedAt": null,
+      "originalDate": null,
+      "datePrecision": "unknown",
+      "dateBasis": "updated",
+      "retrievedAt": "2026-10-24",
+      "checkedAt": "2026-10-24T04:28:53.4608521Z",
+      "supportedClaim": "The linked public documentation provides introductory material for docker.",
+      "limitation": "Documents a capability, not graduate hiring demand or an AI growth forecast. Pilot boundary: Packaging option; container use is not a universal junior requirement.",
+      "linkedSkillIds": [
+        "docker"
+      ]
+    },
+    {
+      "id": "baseline-doc-nodejs",
+      "title": "Introduction to Node.js",
+      "publisher": "Node.js",
+      "url": "https://nodejs.org/learn/getting-started/introduction-to-nodejs",
+      "publishedDate": null,
+      "publishedAt": null,
+      "originalDate": null,
+      "datePrecision": "unknown",
+      "dateBasis": "updated",
+      "retrievedAt": "2026-10-24",
+      "checkedAt": "2026-10-24T04:28:53.3596170Z",
+      "supportedClaim": "The linked public documentation provides introductory material for nodejs.",
+      "limitation": "Documents a capability, not graduate hiring demand or an AI growth forecast. Pilot boundary: Runtime implementation option; not a second point for already knowing HTTP.",
+      "linkedSkillIds": [
+        "nodejs"
+      ]
+    },
+    {
+      "id": "baseline-doc-typescript",
+      "title": "TypeScript for JavaScript Programmers",
+      "publisher": "TypeScript",
+      "url": "https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html",
+      "publishedDate": null,
+      "publishedAt": null,
+      "originalDate": null,
+      "datePrecision": "unknown",
+      "dateBasis": "updated",
+      "retrievedAt": "2026-10-24",
+      "checkedAt": "2026-10-24T04:28:53.5589063Z",
+      "supportedClaim": "The linked public documentation provides introductory material for typescript.",
+      "limitation": "Documents a capability, not graduate hiring demand or an AI growth forecast. Pilot boundary: Language tooling option, not an extra universal requirement.",
+      "linkedSkillIds": [
+        "typescript"
+      ]
+    },
+    {
+      "id": "baseline-doc-database-design",
+      "title": "PostgreSQL tutorial: Foreign keys",
+      "publisher": "PostgreSQL",
+      "url": "https://www.postgresql.org/docs/18/tutorial-fk.html",
+      "publishedDate": null,
+      "publishedAt": null,
+      "originalDate": null,
+      "datePrecision": "unknown",
+      "dateBasis": "updated",
+      "retrievedAt": "2026-10-24",
+      "checkedAt": "2026-10-24T04:28:54.2121977Z",
+      "supportedClaim": "The linked public documentation provides introductory material for database-design.",
+      "limitation": "Documents a capability, not graduate hiring demand or an AI growth forecast. Pilot boundary: Schema invariants; separate from writing SQL queries.",
+      "linkedSkillIds": [
+        "database-design"
+      ]
+    },
+    {
+      "id": "baseline-doc-authentication",
+      "title": "HTTP authentication",
+      "publisher": "MDN",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Authentication",
+      "publishedDate": null,
+      "publishedAt": null,
+      "originalDate": null,
+      "datePrecision": "unknown",
+      "dateBasis": "updated",
+      "retrievedAt": "2026-10-24",
+      "checkedAt": "2026-10-24T04:28:53.7081062Z",
+      "supportedClaim": "The linked public documentation provides introductory material for authentication.",
+      "limitation": "Documents a capability, not graduate hiring demand or an AI growth forecast. Pilot boundary: Credential/access behaviour; not general HTTP syntax or a complete production identity system.",
+      "linkedSkillIds": [
+        "authentication"
+      ]
+    },
+    {
+      "id": "baseline-doc-test-automation",
+      "title": "Writing tests",
+      "publisher": "Playwright",
+      "url": "https://playwright.dev/docs/writing-tests",
+      "publishedDate": null,
+      "publishedAt": null,
+      "originalDate": null,
+      "datePrecision": "unknown",
+      "dateBasis": "updated",
+      "retrievedAt": "2026-10-24",
+      "checkedAt": "2026-10-24T04:28:53.9903165Z",
+      "supportedClaim": "The linked public documentation provides introductory material for test-automation.",
+      "limitation": "Documents a capability, not graduate hiring demand or an AI growth forecast. Pilot boundary: Application-level suite maintenance; separate from isolated assertions and test-case design.",
+      "linkedSkillIds": [
+        "test-automation"
+      ]
+    },
+    {
+      "id": "baseline-doc-test-design",
+      "title": "Best Practices",
+      "publisher": "Playwright",
+      "url": "https://playwright.dev/docs/best-practices",
+      "publishedDate": null,
+      "publishedAt": null,
+      "originalDate": null,
+      "datePrecision": "unknown",
+      "dateBasis": "updated",
+      "retrievedAt": "2026-10-24",
+      "checkedAt": "2026-10-24T04:28:53.7414703Z",
+      "supportedClaim": "The linked public documentation provides introductory material for test-design.",
+      "limitation": "Documents a capability, not graduate hiring demand or an AI growth forecast. Pilot boundary: Coverage reasoning; no extra point merely for running the same test.",
+      "linkedSkillIds": [
+        "test-design"
+      ]
+    },
+    {
+      "id": "baseline-doc-python",
+      "title": "The Python Tutorial",
+      "publisher": "Python Software Foundation",
+      "url": "https://docs.python.org/3/tutorial/",
+      "publishedDate": null,
+      "publishedAt": null,
+      "originalDate": null,
+      "datePrecision": "unknown",
+      "dateBasis": "updated",
+      "retrievedAt": "2026-10-24",
+      "checkedAt": "2026-10-24T04:28:53.7919057Z",
+      "supportedClaim": "The linked public documentation provides introductory material for python.",
+      "limitation": "Documents a capability, not graduate hiring demand or an AI growth forecast. Pilot boundary: Alternative language option, not required together with JavaScript.",
+      "linkedSkillIds": [
+        "python"
+      ]
+    },
+    {
+      "id": "baseline-doc-bug-reporting",
+      "title": "Creating an issue",
+      "publisher": "GitHub Docs",
+      "url": "https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/creating-an-issue",
+      "publishedDate": null,
+      "publishedAt": null,
+      "originalDate": null,
+      "datePrecision": "unknown",
+      "dateBasis": "updated",
+      "retrievedAt": "2026-10-24",
+      "checkedAt": "2026-10-24T04:28:54.3563989Z",
+      "supportedClaim": "The linked public documentation provides introductory material for bug-reporting.",
+      "limitation": "Documents a capability, not graduate hiring demand or an AI growth forecast. Pilot boundary: Communicating a defect; separate from implementing tests or debugging fixes.",
+      "linkedSkillIds": [
+        "bug-reporting"
+      ]
+    },
+    {
+      "id": "baseline-role-backend-development",
+      "title": "O*NET 31.0 task reference 15-1252.00",
+      "publisher": "U.S. Department of Labor / O*NET",
+      "url": "https://www.onetcenter.org/dl_files/database/db_31_0_json/task_statements.json",
+      "publishedDate": "2025-08-01",
+      "publishedAt": null,
+      "originalDate": "2025-08-01",
+      "datePrecision": "day",
+      "dateBasis": "updated",
+      "retrievedAt": "2026-10-24",
+      "checkedAt": "2026-10-24T04:16:27.302Z",
+      "supportedClaim": "Occupational task anchors 21667, 21676, 21669, 21670, 21670 support the pilot task scope; see the attributed filtered reference for exact text.",
+      "limitation": "Broad U.S. occupational task descriptions, not Malaysian junior hiring demand, tool requirements or AI trend growth. Skill-to-task links are Code Queens interpretations.",
+      "linkedSkillIds": [
+        "api-basics",
+        "sql",
+        "database-design",
+        "authentication",
+        "testing-basics",
+        "git",
+        "linux-basics",
+        "ci-cd-basics"
+      ]
+    },
+    {
+      "id": "baseline-role-qa-automation",
+      "title": "O*NET 31.0 task reference 15-1253.00",
+      "publisher": "U.S. Department of Labor / O*NET",
+      "url": "https://www.onetcenter.org/dl_files/database/db_31_0_json/task_statements.json",
+      "publishedDate": "2022-08-01",
+      "publishedAt": null,
+      "originalDate": "2022-08-01",
+      "datePrecision": "day",
+      "dateBasis": "updated",
+      "retrievedAt": "2026-10-24",
+      "checkedAt": "2026-10-24T04:16:27.302Z",
+      "supportedClaim": "Occupational task anchors 14638, 14640, 14652, 14650, 14641, 14661, 14639, 14648 support the pilot task scope; see the attributed filtered reference for exact text.",
+      "limitation": "Broad U.S. occupational task descriptions, not Malaysian junior hiring demand, tool requirements or AI trend growth. Skill-to-task links are Code Queens interpretations.",
+      "linkedSkillIds": [
+        "testing-basics",
+        "test-design",
+        "test-automation",
+        "api-basics",
+        "bug-reporting",
+        "git",
+        "ci-cd-basics",
+        "sql"
+      ]
+    }
+  ],
+  "sdg": {
+    "goals": [
+      {
+        "sdgId": "sdg-4",
+        "number": 4,
+        "name": "Quality Education"
+      }
+    ],
+    "roleTags": [
+      {
+        "roleId": "backend-development",
+        "sdgId": "sdg-4",
+        "rationale": "Accessible practice for Backend Development can support technical skills for work (target 4.4); possible contribution, not measured job outcomes.",
+        "isPlaceholder": false
+      },
+      {
+        "roleId": "qa-automation",
+        "sdgId": "sdg-4",
+        "rationale": "Accessible practice for QA Automation can support technical skills for work (target 4.4); possible contribution, not measured job outcomes.",
+        "isPlaceholder": false
+      }
+    ],
+    "skillTags": [
+      {
+        "skillId": "git",
+        "sdgId": "sdg-4",
+        "rationale": "Practising Git can build technical skills for work; possible SDG 4.4 contribution.",
+        "isPlaceholder": false
+      },
+      {
+        "skillId": "sql",
+        "sdgId": "sdg-4",
+        "rationale": "Practising SQL can build technical skills for work; possible SDG 4.4 contribution.",
+        "isPlaceholder": false
+      },
+      {
+        "skillId": "javascript",
+        "sdgId": "sdg-4",
+        "rationale": "Practising JavaScript can build technical skills for work; possible SDG 4.4 contribution.",
+        "isPlaceholder": false
+      },
+      {
+        "skillId": "api-basics",
+        "sdgId": "sdg-4",
+        "rationale": "Practising HTTP API basics can build technical skills for work; possible SDG 4.4 contribution.",
+        "isPlaceholder": false
+      },
+      {
+        "skillId": "testing-basics",
+        "sdgId": "sdg-4",
+        "rationale": "Practising Testing basics can build technical skills for work; possible SDG 4.4 contribution.",
+        "isPlaceholder": false
+      },
+      {
+        "skillId": "linux-basics",
+        "sdgId": "sdg-4",
+        "rationale": "Practising Linux command line can build technical skills for work; possible SDG 4.4 contribution.",
+        "isPlaceholder": false
+      },
+      {
+        "skillId": "ci-cd-basics",
+        "sdgId": "sdg-4",
+        "rationale": "Practising CI workflow basics can build technical skills for work; possible SDG 4.4 contribution.",
+        "isPlaceholder": false
+      },
+      {
+        "skillId": "docker",
+        "sdgId": "sdg-4",
+        "rationale": "Practising Container basics with Docker can build technical skills for work; possible SDG 4.4 contribution.",
+        "isPlaceholder": false
+      },
+      {
+        "skillId": "nodejs",
+        "sdgId": "sdg-4",
+        "rationale": "Practising Node.js runtime basics can build technical skills for work; possible SDG 4.4 contribution.",
+        "isPlaceholder": false
+      },
+      {
+        "skillId": "typescript",
+        "sdgId": "sdg-4",
+        "rationale": "Practising TypeScript basics can build technical skills for work; possible SDG 4.4 contribution.",
+        "isPlaceholder": false
+      },
+      {
+        "skillId": "database-design",
+        "sdgId": "sdg-4",
+        "rationale": "Practising Relational data modelling can build technical skills for work; possible SDG 4.4 contribution.",
+        "isPlaceholder": false
+      },
+      {
+        "skillId": "authentication",
+        "sdgId": "sdg-4",
+        "rationale": "Practising HTTP authentication and access checks can build technical skills for work; possible SDG 4.4 contribution.",
+        "isPlaceholder": false
+      },
+      {
+        "skillId": "test-automation",
+        "sdgId": "sdg-4",
+        "rationale": "Practising Functional test automation can build technical skills for work; possible SDG 4.4 contribution.",
+        "isPlaceholder": false
+      },
+      {
+        "skillId": "test-design",
+        "sdgId": "sdg-4",
+        "rationale": "Practising Test-case design can build technical skills for work; possible SDG 4.4 contribution.",
+        "isPlaceholder": false
+      },
+      {
+        "skillId": "python",
+        "sdgId": "sdg-4",
+        "rationale": "Practising Python can build technical skills for work; possible SDG 4.4 contribution.",
+        "isPlaceholder": false
+      },
+      {
+        "skillId": "bug-reporting",
+        "sdgId": "sdg-4",
+        "rationale": "Practising Reproducible defect reporting can build technical skills for work; possible SDG 4.4 contribution.",
+        "isPlaceholder": false
+      }
+    ]
+  },
+  "prerequisiteEdges": [
+    {
+      "skillId": "ci-cd-basics",
+      "prerequisiteSkillId": "git"
+    },
+    {
+      "skillId": "ci-cd-basics",
+      "prerequisiteSkillId": "testing-basics"
+    },
+    {
+      "skillId": "docker",
+      "prerequisiteSkillId": "linux-basics"
+    },
+    {
+      "skillId": "nodejs",
+      "prerequisiteSkillId": "javascript"
+    },
+    {
+      "skillId": "typescript",
+      "prerequisiteSkillId": "javascript"
+    },
+    {
+      "skillId": "database-design",
+      "prerequisiteSkillId": "sql"
+    },
+    {
+      "skillId": "authentication",
+      "prerequisiteSkillId": "api-basics"
+    },
+    {
+      "skillId": "test-automation",
+      "prerequisiteSkillId": "testing-basics"
+    },
+    {
+      "skillId": "test-automation",
+      "prerequisiteSkillId": "api-basics"
+    },
+    {
+      "skillId": "test-design",
+      "prerequisiteSkillId": "testing-basics"
+    }
+  ],
+  "criteriaDecisions": [
+    {
+      "roleId": "backend-development",
+      "skillId": "api-basics",
+      "action": "admit",
+      "reason": "Product interpretation for introductory B1 work, anchored to reference tasks 21667; Protocol behaviour; separate from automated test-suite maintenance. Not a hiring probability or universal job requirement.",
+      "evidenceIds": [
+        "baseline-role-backend-development",
+        "baseline-doc-api-basics"
+      ]
+    },
+    {
+      "roleId": "backend-development",
+      "skillId": "sql",
+      "action": "admit",
+      "reason": "Product interpretation for introductory B2 work, anchored to reference tasks 21676; Query execution; separate from choosing schema keys and constraints. Not a hiring probability or universal job requirement.",
+      "evidenceIds": [
+        "baseline-role-backend-development",
+        "baseline-doc-sql"
+      ]
+    },
+    {
+      "roleId": "backend-development",
+      "skillId": "database-design",
+      "action": "admit",
+      "reason": "Product interpretation for introductory B2 work, anchored to reference tasks 21676; Schema invariants; separate from writing SQL queries. Not a hiring probability or universal job requirement.",
+      "evidenceIds": [
+        "baseline-role-backend-development",
+        "baseline-doc-database-design"
+      ]
+    },
+    {
+      "roleId": "backend-development",
+      "skillId": "authentication",
+      "action": "admit",
+      "reason": "Product interpretation for introductory B2 work, anchored to reference tasks 21676; Credential/access behaviour; not general HTTP syntax or a complete production identity system. Not a hiring probability or universal job requirement.",
+      "evidenceIds": [
+        "baseline-role-backend-development",
+        "baseline-doc-authentication"
+      ]
+    },
+    {
+      "roleId": "backend-development",
+      "skillId": "testing-basics",
+      "action": "admit",
+      "reason": "Product interpretation for introductory B3 work, anchored to reference tasks 21669, 21670; An isolated assertion; separate from deriving coverage or maintaining end-to-end suites. Not a hiring probability or universal job requirement.",
+      "evidenceIds": [
+        "baseline-role-backend-development",
+        "baseline-doc-testing-basics"
+      ]
+    },
+    {
+      "roleId": "backend-development",
+      "skillId": "git",
+      "action": "admit",
+      "reason": "Product interpretation for introductory B4 work, anchored to reference tasks 21670; Version-control workflow; separate from automated CI checks. Not a hiring probability or universal job requirement.",
+      "evidenceIds": [
+        "baseline-role-backend-development",
+        "baseline-doc-git"
+      ]
+    },
+    {
+      "roleId": "backend-development",
+      "skillId": "linux-basics",
+      "action": "admit",
+      "reason": "Product interpretation for introductory B4 work, anchored to reference tasks 21670; Shell operation; separate from source control and container packaging. Not a hiring probability or universal job requirement.",
+      "evidenceIds": [
+        "baseline-role-backend-development",
+        "baseline-doc-linux-basics"
+      ]
+    },
+    {
+      "roleId": "backend-development",
+      "skillId": "ci-cd-basics",
+      "action": "admit",
+      "reason": "Product interpretation for introductory B4 work, anchored to reference tasks 21670; Pipeline execution; not writing the underlying tests. No paid runner is required for reading. Not a hiring probability or universal job requirement.",
+      "evidenceIds": [
+        "baseline-role-backend-development",
+        "baseline-doc-ci-cd-basics"
+      ]
+    },
+    {
+      "roleId": "qa-automation",
+      "skillId": "testing-basics",
+      "action": "admit",
+      "reason": "Product interpretation for introductory Q1 work, anchored to reference tasks 14638, 14640; An isolated assertion; separate from deriving coverage or maintaining end-to-end suites. Not a hiring probability or universal job requirement.",
+      "evidenceIds": [
+        "baseline-role-qa-automation",
+        "baseline-doc-testing-basics"
+      ]
+    },
+    {
+      "roleId": "qa-automation",
+      "skillId": "test-design",
+      "action": "admit",
+      "reason": "Product interpretation for introductory Q1 work, anchored to reference tasks 14638, 14640; Coverage reasoning; no extra point merely for running the same test. Not a hiring probability or universal job requirement.",
+      "evidenceIds": [
+        "baseline-role-qa-automation",
+        "baseline-doc-test-design"
+      ]
+    },
+    {
+      "roleId": "qa-automation",
+      "skillId": "test-automation",
+      "action": "admit",
+      "reason": "Product interpretation for introductory Q2 work, anchored to reference tasks 14652, 14650; Application-level suite maintenance; separate from isolated assertions and test-case design. Not a hiring probability or universal job requirement.",
+      "evidenceIds": [
+        "baseline-role-qa-automation",
+        "baseline-doc-test-automation"
+      ]
+    },
+    {
+      "roleId": "qa-automation",
+      "skillId": "api-basics",
+      "action": "admit",
+      "reason": "Product interpretation for introductory Q2 work, anchored to reference tasks 14652, 14650; Protocol behaviour; separate from automated test-suite maintenance. Not a hiring probability or universal job requirement.",
+      "evidenceIds": [
+        "baseline-role-qa-automation",
+        "baseline-doc-api-basics"
+      ]
+    },
+    {
+      "roleId": "qa-automation",
+      "skillId": "bug-reporting",
+      "action": "admit",
+      "reason": "Product interpretation for introductory Q3 work, anchored to reference tasks 14641, 14661; Communicating a defect; separate from implementing tests or debugging fixes. Not a hiring probability or universal job requirement.",
+      "evidenceIds": [
+        "baseline-role-qa-automation",
+        "baseline-doc-bug-reporting"
+      ]
+    },
+    {
+      "roleId": "qa-automation",
+      "skillId": "git",
+      "action": "admit",
+      "reason": "Product interpretation for introductory Q4 work, anchored to reference tasks 14639, 14648; Version-control workflow; separate from automated CI checks. Not a hiring probability or universal job requirement.",
+      "evidenceIds": [
+        "baseline-role-qa-automation",
+        "baseline-doc-git"
+      ]
+    },
+    {
+      "roleId": "qa-automation",
+      "skillId": "ci-cd-basics",
+      "action": "admit",
+      "reason": "Product interpretation for introductory Q4 work, anchored to reference tasks 14639, 14648; Pipeline execution; not writing the underlying tests. No paid runner is required for reading. Not a hiring probability or universal job requirement.",
+      "evidenceIds": [
+        "baseline-role-qa-automation",
+        "baseline-doc-ci-cd-basics"
+      ]
+    },
+    {
+      "roleId": "qa-automation",
+      "skillId": "sql",
+      "action": "admit",
+      "reason": "Product interpretation for introductory Q2 work, anchored to reference tasks 14652, 14650; Query execution; separate from choosing schema keys and constraints. Not a hiring probability or universal job requirement.",
+      "evidenceIds": [
+        "baseline-role-qa-automation",
+        "baseline-doc-sql"
+      ]
+    }
+  ]
+}

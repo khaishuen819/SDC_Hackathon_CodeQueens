@@ -312,6 +312,12 @@ The contract is still PROPOSED, to agree with M3/M4.
 
 ## Open items
 
+Historical M2 integration notes below describe the existing application's legacy
+weighted matching. Approved Feature 2 V4 supersedes numerical trend adjustments
+with one point per admitted capability; new versioned route integration is Phase5,
+not part of this Phase2 catalogue checkpoint. Do not apply these older weight proposals
+to the new baseline.
+
 - **Prerequisites (for M3):** there is no prerequisite data, so every pathway step has
   `prerequisites: []`. M3 (or the content owner) to supply reviewed "skill A before skill B" pairs; we
   will need a small table for them. Nothing is invented meanwhile.
@@ -402,3 +408,68 @@ Commands (run by M2, from the project root):
 
 - Replit Agent: scaffolded minimal Express + TypeScript server with GET /health and Replit config (commits ca8551b, 9671391).
 - Claude Code: used for M2 backend development, phase by phase; all code reviewed and committed by M2.
+- Codex: Phase 2 reference retrieval/parser, pilot configuration, pure baseline construction,
+  seed protection, tests and technical notes on 24 October 2026. Public resources were
+  checked; time estimates and task/SDG mappings are app interpretations. No production
+  database, CV, live model or deployment was used. Record this use in the official tools
+  declaration; a Git co-author trailer is a separate choice.
+
+## Feature 2 V4 — Phase 2 reference/catalogue checkpoint
+
+This checkpoint provides offline input for later versioned matching, not a changed
+live app. `buildInitialCriteria(reference, pilotConfig, verifiedContent)` is pure and
+rejects incomplete resources, placeholder content, missing/unsupported task bridges
+and invalid Phase1 catalogue relationships. Storage/bootstrap is deferred to Phase4's
+real store; routes/frontend remain for Phases5/6. No database command was run.
+
+Files and ownership for the next implementer:
+
+| File | Purpose / handoff |
+|---|---|
+| `src/server/trends/http.ts` | Shared bounded fetch for Phase3: exact HTTPS hosts, same-host redirects, stream bytes, deadline and cancellation. |
+| `src/server/trends/reference.ts` | O*NET 31.0 parser/fetcher for the two pilot occupation IDs; no weights inferred from software flags. |
+| `scripts/import-role-reference.ts` | Explicit import command, writes only filtered `role-reference-31.0.json`; does not touch PostgreSQL. |
+| `src/server/trends/pilotConfig.ts` | B/Q task bridges, allowed source/resource hosts, foundational IDs and permitted SDG rationale templates. |
+| `src/server/trends/data/pilot-baseline.json` | 16 defined/recognised skill IDs; eight assessed capabilities per role with weight1, explicit admission evidence, prerequisites, 16 resources and role/skill SDG4 rationales. |
+| `src/server/trends/data/baseline-provenance.json` | Actual retrieval/check times, public source links, raw-table/resource hashes, verification method and limits. |
+| `prisma/seed.ts` | Inserts missing legacy demo rows without overwriting any existing content; never calls snapshot/head models. Importing it does not connect to PostgreSQL. |
+
+Reference source: [O*NET 31.0 Database](https://www.onetcenter.org/database.html),
+U.S. Department of Labor, Employment and Training Administration. Used under
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), with
+[the publisher's attribution guidance](https://www.onetcenter.org/license_db.html).
+The saved tables are filtered to two occupations; B/Q mappings, capability definitions,
+learning selection and SDG reasoning are Code Queens adaptations, not USDOL/ETA endorsement.
+Supervisory rows may remain as reference context, but no pilot bridge/requirement uses them.
+No source text or course is copied into the app as a teaching product. Apache-2.0
+covers project source code, not a relicensing of O*NET data or linked provider content.
+
+The catalogue intentionally separates broad occupational scope from chosen junior
+tasks. Each current association points to occupational task evidence and a capability
+resource. Languages/frameworks remain identifiable alternatives; the pilot does not
+require learning Python, JavaScript, TypeScript, Node.js and Docker together. Match
+coverage describes only our assessed subset. Real AI-trend interpretations are Phase3,
+so this baseline alone must not be described as live AI growth or local hiring demand.
+
+Every resource page is publicly readable without purchase at the recorded check time.
+These are introductory documentation destinations, not complete training courses.
+Estimated hours are app estimates for selected reading plus suggested practice, not
+provider duration, mastery time or observed learner results. Some examples use a
+particular language/tool; the graduate can use an equivalent stack. The Python tutorial
+assumes existing programming knowledge. No video playback or paid platform was tested.
+
+SDG mappings refer to [target 4.4](https://sdgs.un.org/goals/goal4), relevant technical
+skills for work. The role/skill explanations describe possible contributions through
+accessible practice, not measured attainment of an SDG or guaranteed employment.
+
+Verification: 143 backend tests, 10 frontend checks and TypeScript checking passed
+before independent review. Real O*NET data contained null task classifications, which
+are preserved as `Unknown`, not silently given a Core/Supplemental classification.
+All 16 resource links returned HTTP200. Public page topics were checked; no complete
+learning course or learner outcome was evaluated.
+
+Native Node live-import command timed out twice within the enforced 30-second limit.
+Public tables were retrieved with PowerShell HTTPS and passed through the same parser;
+provenance identifies this explicitly. The native fetch command needs a successful
+target-runtime check before operational reliance. No automatic source/model refresh,
+durable head, database migration or production readiness is implied by this checkpoint.
