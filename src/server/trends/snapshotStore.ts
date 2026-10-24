@@ -1,5 +1,6 @@
 import { RefreshPublicState } from "../contracts/trends.ts";
 import type { CriteriaBundle, CriteriaSnapshot, PublishResult, RefreshReservation, RefreshState, SnapshotId } from "../contracts/trends.ts";
+import type { Prisma, PrismaClient } from "../db/generated/prisma/client.ts";
 import { validateCriteriaBundle } from "./policy.ts";
 import { criteriaSnapshotId } from "./identity.ts";
 import { emptyQueue } from "./queue.ts";
@@ -129,5 +130,98 @@ export class MemoryCriteriaStore implements CriteriaStore {
     const id = this.insert(bundle);
     this.write({ ...head, snapshotId: id });
     return id;
+  }
+}
+
+type HeadRow = { snapshotId: string | null; nextGeneration: bigint; publishedGeneration: bigint; leaseGeneration: bigint | null;
+  leaseExpiresAt: Date | null; nextAllowedAt: Date | null; lastAttemptAt: Date | null; lastSuccessAt: Date | null; state: unknown };
+const fromRow = (row: HeadRow): RefreshState => ({
+  snapshotId: row.snapshotId as SnapshotId | null, nextGeneration: BigInt(row.nextGeneration), publishedGeneration: BigInt(row.publishedGeneration),
+  leaseGeneration: row.leaseGeneration === null ? null : BigInt(row.leaseGeneration), leaseExpiresAt: row.leaseExpiresAt?.toISOString() ?? null,
+  nextAllowedAt: row.nextAllowedAt?.toISOString() ?? null, lastAttemptAt: row.lastAttemptAt?.toISOString() ?? null,
+  lastSuccessfulCheckAt: row.lastSuccessAt?.toISOString() ?? null, state: RefreshPublicState.parse(row.state),
+});
+const json = (value: unknown) => value as Prisma.InputJsonValue;
+
+// PostgreSQL store. Every write locks the single head row (SELECT ... FOR
+// UPDATE) inside one transaction and uses the database clock, so separate
+// server instances share one lease, cooldown and publication order.
+export class PrismaCriteriaStore implements CriteriaStore {
+  private prisma: PrismaClient;
+  private timing: RefreshTiming;
+  constructor(prisma: PrismaClient, timing: RefreshTiming = REFRESH_TIMING) { this.prisma = prisma; this.timing = timing; }
+
+  private async locked<T>(work: (tx: Prisma.TransactionClient, head: RefreshState, now: number) => Promise<T>): Promise<T> {
+    return this.prisma.$transaction(async (tx) => {
+      await tx.$executeRaw`INSERT INTO "CriteriaHead" ("key", "state") VALUES ('pilot', ${JSON.stringify(emptyPublicState())}::jsonb) ON CONFLICT ("key") DO NOTHING`;
+      const [row] = await tx.$queryRaw<Array<HeadRow & { dbNow: Date }>>`SELECT *, now() AS "dbNow" FROM "CriteriaHead" WHERE "key" = 'pilot' FOR UPDATE`;
+      return work(tx, fromRow(row), row.dbNow.getTime());
+    });
+  }
+  private async snapshot(db: Prisma.TransactionClient | PrismaClient, id: string | null): Promise<CriteriaSnapshot | null> {
+    const row = id ? await db.criteriaSnapshot.findUnique({ where: { id } }) : null;
+    return row ? checkedSnapshot(row.id, row.createdAt.toISOString(), row.payload) : null;
+  }
+  private async insert(tx: Prisma.TransactionClient, bundle: CriteriaBundle): Promise<SnapshotId> {
+    const valid = validateCriteriaBundle(bundle), id = criteriaSnapshotId(valid);
+    await tx.criteriaSnapshot.createMany({ data: [{ id, schemaVersion: valid.schemaVersion, policyVersion: valid.policyVersion, payload: json(valid) }], skipDuplicates: true });
+    return id;
+  }
+  private update(tx: Prisma.TransactionClient, data: Prisma.CriteriaHeadUpdateInput) {
+    return tx.criteriaHead.update({ where: { key: "pilot" }, data });
+  }
+
+  async reserveRefresh(): Promise<RefreshReservation> {
+    return this.locked(async (tx, head, now) => {
+      const decision = decideReservation(head, now, this.timing);
+      if (decision.status !== "acquired") return decision;
+      await this.update(tx, { nextGeneration: decision.generation, leaseGeneration: decision.generation, leaseExpiresAt: new Date(decision.leaseExpiresAt),
+        nextAllowedAt: new Date(decision.nextAllowedAt), lastAttemptAt: new Date(now) });
+      return { status: "acquired" as const, generation: decision.generation, baseSnapshotId: head.snapshotId, leaseExpiresAt: decision.leaseExpiresAt };
+    });
+  }
+  async readSnapshot(id?: SnapshotId): Promise<CriteriaSnapshot | null> {
+    const target = id ?? (await this.prisma.criteriaHead.findUnique({ where: { key: "pilot" } }))?.snapshotId ?? null;
+    return this.snapshot(this.prisma, target);
+  }
+  async readRefreshState(): Promise<RefreshState> {
+    const row = await this.prisma.criteriaHead.findUnique({ where: { key: "pilot" } });
+    return row ? fromRow(row) : emptyHead();
+  }
+  async saveRefreshState(generation: bigint, state: RefreshPublicState, checked: boolean): Promise<boolean> {
+    const valid = RefreshPublicState.parse(state);
+    return this.locked(async (tx, head, now) => {
+      if (!leaseHeld(head, generation, now)) return false;
+      await this.update(tx, { state: json(valid), ...(checked ? { lastSuccessAt: new Date(now) } : {}) });
+      return true;
+    });
+  }
+  async publishIfCurrent(baseId: SnapshotId | null, generation: bigint, bundle: CriteriaBundle, state: RefreshPublicState): Promise<PublishResult> {
+    const valid = RefreshPublicState.parse(state), id = criteriaSnapshotId(validateCriteriaBundle(bundle));
+    return this.locked(async (tx, head, now) => {
+      if (!canPublish(head, baseId, generation, now)) return { status: "conflict" as const, snapshot: await this.snapshot(tx, head.snapshotId) };
+      if (id === head.snapshotId) {
+        await this.update(tx, { state: json(valid), lastSuccessAt: new Date(now) });
+        return { status: "unchanged" as const, snapshot: await this.snapshot(tx, id) };
+      }
+      await this.insert(tx, bundle);
+      await this.update(tx, { snapshot: { connect: { id } }, publishedGeneration: generation, state: json(valid), lastSuccessAt: new Date(now) });
+      return { status: "published" as const, snapshot: await this.snapshot(tx, id) };
+    });
+  }
+  async recordFailure(generation: bigint, state: RefreshPublicState | null): Promise<void> {
+    const valid = state ? RefreshPublicState.parse(state) : null;
+    await this.locked(async (tx, head, now) => { if (valid && leaseHeld(head, generation, now)) await this.update(tx, { state: json(valid) }); });
+  }
+  async releaseRefresh(generation: bigint): Promise<void> {
+    await this.prisma.criteriaHead.updateMany({ where: { key: "pilot", leaseGeneration: generation }, data: { leaseGeneration: null, leaseExpiresAt: null } });
+  }
+  async bootstrap(bundle: CriteriaBundle): Promise<SnapshotId> {
+    return this.locked(async (tx, head) => {
+      if (head.snapshotId) return head.snapshotId;
+      const id = await this.insert(tx, bundle);
+      await this.update(tx, { snapshot: { connect: { id } } });
+      return id;
+    });
   }
 }

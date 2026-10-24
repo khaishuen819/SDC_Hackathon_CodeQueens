@@ -9,7 +9,7 @@ describeCriteriaStore("memory store", async () => {
   const backing: MemoryBacking = MemoryCriteriaStore.emptyBacking();
   const make = () => new MemoryCriteriaStore({ backing, ...CONTRACT_TIMING });
   return { a: make(), b: make(), restart: async () => make(), cleanup: async () => {} };
-});
+}, { timing: CONTRACT_TIMING });
 
 const head = (overrides = {}) => ({ snapshotId: null, nextGeneration: 4n, publishedGeneration: 3n, leaseGeneration: null, leaseExpiresAt: null,
   nextAllowedAt: null, lastAttemptAt: null, lastSuccessfulCheckAt: null, state: emptyPublicState(), ...overrides });

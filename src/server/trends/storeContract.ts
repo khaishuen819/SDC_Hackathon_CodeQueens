@@ -15,7 +15,8 @@ const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const changed = (n: number): CriteriaBundle => { const b = bundle(); b.interpreterVersion = `fictional-changed-version-${n}`; return b; };
 const stateWith = (notice: string): RefreshPublicState => ({ ...emptyPublicState(), notices: [notice] });
 
-export function describeCriteriaStore(name: string, open: () => Promise<StoreHarness>, options: { skip?: string } = {}) {
+export function describeCriteriaStore(name: string, open: () => Promise<StoreHarness>, options: { skip?: string; timing?: { leaseMs: number; cooldownMs: number } } = {}) {
+  const timing = options.timing ?? CONTRACT_TIMING;
   const it = (title: string, body: (h: StoreHarness) => Promise<void>) => test(`${name}: ${title}`, { skip: options.skip }, async () => {
     const h = await open();
     try { await body(h); } finally { await h.cleanup(); }
@@ -48,7 +49,7 @@ export function describeCriteriaStore(name: string, open: () => Promise<StoreHar
     assert.equal(busy.status === "busy" && busy.retryAt, first.leaseExpiresAt);
     await a.releaseRefresh(first.generation);
     assert.equal((await b.reserveRefresh()).status, "cooldown");
-    await wait(CONTRACT_TIMING.cooldownMs + 50);
+    await wait(timing.cooldownMs + 50);
     const second = await b.reserveRefresh();
     assert.equal(second.status === "acquired" && second.generation, 2n);
   });
@@ -56,7 +57,7 @@ export function describeCriteriaStore(name: string, open: () => Promise<StoreHar
   it("an expired lease is recoverable, and the stalled worker cannot publish or clear its successor", async ({ a, b }) => {
     await a.bootstrap(bundle());
     const stalled = await a.reserveRefresh();
-    await wait(CONTRACT_TIMING.leaseMs + 50);
+    await wait(timing.leaseMs + 50);
     const successor = await b.reserveRefresh();
     assert.equal(successor.status, "acquired");
     if (stalled.status !== "acquired" || successor.status !== "acquired") return;
